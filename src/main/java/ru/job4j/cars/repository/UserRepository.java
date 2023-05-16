@@ -3,6 +3,7 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import ru.job4j.cars.model.User;
 
@@ -20,13 +21,16 @@ public class UserRepository {
      * @return пользователь с id.
      */
     public User create(User user) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
+        Transaction tx = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
             session.save(user);
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
         return user;
     }
@@ -37,20 +41,22 @@ public class UserRepository {
      * @param user пользователь.
      */
     public void update(User user) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
+        Transaction tx = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
             session.createQuery(
                             "update User set login = :fLogin, password = :fPassword where id = :fId")
                     .setParameter("fLogin", user.getLogin())
                     .setParameter("fPassword", user.getPassword())
                     .setParameter("fId", user.getId())
                     .executeUpdate();
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
-        session.close();
     }
 
     /**
@@ -59,18 +65,20 @@ public class UserRepository {
      * @param userId ID
      */
     public void delete(int userId) {
-        Session session = sf.openSession();
-        try {
-            session.beginTransaction();
+        Transaction tx = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
             session.createQuery(
                             "delete User where id = :fId")
                     .setParameter("fId", userId)
                     .executeUpdate();
-            session.getTransaction().commit();
+            tx.commit();
         } catch (Exception e) {
-            session.getTransaction().rollback();
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
         }
-        session.close();
     }
 
     /**
@@ -79,11 +87,20 @@ public class UserRepository {
      * @return список пользователей.
      */
     public List<User> findAllOrderById() {
-        Session session = sf.openSession();
-        Query<User> query = session.createQuery(
-                "from User order by id", User.class);
-        List<User> list = query.list();
-        session.close();
+        Transaction tx = null;
+        List<User> list = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            Query<User> query = session.createQuery(
+                    "from User order by id", User.class);
+            list = query.list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
         return list;
     }
 
@@ -93,12 +110,21 @@ public class UserRepository {
      * @return пользователь.
      */
     public Optional<User> findById(int userId) {
-        Session session = sf.openSession();
-        Query<User> query = session.createQuery(
-                "from User where id = :fId", User.class)
-                .setParameter("fId", userId);
-        Optional<User> optionalUser = query.uniqueResultOptional();
-        session.close();
+        Transaction tx = null;
+        Optional<User> optionalUser = Optional.empty();
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            Query<User> query = session.createQuery(
+                            "from User where id = :fId", User.class)
+                    .setParameter("fId", userId);
+            optionalUser = query.uniqueResultOptional();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
         return optionalUser;
     }
 
@@ -109,12 +135,21 @@ public class UserRepository {
      * @return список пользователей.
      */
     public List<User> findByLikeLogin(String key) {
-        Session session = sf.openSession();
-        Query<User> query = session.createQuery(
-                "from User where password = :fKey", User.class)
-            .setParameter("fKey", key);
-        List<User> list = query.list();
-        session.close();
+        Transaction tx = null;
+        List<User> list = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            Query<User> query = session.createQuery(
+                            "from User where password = :fKey", User.class)
+                    .setParameter("fKey", key);
+            list = query.list();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
         return list;
     }
 
@@ -125,12 +160,21 @@ public class UserRepository {
      * @return Optional or user.
      */
     public Optional<User> findByLogin(String login) {
-        Session session = sf.openSession();
-        Query<User> query = session.createQuery(
-                        "from User where login = :fLogin", User.class)
-                .setParameter("fLogin", login);
-        Optional<User> optionalUser = query.uniqueResultOptional();
-        session.close();
+        Transaction tx = null;
+        Optional<User> optionalUser = Optional.empty();
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            Query<User> query = session.createQuery(
+                            "from User where login = :fLogin", User.class)
+                    .setParameter("fLogin", login);
+            optionalUser = query.uniqueResultOptional();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
         return optionalUser;
     }
 }
