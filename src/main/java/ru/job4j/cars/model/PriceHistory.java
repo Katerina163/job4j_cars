@@ -18,10 +18,6 @@ public class PriceHistory {
     private long after;
     private Date created;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "auto_post_id")
-    private List<AutoPost> autoPost;
-
     @ManyToMany
     @JoinTable(
             name = "participates",

@@ -3,7 +3,9 @@ package ru.job4j.cars.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "auto_post")
@@ -18,4 +20,8 @@ public class AutoPost {
     @ManyToOne
     @JoinColumn(name = "auto_user_id")
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "auto_post_id")
+    private List<AutoPost> autoPost = new ArrayList<>();
 }
