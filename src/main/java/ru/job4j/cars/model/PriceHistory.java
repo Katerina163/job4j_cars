@@ -3,9 +3,7 @@ package ru.job4j.cars.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "price_history")
@@ -17,12 +15,4 @@ public class PriceHistory {
     private long before;
     private long after;
     private Date created;
-
-    @ManyToMany
-    @JoinTable(
-            name = "participates",
-            joinColumns = { @JoinColumn(name = "post_id") },
-            inverseJoinColumns = { @JoinColumn(name = "user_id") }
-    )
-    private List<User> participates = new ArrayList<>();
 }
