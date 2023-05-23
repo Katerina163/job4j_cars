@@ -11,4 +11,5 @@
     <include file="scripts/002_ddl_create_auto_post_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/003_dml_insert_auto_user.sql" relativeToChangelogFile="true"/>
     <include file="scripts/update_004.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/005_ddl_create_participates_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
