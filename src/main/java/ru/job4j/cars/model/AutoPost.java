@@ -23,7 +23,7 @@ public class AutoPost {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "auto_post_id")
-    private List<AutoPost> autoPost = new ArrayList<>();
+    private List<PriceHistory> priceHistories = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
