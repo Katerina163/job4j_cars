@@ -3,9 +3,7 @@ package ru.job4j.cars.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "auto_post")
@@ -16,6 +14,10 @@ public class AutoPost {
     private int id;
     private String description;
     private Date created;
+
+    @OneToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
 
     @ManyToOne
     @JoinColumn(name = "auto_user_id")
@@ -32,4 +34,8 @@ public class AutoPost {
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
     private List<User> participates = new ArrayList<>();
+
+    @OneToMany(cascade =  CascadeType.ALL)
+    @JoinColumn(name = "auto_post_id")
+    private Set<File> files = new HashSet<>();
 }
