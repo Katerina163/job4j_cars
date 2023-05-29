@@ -1,6 +1,7 @@
 package ru.job4j.cars.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -8,9 +9,11 @@ import java.util.*;
 @Entity
 @Table(name = "auto_post")
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AutoPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
     private String description;
     private Date created;
@@ -36,6 +39,6 @@ public class AutoPost {
     private List<User> participates = new ArrayList<>();
 
     @OneToMany(cascade =  CascadeType.ALL)
-    @JoinColumn(name = "auto_post_id")
+    @JoinColumn(name = "post_id")
     private Set<File> files = new HashSet<>();
 }

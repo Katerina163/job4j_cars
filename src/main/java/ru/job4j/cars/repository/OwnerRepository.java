@@ -14,7 +14,7 @@ public class OwnerRepository {
 
     public Optional<Owner> findById(int id) {
         return crudRepository.optional(
-                "from Owner o left join fetch o.cars where id = :fId",
+                "from Owner o left join fetch o.cars where o.id = :fId",
                 Owner.class, Map.of("fId", id));
     }
 
