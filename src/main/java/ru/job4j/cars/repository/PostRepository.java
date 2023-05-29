@@ -22,13 +22,14 @@ public class PostRepository {
 
     public  Collection<AutoPost> findWithFile() {
         return crudRepository.query(
-                "from AutoPost a join a.files as f with count(f) > 0",
-                AutoPost.class);
+                "from AutoPost a join a.files", AutoPost.class).stream()
+                .filter(autoPost -> !autoPost.getFiles().isEmpty())
+                .toList();
     }
 
     public  Collection<AutoPost> findCarBrand(String brand) {
-        String s = "from AutoPost a join a.car as c where c.name like '%"
-                + brand + "%'";
-        return crudRepository.query(s, AutoPost.class);
+        return crudRepository.query(
+                "from AutoPost a join a.car as c where c.name = :fBrand",
+                AutoPost.class, Map.of("fBrand", brand));
     }
 }
