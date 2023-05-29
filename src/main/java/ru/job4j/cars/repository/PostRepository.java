@@ -22,9 +22,7 @@ public class PostRepository {
 
     public  Collection<AutoPost> findWithFile() {
         return crudRepository.query(
-                "from AutoPost a join a.files", AutoPost.class).stream()
-                .filter(autoPost -> !autoPost.getFiles().isEmpty())
-                .toList();
+                "from AutoPost a join a.files where size(a.files) > 0", AutoPost.class);
     }
 
     public  Collection<AutoPost> findCarBrand(String brand) {
