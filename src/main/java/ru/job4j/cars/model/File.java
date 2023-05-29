@@ -22,8 +22,4 @@ public class File {
     private String name;
 
     private String path;
-
-    @ManyToOne
-    @JoinColumn(name = "auto_post_id")
-    private AutoPost autoPost;
 }
