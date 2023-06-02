@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface PostRepository {
     Collection<AutoPost> findAllNew();
 
+    Collection<AutoPost> findAll();
+
     Collection<AutoPost> findWithFile();
 
     Collection<AutoPost> findCarBrand(String brand);

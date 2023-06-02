@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Профиль</title>
+    <link rel="stylesheet" th:href="@{/static/styles/menu.css}">
+</head>
+<body>
+<div class="m-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a th:href="@{/post/}" class="navbar-brand">job4j_car</a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav">
+                    <a th:href="@{/post/create}" class="nav-item nav-link">Добавить объявление</a>
+                        <a th:href="@{/user/profile}" class="nav-item nav-link active">Профиль</a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Объявления</a>
+                        <div class="dropdown-menu">
+                            <a th:href="@{/post/new}" class="dropdown-item">Новые</a>
+                            <a th:href="@{/post/with-photo}" class="dropdown-item">С фото</a>
+                        </div>
+                    </div>
+                </div>
+                <form th:action="@{/post/mark}" method="post" enctype="multipart/form-data" class="d-flex">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Найти" name="brand">
+                        <button type="submit" class="btn btn-secondary"><i class="bi-search"></i></button>
+                    </div>
+                </form>
+                <div class="navbar-nav">
+                    <a th:text="${user.login}" class="nav-item nav-link"></a>
+                    <a th:href="@{/user/logout}" class="nav-item nav-link">Выйти</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+
+</body>
+</html>

@@ -21,6 +21,11 @@ public class SimplePostService implements PostService {
     }
 
     @Override
+    public Collection<AutoPost> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Collection<AutoPost> findWithFile() {
         return repository.findWithFile();
     }

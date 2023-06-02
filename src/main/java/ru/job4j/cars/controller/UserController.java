@@ -10,6 +10,7 @@ import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -40,6 +41,12 @@ public class UserController {
         return "redirect:/post/";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/user/login";
+    }
+
     @GetMapping("/register")
     public String getRegisterPage() {
         return "/user/register";
@@ -49,5 +56,12 @@ public class UserController {
     public String register(@ModelAttribute User user) {
         service.create(user);
         return "/user/login";
+    }
+
+    @GetMapping("/profile")
+    public String getProfile(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        model.addAttribute("user", user);
+        return "/user/home";
     }
 }
