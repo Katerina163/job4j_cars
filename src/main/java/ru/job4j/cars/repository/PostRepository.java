@@ -33,6 +33,12 @@ public class PostRepository {
                 AutoPost.class, Map.of("fBrand", brand));
     }
 
+    public Collection<AutoPost> findUsersCar(String login) {
+        return crudRepository.query(
+                "from AutoPost a where a.user.login = :fUser",
+                AutoPost.class, Map.of("fUser", login));
+    }
+
     public void add(AutoPost post) {
         crudRepository.run(session -> session.save(post));
     }

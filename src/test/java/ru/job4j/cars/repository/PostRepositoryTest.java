@@ -115,6 +115,22 @@ public class PostRepositoryTest {
     }
 
     @Test
+    public void whenFindUsersCars() {
+        AutoPost post1 = new AutoPost();
+        post1.setDescription("description");
+        post1.setUser(user);
+        post1.setCar(car);
+        repository.add(post1);
+        AutoPost post2 = new AutoPost();
+        post2.setDescription("description2");
+        post2.setCreated(Date.valueOf(LocalDate.now()));
+        post2.setUser(user);
+        post2.setCar(alterCar);
+        repository.add(post2);
+        assertThat(repository.findUsersCar(user.getLogin()), is(List.of(post1, post2)));
+    }
+
+    @Test
     public void whenAddThenDelete() {
         AutoPost post1 = new AutoPost();
         post1.setDescription("description");
