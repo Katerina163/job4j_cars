@@ -10,8 +10,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class FileRepositoryTest {
-    private FileRepository repository = new FileRepository(new CrudRepository(
+public class HiberFileRepositoryTest {
+    private HiberFileRepository repository = new HiberFileRepository(new CrudRepository(
             new MetadataSources(
                     new StandardServiceRegistryBuilder()
                             .configure().build())

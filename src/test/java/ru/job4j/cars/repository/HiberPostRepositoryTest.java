@@ -14,34 +14,34 @@ import java.util.Set;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class PostRepositoryTest {
+public class HiberPostRepositoryTest {
     private Set<File> files;
-    private PostRepository repository;
+    private HiberPostRepository repository;
     private User user;
     private Car car;
     private Car alterCar;
 
-    public PostRepositoryTest() {
+    public HiberPostRepositoryTest() {
         CrudRepository crud = new CrudRepository(
                 new MetadataSources(
                         new StandardServiceRegistryBuilder()
                                 .configure().build())
                         .buildMetadata().buildSessionFactory());
-        repository = new PostRepository(crud);
+        repository = new HiberPostRepository(crud);
 
-        var fileRepository = new FileRepository(crud);
+        var fileRepository = new HiberFileRepository(crud);
         File file = new File();
         file.setName("name");
         file.setPath("/path");
         fileRepository.create(file);
         files = Set.of(file);
 
-        var engineRepository = new EngineRepository(crud);
+        var engineRepository = new HiberEngineRepository(crud);
         Engine engine = new Engine();
         engine.setName("test");
         engine = engineRepository.create(engine);
 
-        var carRepository = new CarRepository(crud);
+        var carRepository = new HiberCarRepository(crud);
         this.car = new Car();
         car.setEngine(engine);
         car.setName("car");
@@ -51,7 +51,7 @@ public class PostRepositoryTest {
         alterCar.setName("name");
         carRepository.create(alterCar);
 
-        var userRepository = new UserRepository(crud);
+        var userRepository = new HiberUserRepository(crud);
         this.user = new User();
         user.setLogin("login");
         user.setPassword("password");

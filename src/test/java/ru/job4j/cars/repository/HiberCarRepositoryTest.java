@@ -11,21 +11,21 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class CarRepositoryTest {
+public class HiberCarRepositoryTest {
     private Engine engine;
-    private CarRepository repository;
+    private HiberCarRepository repository;
 
-    public CarRepositoryTest() {
+    public HiberCarRepositoryTest() {
         CrudRepository crud = new CrudRepository(
                 new MetadataSources(
                         new StandardServiceRegistryBuilder()
                                 .configure().build())
                         .buildMetadata().buildSessionFactory());
-        EngineRepository engineRepository = new EngineRepository(crud);
-        repository = new CarRepository(crud);
+        HiberEngineRepository hiberEngineRepository = new HiberEngineRepository(crud);
+        repository = new HiberCarRepository(crud);
         this.engine = new Engine();
         engine.setName("test");
-        engine = engineRepository.create(engine);
+        engine = hiberEngineRepository.create(engine);
     }
 
     @Test

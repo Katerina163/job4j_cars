@@ -11,19 +11,19 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class OwnerRepositoryTest {
-    private OwnerRepository repository;
+public class HiberOwnerRepositoryTest {
+    private HiberOwnerRepository repository;
     private User user;
 
-    public OwnerRepositoryTest() {
+    public HiberOwnerRepositoryTest() {
         CrudRepository crud = new CrudRepository(
                 new MetadataSources(
                         new StandardServiceRegistryBuilder()
                                 .configure().build())
                         .buildMetadata().buildSessionFactory());
-        repository = new OwnerRepository(crud);
+        repository = new HiberOwnerRepository(crud);
 
-        var userRepository = new UserRepository(crud);
+        var userRepository = new HiberUserRepository(crud);
         this.user = new User();
         user.setLogin("login");
         user.setPassword("password");

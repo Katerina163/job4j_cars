@@ -11,8 +11,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class UserRepositoryTest {
-    private UserRepository repository = new UserRepository(new CrudRepository(
+public class HiberUserRepositoryTest {
+    private HiberUserRepository repository = new HiberUserRepository(new CrudRepository(
             new MetadataSources(
                     new StandardServiceRegistryBuilder()
                             .configure().build())

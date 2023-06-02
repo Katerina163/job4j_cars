@@ -10,8 +10,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class EngineRepositoryTest {
-    private EngineRepository repository = new EngineRepository(new CrudRepository(
+public class HiberEngineRepositoryTest {
+    private HiberEngineRepository repository = new HiberEngineRepository(new CrudRepository(
             new MetadataSources(
                     new StandardServiceRegistryBuilder()
                             .configure().build())
