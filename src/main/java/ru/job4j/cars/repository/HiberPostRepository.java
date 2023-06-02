@@ -24,6 +24,11 @@ public class HiberPostRepository implements PostRepository {
     }
 
     @Override
+    public Collection<AutoPost> findAll() {
+        return crudRepository.query("from AutoPost", AutoPost.class);
+    }
+
+    @Override
     public Collection<AutoPost> findWithFile() {
         return crudRepository.query(
                 "from AutoPost a where size(a.files) >= 1", AutoPost.class);
