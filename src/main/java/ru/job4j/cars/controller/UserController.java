@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.cars.model.User;
+import ru.job4j.cars.service.PostService;
 import ru.job4j.cars.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,9 +17,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
     private UserService service;
+    private PostService postService;
 
-    public UserController(UserService simpleUserService) {
+    public UserController(UserService simpleUserService, PostService simplePostService) {
         service = simpleUserService;
+        postService = simplePostService;
     }
 
     @GetMapping("/login")
@@ -61,7 +64,7 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(Model model, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+        model.addAttribute(postService.findUsersCar(user.getLogin()));
         return "/user/home";
     }
 }
