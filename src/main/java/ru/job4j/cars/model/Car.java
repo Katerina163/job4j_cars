@@ -21,9 +21,6 @@ public class Car {
 
     private String name;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Owner owner;
-
     @ManyToOne
     @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
     private Engine engine;
