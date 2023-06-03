@@ -1,8 +1,8 @@
 body {
-    background: rgb(227,251,152);
-    background: -moz-radial-gradient(circle, rgba(227,251,152,1) 0%, rgba(152,251,152,1) 100%);
-    background: -webkit-radial-gradient(circle, rgba(227,251,152,1) 0%, rgba(152,251,152,1) 100%);
-    background: radial-gradient(circle, rgba(227,251,152,1) 0%, rgba(152,251,152,1) 100%);
+    background: rgb(255,255,153);
+    background: -moz-radial-gradient(circle, rgba(255,255,153,1) 0%, rgba(152,251,152,1) 100%);
+    background: -webkit-radial-gradient(circle, rgba(255,255,153,1) 0%, rgba(152,251,152,1) 100%);
+    background: radial-gradient(circle, rgba(255,255,153,1) 0%, rgba(152,251,152,1) 100%);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e3fb98",endColorstr="#98fb98",GradientType=1);
 }
 text {

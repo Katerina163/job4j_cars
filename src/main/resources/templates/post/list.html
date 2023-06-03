@@ -55,7 +55,8 @@
             <a th:href="@{/post/{id}(id=${post.id})}" style="text-decoration: none;" class="text-success">
                 <div class="col">
                     <div class="card border-dark">
-                        <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}" class="card-img-top" alt="No image">
+                        <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}"
+                             class="card-img-top" alt="No image">
                         <div class="card-body text-success text-center">
                             <h5 class="card-title" th:text="${post.car.name}">mark</h5>
                             <p class="card-text">price</p>
