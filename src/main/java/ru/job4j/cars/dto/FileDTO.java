@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class FileDTO {
     private String name;
+    private int postId;
     private byte[] content;
 }

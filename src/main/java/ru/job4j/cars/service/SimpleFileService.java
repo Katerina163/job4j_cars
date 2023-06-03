@@ -39,7 +39,7 @@ public class SimpleFileService implements FileService {
             return Optional.empty();
         }
         var content = readFileAsBytes(fileOptional.get().getPath());
-        return Optional.of(new FileDTO(fileOptional.get().getName(), content));
+        return Optional.of(new FileDTO(fileOptional.get().getName(), fileOptional.get().getPostId(), content));
     }
 
     private byte[] readFileAsBytes(String path) {
@@ -54,7 +54,7 @@ public class SimpleFileService implements FileService {
     public File save(FileDTO fileDto) {
         var path = getNewFilePath(fileDto.getName());
         writeFileBytes(path, fileDto.getContent());
-        return repository.create(new File(fileDto.getName(), path));
+        return repository.create(new File(fileDto.getName(), path, fileDto.getPostId()));
     }
 
     private String getNewFilePath(String sourceName) {

@@ -22,8 +22,12 @@ public class File {
 
     private String path;
 
-    public File(String name, String path) {
+    @Column(name = "post_id")
+    private int postId;
+
+    public File(String name, String path, int postId) {
         this.name = name;
         this.path = path;
+        this.postId = postId;
     }
 }
