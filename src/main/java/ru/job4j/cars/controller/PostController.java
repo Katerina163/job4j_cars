@@ -3,15 +3,22 @@ package ru.job4j.cars.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cars.dto.FileDTO;
+import ru.job4j.cars.service.FileService;
 import ru.job4j.cars.service.PostService;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/post")
 public class PostController {
     private PostService service;
+    private FileService fileService;
 
-    public PostController(PostService simplePostService) {
+    public PostController(PostService simplePostService, FileService simpleFileService) {
         service = simplePostService;
+        fileService = simpleFileService;
     }
 
     @GetMapping("/")
@@ -57,6 +64,12 @@ public class PostController {
     @GetMapping("/create")
     public String getCreatePage() {
         return "/post/create";
+    }
+
+    @PostMapping("/add/{id}")
+    public String add(@RequestParam MultipartFile file, @PathVariable int id) throws IOException {
+        fileService.save(new FileDTO(file.getOriginalFilename(), id, file.getBytes()));
+        return "redirect:/post/" + id;
     }
 
     @GetMapping("/modify")

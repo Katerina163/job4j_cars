@@ -54,4 +54,9 @@ public class SimplePostService implements PostService {
     public Optional<AutoPost> findById(int id) {
         return repository.findById(id);
     }
+
+    @Override
+    public void update(AutoPost post) {
+        repository.update(post);
+    }
 }

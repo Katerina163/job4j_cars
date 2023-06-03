@@ -60,7 +60,14 @@ public class HiberPostRepository implements PostRepository {
 
     @Override
     public Optional<AutoPost> findById(int id) {
-        return crudRepository.optional("from AutoPost where id = :fId",
-                AutoPost.class, Map.of("fId", id));
+        String s = "from AutoPost ap left join fetch ap.priceHistories"
+                + " left join fetch ap.car as car left join fetch car.owners where ap.id = :fId";
+
+        return crudRepository.optional(s, AutoPost.class, Map.of("fId", id));
+    }
+
+    @Override
+    public void update(AutoPost post) {
+        crudRepository.run(session -> session.merge(post));
     }
 }

@@ -2,6 +2,7 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,10 +16,15 @@ public class AutoPost {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
+
     private String description;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date created;
 
-    @OneToOne
+    private boolean sold;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id")
     private Car car;
 
@@ -30,7 +36,7 @@ public class AutoPost {
     @JoinColumn(name = "auto_post_id")
     private List<PriceHistory> priceHistories = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "participates",
             joinColumns = { @JoinColumn(name = "post_id") },
@@ -38,7 +44,7 @@ public class AutoPost {
     )
     private List<User> participates = new ArrayList<>();
 
-    @OneToMany(cascade =  CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
     private Set<File> files = new HashSet<>();
 }

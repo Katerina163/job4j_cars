@@ -21,4 +21,6 @@ public interface PostRepository {
     void delete(AutoPost post);
 
     Optional<AutoPost> findById(int id);
+
+    void update(AutoPost post);
 }
