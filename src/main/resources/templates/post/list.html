@@ -55,21 +55,13 @@
             <a th:href="@{/post/{id}(id=${post.id})}" style="text-decoration: none;" class="text-success">
                 <div class="col">
                     <div class="card border-dark">
-                        <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel"
-                             th:each="file: ${post.files}">
-                            <div class="carousel-inner">
-                                <div class="carousel-item">
-                                    <img th:src="@{/files/{fileId}(fileId=*{file.id})}" class="d-block w-100"
-                                         alt="no image">
-                                </div>
-                            </div>
-                        </div>
+                        <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}" class="card-img-top" alt="No image">
                         <div class="card-body text-success text-center">
                             <h5 class="card-title" th:text="${post.car.name}">mark</h5>
                             <p class="card-text">price</p>
                         </div>
                         <div class="card-footer success">
-                            <small class="text-dark" th:text="${post.created}">data</small>
+                            <small class="text-dark" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}">data</small>
                         </div>
                     </div>
                 </div>
