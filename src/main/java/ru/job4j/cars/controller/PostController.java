@@ -2,10 +2,7 @@ package ru.job4j.cars.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.cars.service.PostService;
 
 @Controller
@@ -44,6 +41,17 @@ public class PostController {
         }
         model.addAttribute("posts", list);
         return "/post/list";
+    }
+
+    @GetMapping("/{id}")
+    public String getPostPage(@PathVariable int id, Model model) {
+        var postOptional = service.findById(id);
+        if (postOptional.isEmpty()) {
+            model.addAttribute("message", "Не удалось найти пост");
+            return "/error";
+        }
+        model.addAttribute("post", postOptional.get());
+        return "/post/post";
     }
 
     @GetMapping("/create")

@@ -1,8 +1,6 @@
 package ru.job4j.cars.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 
@@ -13,6 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +21,9 @@ public class File {
     private String name;
 
     private String path;
+
+    public File(String name, String path) {
+        this.name = name;
+        this.path = path;
+    }
 }
