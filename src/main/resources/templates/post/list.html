@@ -59,7 +59,8 @@
                              class="card-img-top" alt="No image">
                         <div class="card-body text-success text-center">
                             <h5 class="card-title" th:text="${post.car.name}">mark</h5>
-                            <p class="card-text">price</p>
+                            <p class="card-text"
+                               th:text="${post.priceHistories.get(post.priceHistories.size() - 1).after}">price</p>
                         </div>
                         <div class="card-footer success">
                             <small class="text-dark" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}">data</small>

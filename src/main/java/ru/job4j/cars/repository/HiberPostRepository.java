@@ -17,34 +17,42 @@ public class HiberPostRepository implements PostRepository {
 
     @Override
     public Collection<AutoPost> findAllNew() {
-        String s = "from AutoPost where created between :fStart and :fEnd order by created";
-        return crudRepository.query(s, AutoPost.class, Map.of(
-                "fStart", Date.valueOf(LocalDate.now().minusDays(1L)),
-                "fEnd", Date.valueOf(LocalDate.now())));
+        return crudRepository.query(
+                getAutoPostQuery("where ap.created between :fStart and :fEnd order by ap.created"),
+                AutoPost.class, Map.of(
+                        "fStart", Date.valueOf(LocalDate.now().minusDays(1L)),
+                        "fEnd", Date.valueOf(LocalDate.now())));
+    }
+
+    private String getAutoPostQuery(String condition) {
+        return "from AutoPost ap left join fetch ap.priceHistories"
+                + " left join fetch ap.car as car left join fetch ap.files "
+                + condition;
     }
 
     @Override
     public Collection<AutoPost> findAll() {
-        return crudRepository.query("from AutoPost", AutoPost.class);
+        return crudRepository.query(
+                getAutoPostQuery(""), AutoPost.class);
     }
 
     @Override
     public Collection<AutoPost> findWithFile() {
         return crudRepository.query(
-                "from AutoPost a where size(a.files) >= 1", AutoPost.class);
+                getAutoPostQuery("where size(ap.files) >= 1"), AutoPost.class);
     }
 
     @Override
     public Collection<AutoPost> findCarBrand(String brand) {
         return crudRepository.query(
-                "from AutoPost a where a.car.name = :fBrand",
+                getAutoPostQuery("where car.name = :fBrand"),
                 AutoPost.class, Map.of("fBrand", brand));
     }
 
     @Override
     public Collection<AutoPost> findUsersCar(String login) {
         return crudRepository.query(
-                "from AutoPost a where a.user.login = :fUser",
+                getAutoPostQuery("where ap.user.login = :fUser"),
                 AutoPost.class, Map.of("fUser", login));
     }
 
@@ -60,10 +68,11 @@ public class HiberPostRepository implements PostRepository {
 
     @Override
     public Optional<AutoPost> findById(int id) {
-        String s = "from AutoPost ap left join fetch ap.priceHistories"
-                + " left join fetch ap.car as car left join fetch car.owners where ap.id = :fId";
-
-        return crudRepository.optional(s, AutoPost.class, Map.of("fId", id));
+        String s = " left join fetch car.owners left join fetch ap.user"
+                + " left join fetch car.engine where ap.id = :fId";
+        return crudRepository.optional(
+                getAutoPostQuery(s),
+                AutoPost.class, Map.of("fId", id));
     }
 
     @Override
