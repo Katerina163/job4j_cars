@@ -18,4 +18,8 @@ public class PriceHistory {
     private long before;
     private long after;
     private Date created;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auto_post_id")
+    private AutoPost post;
 }
