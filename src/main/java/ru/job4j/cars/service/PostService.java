@@ -23,4 +23,6 @@ public interface PostService {
     Optional<AutoPost> findById(int id);
 
     void update(AutoPost post);
+
+    void soldById(int id, boolean sold);
 }

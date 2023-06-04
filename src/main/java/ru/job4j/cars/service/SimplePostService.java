@@ -59,4 +59,9 @@ public class SimplePostService implements PostService {
     public void update(AutoPost post) {
         repository.update(post);
     }
+
+    @Override
+    public void soldById(int id, boolean sold) {
+        repository.soldById(id, sold);
+    }
 }

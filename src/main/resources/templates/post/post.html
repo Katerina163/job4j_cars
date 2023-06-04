@@ -97,9 +97,16 @@
         <h4>Продано</h4>
     </div>
     <div th:if="${user.login == post.user.login}">
-        <div class="col-6">
-            <button class="button" type="submit">Продать</button>
-        </div>
+        <form th:action="@{/post/sold}" method="post" enctype="multipart/form-data" th:object="${post}">
+            <input type="hidden" name="id" th:field="*{id}">
+            <input type="hidden" name="sold" th:field="*{sold}">
+            <div class="col-6" th:if="${post.sold}">
+                <button class="button" type="submit">Выставить на продажу</button>
+            </div>
+            <div class="col-6" th:if="${!post.sold}">
+                <button class="button" type="submit">Продать</button>
+            </div>
+        </form>
     </div>
     <div th:if="${user.login != 'Гость' && user.login != post.user.login}">
         <div class="col-6">

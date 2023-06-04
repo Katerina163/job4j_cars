@@ -42,7 +42,7 @@ public class PostController {
         return "/post/list";
     }
 
-    @PostMapping("/mark")
+    @GetMapping("/mark")
     public String getMarkPage(@RequestParam String brand, Model model) {
         var list = service.findCarBrand(brand);
         if (list.isEmpty()) {
@@ -108,6 +108,12 @@ public class PostController {
     public String add(@RequestParam MultipartFile file, @PathVariable int id) throws IOException {
         fileService.save(new FileDTO(file.getOriginalFilename(), id, file.getBytes()));
         return "redirect:/post/" + id;
+    }
+
+    @PostMapping("/sold")
+    public String sold(@ModelAttribute AutoPost post) {
+        service.soldById(post.getId(), !post.isSold());
+        return "redirect:/post/" + post.getId();
     }
 
     @GetMapping("/modify")

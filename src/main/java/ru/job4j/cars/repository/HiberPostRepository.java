@@ -98,4 +98,11 @@ public class HiberPostRepository implements PostRepository {
     public void update(AutoPost post) {
         crudRepository.run(session -> session.merge(post));
     }
+
+    @Override
+    public void soldById(int id, boolean sold) {
+        crudRepository.run(
+                "update AutoPost set sold = :fSold where id = :fId",
+                Map.of("fSold", sold, "fId", id));
+    }
 }
