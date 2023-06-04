@@ -57,12 +57,18 @@
     </div>
     <div th:if="${user.login == post.user.login}">
         <form th:action="@{/post/add/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="file"><b>Фото</b></label>
-                <input class="form-control form-control-sm w-100" type="file" id="file" name="file">
-            </div>
-            <div class="col-6">
-                <button class="button" type="submit">Добавить фото</button>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <label for="file"><b>Фото</b></label>
+                        <input class="form-control form-control-sm w-100" type="file" id="file" name="file">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <button class="button" type="submit">Добавить фото</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -88,9 +94,15 @@
     <div class="green" th:if="${post.sold}">
         <h4>Продано</h4>
     </div>
-
-    <div class="col-6">
-        <button class="button" type="submit">Подписаться</button>
+    <div th:if="${user.login == post.user.login}">
+        <div class="col-6">
+            <button class="button" type="submit">Продать</button>
+        </div>
+    </div>
+    <div th:if="${user.login != 'Гость' && user.login != post.user.login}">
+        <div class="col-6">
+            <button class="button" type="submit">Подписаться</button>
+        </div>
     </div>
 </div>
 </body>

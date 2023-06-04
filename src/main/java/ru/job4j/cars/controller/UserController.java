@@ -64,7 +64,7 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(Model model, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        model.addAttribute(postService.findUsersCar(user.getLogin()));
+        model.addAttribute("posts", postService.findUsersCar(user.getLogin()));
         return "/user/home";
     }
 }

@@ -45,5 +45,27 @@
 </div>
 
 
+<div class="container-fluid">
+    <h4 align="center"><div th:text="'Добро пожаловать, ' + ${user.login} + '!'"></div></h4>
+    <div><h5>Ваши объявления:</h5></div>
+    <div class="row row-cols-2 row-cols-md-4 g-4" th:each="post: ${posts}">
+        <a th:href="@{/post/{id}(id=${post.id})}" style="text-decoration: none;" class="text-success">
+            <div class="col">
+                <div class="card border-dark">
+                    <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}"
+                         class="card-img-top" alt="No image">
+                    <div class="card-body text-success text-center">
+                        <h5 class="card-title" th:text="${post.car.name}">mark</h5>
+                        <p class="card-text">price</p>
+                    </div>
+                    <div class="card-footer success">
+                        <small class="text-dark" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}">data</small>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+
 </body>
 </html>
