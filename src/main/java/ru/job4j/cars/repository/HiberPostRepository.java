@@ -1,6 +1,9 @@
 package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.AutoPost;
 
@@ -13,6 +16,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class HiberPostRepository implements PostRepository {
+    private final SessionFactory sf;
     private CrudRepository crudRepository;
 
     @Override
@@ -58,7 +62,22 @@ public class HiberPostRepository implements PostRepository {
 
     @Override
     public void add(AutoPost post) {
-        crudRepository.run(session -> session.save(post));
+        Transaction tx = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            session.save(post.getCar().getEngine());
+            session.save(post.getCar());
+            for (var owner : post.getCar().getOwners()) {
+                session.save(owner);
+            }
+            session.save(post);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override

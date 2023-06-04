@@ -80,13 +80,15 @@
     <div><h4>Описание:</h4>
         <p style="text-align: justify;" class="text-break" th:text="${post.description}"></p>
     </div>
-    <div class="mb-3" th:each="owner: ${post.car.owners}"><h4>Предыдущие владельцы:</h4>
-        <a th:text="${owner.name}"></a>
+    <div class="mb-3"><h4>Предыдущие владельцы:</h4>
+        <div th:each="owner: ${post.car.owners}">
+            <a th:text="${owner.name}"></a>
+        </div>
     </div>
-    <div th:each="history: ${post.priceHistories}"><h4>Цена:</h4>
-        <p class="textonleft" th:text="${history.after} + '₽'"></p>
+    <div><h4>Цена:</h4>
+        <p class="textonleft" th:text="${post.priceHistories.get(post.priceHistories.size() - 1).after} + '₽'"></p>
         <p class="textonright"
-           th:text="'Последнее обновление цены ' + ${#dates.format(history.created, 'dd/MM/yyyy')}"></p>
+           th:text="'Последнее обновление цены ' + ${#dates.format(post.priceHistories.get(post.priceHistories.size() - 1).created, 'dd/MM/yyyy')}"></p>
     </div>
     <div class="green" th:if="${!post.sold}">
         <h4>Не продано</h4>

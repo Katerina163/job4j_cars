@@ -18,20 +18,10 @@ import java.time.LocalDate;
 public class PostController {
     private PostService service;
     private FileService fileService;
-    private CarService carService;
-    private EngineService engineService;
-    private OwnerService ownerService;
-    private PriceHistoryService priceHistoryService;
 
-    public PostController(PostService simplePostService, FileService simpleFileService, CarService simpleCarService,
-                          EngineService simpleEngineService, OwnerService simpleOwnerService,
-                          PriceHistoryService simplePriceHistoryService) {
+    public PostController(PostService simplePostService, FileService simpleFileService) {
         service = simplePostService;
         fileService = simpleFileService;
-        carService = simpleCarService;
-        engineService = simpleEngineService;
-        ownerService = simpleOwnerService;
-        priceHistoryService = simplePriceHistoryService;
     }
 
     @GetMapping("/")
@@ -81,17 +71,15 @@ public class PostController {
 
     @PostMapping("/create")
     public String create(@RequestParam String engineName, @RequestParam String carName, @RequestParam String owners,
-                         @RequestParam String description, @RequestParam Integer price, @RequestParam MultipartFile file,
+                         @RequestParam String description, @RequestParam int price, @RequestParam MultipartFile file,
                          HttpSession session) throws IOException {
         var today = Date.valueOf(LocalDate.now());
         var user = (User) session.getAttribute("user");
         var engine = new Engine();
         engine.setName(engineName);
-        engineService.create(engine);
         var car = new Car();
         car.setName(carName);
         car.setEngine(engine);
-        carService.create(car);
         var post = new AutoPost();
         post.setDescription(description);
         post.setCar(car);
@@ -103,16 +91,15 @@ public class PostController {
             var owner = new Owner();
             owner.setUser(user);
             owner.setName(name);
-            ownerService.create(owner);
+            owner.getCars().add(car);
             post.getCar().getOwners().add(owner);
         }
-        service.add(post);
-        var priceHistory = new PriceHistory();
+       var priceHistory = new PriceHistory();
         priceHistory.setBefore(price);
         priceHistory.setAfter(price);
         priceHistory.setCreated(today);
-        priceHistory.setPost(post);
-        priceHistoryService.create(priceHistory);
+        post.getPriceHistories().add(priceHistory);
+        service.add(post);
         fileService.save(new FileDTO(file.getOriginalFilename(), post.getId(), file.getBytes()));
         return "redirect:/user/profile";
     }
