@@ -31,13 +31,9 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute User user, Model model, HttpServletRequest request) {
-        var loginUser = service.findByLogin(user.getLogin());
+        var loginUser = service.findByLoginAndPassword(user.getLogin(), user.getPassword());
         if (loginUser.isEmpty()) {
-            model.addAttribute("message", "Неверно введен логин");
-            return "/error";
-        }
-        if (!loginUser.get().getPassword().equals(user.getPassword())) {
-            model.addAttribute("message", "Неверно введен пароль");
+            model.addAttribute("message", "Неверно введен логин или пароль");
             return "/error";
         }
         request.getSession().setAttribute("user", loginUser.get());

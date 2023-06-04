@@ -49,4 +49,9 @@ public class SimpleUserService implements UserService {
     public Optional<User> findByLogin(String login) {
         return repository.findByLogin(login);
     }
+
+    @Override
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return repository.findByLoginAndPassword(login, password);
+    }
 }

@@ -54,6 +54,14 @@ public class HiberUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return crudRepository.optional(
+                "from User where login = :fLogin and password = :fPassword",
+                User.class, Map.of("fLogin", login, "fPassword", password)
+        );
+    }
+
+    @Override
     public Optional<User> findByLogin(String login) {
         return crudRepository.optional(
                 "from User where login = :fLogin", User.class,

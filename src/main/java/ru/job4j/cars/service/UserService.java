@@ -19,4 +19,6 @@ public interface UserService {
     List<User> findByLikeLogin(String key);
 
     Optional<User> findByLogin(String login);
+
+    Optional<User> findByLoginAndPassword(String login, String password);
 }
