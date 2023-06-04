@@ -1,10 +1,9 @@
-body{
+body {
     margin-top:20px;
-    background: #f6f9fc;
+    background: #ffff99;
 }
 .account-block {
     padding: 0;
-    background-image: url(https://bootdey.com/img/Content/bg1.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     height: 100%;
@@ -23,7 +22,7 @@ body{
 }
 .account-block .account-testimonial {
     text-align: center;
-    color: #fff;
+    color: #ffff99;
     position: absolute;
     margin: 0 auto;
     padding: 0 1.75rem;
@@ -33,11 +32,11 @@ body{
 }
 
 .text-theme {
-    color: #5369f8 !important;
+    color: #198754 !important;
 }
 
 .btn-theme {
-    background-color: #5369f8;
-    border-color: #5369f8;
+    background-color: #198754;
+    border-color: #198754;
     color: #fff;
 }
