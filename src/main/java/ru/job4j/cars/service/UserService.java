@@ -14,6 +14,12 @@ public interface UserService {
 
     List<User> findAllOrderById();
 
+    List<User> findParticipatesById(int userId);
+
+    void addAutoPostByUserId(int userId, int postId);
+
+    void deleteAutoPostByUserId(int userId, int postId);
+
     Optional<User> findById(int userId);
 
     List<User> findByLikeLogin(String key);

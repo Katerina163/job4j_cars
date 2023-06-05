@@ -54,21 +54,27 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4">
             <div class="col" th:each="post: ${posts}">
-                <a th:href="@{/post/{id}(id=${post.id})}" style="text-decoration: none;" class="text-success">
-                    <div class="card border-dark bg-success">
+                <div class="card border-dark bg-success">
+                    <a th:if="${!post.files.isEmpty()}">
                         <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}"
                              class="card-img-top" height="222" alt="No image">
+                    </a>
+                    <a th:if="${post.files.isEmpty()}">
+                        <img src="https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80"
+                             class="card-img-top" height="222" alt="No image">
+                    </a>
+                    <a class="text-decoration-none text-reset" th:href="@{/post/{id}(id=${post.id})}">
                         <div class="card-body text-center">
                             <h5 class="card-title" th:text="${post.car.name}">mark</h5>
                             <p class="card-text"
                                th:text="${post.priceHistories.get(post.priceHistories.size() - 1).after}">price</p>
                         </div>
-                        <div class="card-footer success">
-                            <small class="text-dark"
-                                   th:text="${#dates.format(post.created, 'dd/MM/yyyy')}">data</small>
-                        </div>
+                    </a>
+                    <div class="card-footer success">
+                        <small class="text-dark"
+                               th:text="${#dates.format(post.created, 'dd/MM/yyyy')}">data</small>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </div>

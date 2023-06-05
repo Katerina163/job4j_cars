@@ -51,6 +51,11 @@ public class SimplePostService implements PostService {
     }
 
     @Override
+    public void deleteById(int id) {
+        repository.deleteById(id);
+    }
+
+    @Override
     public Optional<AutoPost> findById(int id) {
         return repository.findById(id);
     }

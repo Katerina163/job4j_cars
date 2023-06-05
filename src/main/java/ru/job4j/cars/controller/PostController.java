@@ -42,7 +42,7 @@ public class PostController {
         return "/post/list";
     }
 
-    @GetMapping("/mark")
+    @PostMapping("/mark")
     public String getMarkPage(@RequestParam String brand, Model model) {
         var list = service.findCarBrand(brand);
         if (list.isEmpty()) {
@@ -91,7 +91,6 @@ public class PostController {
             var owner = new Owner();
             owner.setUser(user);
             owner.setName(name);
-            owner.getCars().add(car);
             post.getCar().getOwners().add(owner);
         }
        var priceHistory = new PriceHistory();
@@ -100,13 +99,17 @@ public class PostController {
         priceHistory.setCreated(today);
         post.getPriceHistories().add(priceHistory);
         service.add(post);
-        fileService.save(new FileDTO(file.getOriginalFilename(), post.getId(), file.getBytes()));
+        if (!file.isEmpty()) {
+            fileService.save(new FileDTO(file.getOriginalFilename(), post.getId(), file.getBytes()));
+        }
         return "redirect:/user/profile";
     }
 
     @PostMapping("/add/{id}")
     public String add(@RequestParam MultipartFile file, @PathVariable int id) throws IOException {
-        fileService.save(new FileDTO(file.getOriginalFilename(), id, file.getBytes()));
+        if (!file.isEmpty()) {
+            fileService.save(new FileDTO(file.getOriginalFilename(), id, file.getBytes()));
+        }
         return "redirect:/post/" + id;
     }
 
@@ -114,6 +117,12 @@ public class PostController {
     public String sold(@ModelAttribute AutoPost post) {
         service.soldById(post.getId(), !post.isSold());
         return "redirect:/post/" + post.getId();
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id) {
+        service.deleteById(id);
+        return "redirect:/user/profile";
     }
 
     @GetMapping("/modify")

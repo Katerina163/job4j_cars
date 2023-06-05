@@ -2,10 +2,7 @@ package ru.job4j.cars.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.PostService;
 import ru.job4j.cars.service.UserService;
@@ -61,6 +58,25 @@ public class UserController {
     public String getProfile(Model model, HttpSession session) {
         var user = (User) session.getAttribute("user");
         model.addAttribute("posts", postService.findUsersCar(user.getLogin()));
+        model.addAttribute("subscribe",
+                service.findParticipatesById(user.getId())
+                .stream()
+                .flatMap(u -> u.getParticipates().stream())
+                .toList());
         return "/user/home";
+    }
+
+    @PostMapping("/subscribe")
+    public String subscribe(@RequestParam int id, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        service.addAutoPostByUserId(user.getId(), id);
+        return "redirect:/user/profile";
+    }
+
+    @GetMapping("/unsubscribe/{id}")
+    public String unsubscribe(@PathVariable int id, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        service.deleteAutoPostByUserId(user.getId(), id);
+        return "redirect:/user/profile";
     }
 }

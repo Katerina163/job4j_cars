@@ -29,7 +29,7 @@ public class HiberPostRepository implements PostRepository {
     }
 
     private String getAutoPostQuery(String condition) {
-        return "from AutoPost ap left join fetch ap.priceHistories"
+        return "select distinct ap from AutoPost ap left join fetch ap.priceHistories"
                 + " left join fetch ap.car as car left join fetch ap.files "
                 + condition;
     }
@@ -83,6 +83,26 @@ public class HiberPostRepository implements PostRepository {
     @Override
     public void delete(AutoPost post) {
         crudRepository.run(session -> session.delete(post));
+    }
+
+    @Override
+    public void deleteById(int id) {
+        Transaction tx = null;
+        try (Session session = sf.openSession()) {
+            tx = session.beginTransaction();
+            session.createQuery("delete from File where postId = :fId")
+                    .setParameter("fId", id)
+                    .executeUpdate();
+            var post = new AutoPost();
+            post.setId(id);
+            session.delete(post);
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override

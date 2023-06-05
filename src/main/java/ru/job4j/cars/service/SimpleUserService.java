@@ -36,6 +36,11 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
+    public List<User> findParticipatesById(int userId) {
+        return repository.findParticipatesById(userId);
+    }
+
+    @Override
     public Optional<User> findById(int userId) {
         return repository.findById(userId);
     }
@@ -53,5 +58,15 @@ public class SimpleUserService implements UserService {
     @Override
     public Optional<User> findByLoginAndPassword(String login, String password) {
         return repository.findByLoginAndPassword(login, password);
+    }
+
+    @Override
+    public void deleteAutoPostByUserId(int userId, int postId) {
+        repository.deleteAutoPostByUserId(userId, postId);
+    }
+
+    @Override
+    public void addAutoPostByUserId(int userId, int postId) {
+        repository.addAutoPostByUserId(userId, postId);
     }
 }
