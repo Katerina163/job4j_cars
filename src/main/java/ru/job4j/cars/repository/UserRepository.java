@@ -18,13 +18,9 @@ public interface UserRepository {
 
     List<User> findParticipatesById(int userId);
 
-    void deleteAutoPostByUserId(int userId, int postId);
-
     Optional<User> findByLoginAndPassword(String login, String password);
 
     List<User> findByLikeLogin(String key);
 
     Optional<User> findByLogin(String login);
-
-    void addAutoPostByUserId(int userId, int postId);
 }

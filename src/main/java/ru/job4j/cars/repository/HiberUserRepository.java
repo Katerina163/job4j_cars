@@ -76,18 +76,4 @@ public class HiberUserRepository implements UserRepository {
                 User.class, Map.of("fLogin", login)
         );
     }
-
-    @Override
-    public void addAutoPostByUserId(int userId, int postId) {
-        crudRepository.runSql(
-                "insert into participates(user_id, post_id) values(:fUserId, :fPostId)",
-                Map.of("fUserId", userId, "fPostId", postId));
-    }
-
-    @Override
-    public void deleteAutoPostByUserId(int userId, int postId) {
-        crudRepository.runSql(
-                "delete from participates where post_id = :fPostId and user_id = :fUserId",
-                Map.of("fUserId", userId, "fPostId", postId));
-    }
 }

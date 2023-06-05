@@ -2,6 +2,7 @@ package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.User;
+import ru.job4j.cars.repository.ParticipateRepository;
 import ru.job4j.cars.repository.UserRepository;
 
 import java.util.List;
@@ -11,8 +12,11 @@ import java.util.Optional;
 public class SimpleUserService implements UserService {
     private UserRepository repository;
 
-    public SimpleUserService(UserRepository hiberUserRepository) {
+    private ParticipateRepository participateRepository;
+
+    public SimpleUserService(UserRepository hiberUserRepository, ParticipateRepository hiberParticipateRepository) {
         repository = hiberUserRepository;
+        participateRepository = hiberParticipateRepository;
     }
 
     @Override
@@ -62,11 +66,11 @@ public class SimpleUserService implements UserService {
 
     @Override
     public void deleteAutoPostByUserId(int userId, int postId) {
-        repository.deleteAutoPostByUserId(userId, postId);
+        participateRepository.delete(userId, postId);
     }
 
     @Override
     public void addAutoPostByUserId(int userId, int postId) {
-        repository.addAutoPostByUserId(userId, postId);
+        participateRepository.create(userId, postId);
     }
 }
