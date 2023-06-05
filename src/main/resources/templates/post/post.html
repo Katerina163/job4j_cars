@@ -52,8 +52,10 @@
 </div>
 <div class="container-md">
     <h3 align="center" th:text="${post.car.name}"></h3>
-    <div class="box text-center" th:each="file: ${post.files}">
-        <img th:src="@{/files/{id}(id=*{file.id})}" height="222" alt="No image">
+    <div class="box text-center">
+        <a th:each="file: ${post.files}">
+            <img th:src="@{/files/{id}(id=*{file.id})}" height="222" alt="No image">
+        </a>
     </div>
     <div th:if="${user.login == post.user.login}">
         <form th:action="@{/post/add/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
@@ -109,9 +111,12 @@
         </form>
     </div>
     <div th:if="${user.login != 'Гость' && user.login != post.user.login}">
-        <div class="col-6">
-            <button class="button" type="submit">Подписаться</button>
-        </div>
+        <form th:action="@{/user/subscribe}" method="post" enctype="multipart/form-data" th:object="${post}">
+            <input type="hidden" name="id" th:field="${post.id}">
+            <div class="col-6">
+                <button class="button" type="submit">Подписаться</button>
+            </div>
+        </form>
     </div>
 </div>
 </body>
