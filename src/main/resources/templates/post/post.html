@@ -92,6 +92,20 @@
         <p class="textonright"
            th:text="'Последнее обновление цены ' + ${#dates.format(post.priceHistories.get(post.priceHistories.size() - 1).created, 'dd/MM/yyyy')}"></p>
     </div>
+    <div th:if="${user.login == post.user.login}">
+        <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" th:field="${post.id}">
+            <input type="hidden" name="after"
+                   th:value="${post.priceHistories.get(post.priceHistories.size() - 1).after}">
+            <div class="mb-3">
+                <label for="price" class="form-label"><b>Цена:</b></label>
+                <input type="number" class="form-control" id="price" name="price">
+            </div>
+            <div class="col-6">
+                <button class="button" type="submit">Изменить цену</button>
+            </div>
+        </form>
+    </div>
     <div class="green" th:if="${!post.sold}">
         <h4>Не продано</h4>
     </div>

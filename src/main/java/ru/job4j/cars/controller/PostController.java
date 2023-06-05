@@ -18,10 +18,13 @@ import java.time.LocalDate;
 public class PostController {
     private PostService service;
     private FileService fileService;
+    private PriceHistoryService priceHistoryService;
 
-    public PostController(PostService simplePostService, FileService simpleFileService) {
+    public PostController(PostService simplePostService, FileService simpleFileService,
+                          PriceHistoryService simplePriceHistoryService) {
         service = simplePostService;
         fileService = simpleFileService;
+        priceHistoryService = simplePriceHistoryService;
     }
 
     @GetMapping("/")
@@ -117,6 +120,18 @@ public class PostController {
     public String sold(@ModelAttribute AutoPost post) {
         service.soldById(post.getId(), !post.isSold());
         return "redirect:/post/" + post.getId();
+    }
+
+    @PostMapping("/change-price")
+    public String changePrice(@RequestParam int id, @RequestParam String after,
+                              @RequestParam String price) {
+        var priceHistory = new PriceHistory();
+        priceHistory.setBefore(Integer.parseInt(after));
+        priceHistory.setAfter(Integer.parseInt(price));
+        priceHistory.setPostId(id);
+        priceHistory.setCreated(Date.valueOf(LocalDate.now()));
+        priceHistoryService.create(priceHistory);
+        return "redirect:/post/" + id;
     }
 
     @GetMapping("/delete/{id}")
