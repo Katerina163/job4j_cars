@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/post")
@@ -73,22 +74,21 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam String engineName, @RequestParam String carName, @RequestParam String owners,
-                         @RequestParam String description, @RequestParam int price, @RequestParam MultipartFile file,
-                         HttpSession session) throws IOException {
+    public String create(@RequestParam Map<String, String> allParams, @RequestParam int price,
+                         @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
         var engine = new Engine();
-        engine.setName(engineName);
+        engine.setName(allParams.get("engineName"));
         var car = new Car();
-        car.setName(carName);
+        car.setName(allParams.get("carName"));
         car.setEngine(engine);
         var post = new AutoPost();
-        post.setDescription(description);
+        post.setDescription(allParams.get("description"));
         post.setCar(car);
         post.setCreated(Date.valueOf(LocalDate.now()));
         post.setSold(false);
         post.setUser(user);
-        String[] ownersNames = owners.split(", ");
+        String[] ownersNames = allParams.get("owners").split(", ");
         for (var name : ownersNames) {
             var owner = new Owner();
             owner.setUser(user);
