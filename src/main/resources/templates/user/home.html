@@ -61,6 +61,11 @@
                         <button class="button">Удалить</button>
                     </a>
                 </div>
+                <div class="col-6 col-sm-3">
+                    <a th:href="@{/post/modify/{id}(id=${post.id})}">
+                        <button class="button">Изменить</button>
+                    </a>
+                </div>
             </div>
             <div class="col-6 col-md-4">
                 <a th:if="${!post.files.isEmpty()}">

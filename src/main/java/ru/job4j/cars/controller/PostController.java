@@ -76,7 +76,6 @@ public class PostController {
     public String create(@RequestParam String engineName, @RequestParam String carName, @RequestParam String owners,
                          @RequestParam String description, @RequestParam int price, @RequestParam MultipartFile file,
                          HttpSession session) throws IOException {
-        var today = Date.valueOf(LocalDate.now());
         var user = (User) session.getAttribute("user");
         var engine = new Engine();
         engine.setName(engineName);
@@ -86,7 +85,7 @@ public class PostController {
         var post = new AutoPost();
         post.setDescription(description);
         post.setCar(car);
-        post.setCreated(today);
+        post.setCreated(Date.valueOf(LocalDate.now()));
         post.setSold(false);
         post.setUser(user);
         String[] ownersNames = owners.split(", ");
@@ -96,16 +95,20 @@ public class PostController {
             owner.setName(name);
             post.getCar().getOwners().add(owner);
         }
-       var priceHistory = new PriceHistory();
-        priceHistory.setBefore(price);
-        priceHistory.setAfter(price);
-        priceHistory.setCreated(today);
-        post.getPriceHistories().add(priceHistory);
+        post.getPriceHistories().add(getPriceHistory(price, price));
         service.add(post);
         if (!file.isEmpty()) {
             fileService.save(new FileDTO(file.getOriginalFilename(), post.getId(), file.getBytes()));
         }
         return "redirect:/user/profile";
+    }
+
+    private PriceHistory getPriceHistory(long after, long before) {
+        var priceHistory = new PriceHistory();
+        priceHistory.setBefore(before);
+        priceHistory.setAfter(after);
+        priceHistory.setCreated(Date.valueOf(LocalDate.now()));
+        return priceHistory;
     }
 
     @PostMapping("/add/{id}")
@@ -125,11 +128,8 @@ public class PostController {
     @PostMapping("/change-price")
     public String changePrice(@RequestParam int id, @RequestParam String after,
                               @RequestParam String price) {
-        var priceHistory = new PriceHistory();
-        priceHistory.setBefore(Integer.parseInt(after));
-        priceHistory.setAfter(Integer.parseInt(price));
+        var priceHistory = getPriceHistory(Integer.parseInt(price), Integer.parseInt(after));
         priceHistory.setPostId(id);
-        priceHistory.setCreated(Date.valueOf(LocalDate.now()));
         priceHistoryService.create(priceHistory);
         return "redirect:/post/" + id;
     }
@@ -140,8 +140,16 @@ public class PostController {
         return "redirect:/user/profile";
     }
 
-    @GetMapping("/modify")
-    public String getModifyPage() {
+    @GetMapping("/modify/{id}")
+    public String getModifyPage(@PathVariable int id, Model model) {
+        model.addAttribute("post", service.findById(id).get());
+        return "/post/modify";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modify(@RequestParam AutoPost post, @RequestParam String owners,
+                         @RequestParam int price, HttpSession session) {
+
         return "/post/modify";
     }
 }
