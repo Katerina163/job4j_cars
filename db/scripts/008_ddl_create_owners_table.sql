@@ -1,6 +1,4 @@
-create table owners
-(
+create table owners (
     id serial primary key,
-    name varchar not null,
-    user_id int not null references auto_user(id)
+    name varchar not null
 );
