@@ -2,25 +2,16 @@ package ru.job4j.cars.repository;
 
 import ru.job4j.cars.model.User;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository {
-    User create(User user);
-
-    void update(User user);
-
-    void delete(int userId);
-
-    List<User> findAllOrderById();
-
-    Optional<User> findById(int userId);
-
-    List<User> findParticipatesById(int userId);
-
     Optional<User> findByLoginAndPassword(String login, String password);
 
-    List<User> findByLikeLogin(String key);
+    User create(User user);
 
     Optional<User> findByLogin(String login);
+
+    void subscribe(long userId, long postId);
+
+    void unsubscribe(long userId, long postId);
 }

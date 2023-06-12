@@ -10,30 +10,24 @@ import java.util.Optional;
 @AllArgsConstructor
 @Repository
 public class HiberFileRepository implements FileRepository {
-    private CrudRepository crudRepository;
+    private CrudRepository crud;
 
     @Override
-    public Optional<File> findById(int id) {
-        return crudRepository.optional(
+    public Optional<File> findById(long id) {
+        return crud.optional(
                 "from File where id = :fId", File.class, Map.of("fId", id));
     }
 
     @Override
     public File create(File file) {
-        crudRepository.run(session -> session.save(file));
+        crud.run(session -> session.save(file));
         return file;
     }
 
     @Override
-    public void update(File file) {
-        crudRepository.run(session -> session.update(file));
-    }
-
-    @Override
-    public void delete(int id) {
-        crudRepository.run(
-                "delete from File where id = :fId",
-                Map.of("fId", id)
-        );
+    public void delete(long id) {
+        File file = new File();
+        file.setId(id);
+        crud.run(session -> session.delete(file));
     }
 }
