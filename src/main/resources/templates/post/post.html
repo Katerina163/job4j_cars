@@ -31,6 +31,24 @@
                             <a th:href="@{/post/with-photo}" class="dropdown-item">С фото</a>
                         </div>
                     </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
+                        <div class="dropdown-menu">
+                            <div th:each="color : ${colors}">
+                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                   th:text="${color.name}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Марка</a>
+                        <div class="dropdown-menu">
+                            <div th:each="mark : ${marks}">
+                                <a th:href="@{/post/mark/{id}(id=${mark.id})}" class="dropdown-item"
+                                   th:text="${mark.name}"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <form th:action="@{/post/mark}" method="post" enctype="multipart/form-data" class="d-flex">
                     <div class="input-group">
@@ -51,7 +69,7 @@
     </nav>
 </div>
 <div class="container-md">
-    <h3 align="center" th:text="${post.car.name}"></h3>
+    <h3 align="center" th:text="${post.car.mark.name} + ' ' + ${post.car.name}"></h3>
     <div class="box text-center">
         <a th:each="file: ${post.files}">
             <img th:src="@{/files/{id}(id=*{file.id})}" height="222" alt="No image">
@@ -76,8 +94,8 @@
     </div>
     <p class="textonleft" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}"></p>
     <p class="textonright" th:text="${post.user.login}"></p>
-    <div><h4>Тип двигателя:</h4>
-        <div th:text="${post.car.engine.name}"></div>
+    <div><h4>Цвет:</h4>
+        <div th:text="${post.car.color.name}"></div>
     </div>
     <div><h4>Описание:</h4>
         <p style="text-align: justify;" class="text-break" th:text="${post.description}"></p>
@@ -88,18 +106,17 @@
         </div>
     </div>
     <div><h4>Цена:</h4>
-        <p class="textonleft" th:text="${post.priceHistories.get(post.priceHistories.size() - 1).after} + '₽'"></p>
+        <p class="textonleft" th:text="${post.history.last().after} + '₽'"></p>
         <p class="textonright"
-           th:text="'Последнее обновление цены ' + ${#dates.format(post.priceHistories.get(post.priceHistories.size() - 1).created, 'dd/MM/yyyy')}"></p>
+           th:text="'Последнее обновление цены ' + ${#dates.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
     </div>
     <div th:if="${user.login == post.user.login}">
         <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" th:field="${post.id}">
-            <input type="hidden" name="after"
-                   th:value="${post.priceHistories.get(post.priceHistories.size() - 1).after}">
+            <input type="hidden" name="before" th:value="${post.history.last().after}">
             <div class="mb-3">
-                <label for="price" class="form-label"><b>Цена:</b></label>
-                <input type="number" class="form-control" id="price" name="price">
+                <label for="after" class="form-label"><b>Цена:</b></label>
+                <input type="number" class="form-control" id="after" name="after">
             </div>
             <div class="col-6">
                 <button class="button" type="submit">Изменить цену</button>

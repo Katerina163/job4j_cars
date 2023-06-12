@@ -29,6 +29,24 @@
                             <a th:href="@{/post/with-photo}" class="dropdown-item">С фото</a>
                         </div>
                     </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
+                        <div class="dropdown-menu">
+                            <div th:each="color : ${colors}">
+                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                   th:text="${color.name}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Марка</a>
+                        <div class="dropdown-menu">
+                            <div th:each="mark : ${marks}">
+                                <a th:href="@{/post/mark/{id}(id=${mark.id})}" class="dropdown-item"
+                                   th:text="${mark.name}"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <form th:action="@{/post/mark}" method="post" enctype="multipart/form-data" class="d-flex">
                     <div class="input-group">
@@ -49,58 +67,57 @@
         <div th:text="'Добро пожаловать, ' + ${user.login} + '!'"></div>
     </h4>
     <div class="green"><h4>Ваши объявления:</h4></div>
-    <a th:each="post: ${posts}">
+    <a th:each="banner: ${posts}">
         <div class="row no-gutters">
             <div class="col-12 col-sm-6 col-md-8">
-                <h5>Марка:</h5>
-                <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.car.name}"></a>
+                <h4><a th:href="@{/post/{id}(id=${banner.postId})}"
+                       th:text="${banner.markName} + ' ' + ${banner.carName}"></a></h4>
                 <h5>Дата публикации:</h5>
-                <a th:text="${#dates.format(post.created, 'dd/MM/yyyy')}"></a>
+                <a th:text="${#dates.format(banner.created, 'dd/MM/yyyy')}"></a>
                 <div class="col-6 col-sm-3">
-                    <a th:href="@{/post/delete/{id}(id=${post.id})}">
+                    <a th:href="@{/post/delete/{id}(id=${banner.postId})}">
                         <button class="button">Удалить</button>
                     </a>
                 </div>
                 <div class="col-6 col-sm-3">
-                    <a th:href="@{/post/modify/{id}(id=${post.id})}">
+                    <a th:href="@{/post/modify/{id}(id=${banner.postId})}">
                         <button class="button">Изменить</button>
                     </a>
                 </div>
             </div>
             <div class="col-6 col-md-4">
-                <a th:if="${!post.files.isEmpty()}">
-                    <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}"
+                <a th:if="${banner.fileId != 0}">
+                    <img th:src="@{/files/{id}(id=*{banner.fileId})}"
                          class="card-img-top" height="222" alt="No image">
                 </a>
-                <a th:if="${post.files.isEmpty()}">
-                    <img src="https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80"
-                         class="card-img-top" height="222" alt="No image">
+                <a th:if="${banner.fileId == 0}">
+                    <img src="/static/img/default.png" class="card-img-top" height="222" alt="No image">
                 </a>
             </div>
         </div>
     </a>
     <div class="green"><h4>Ваши подписки:</h4></div>
-    <a th:each="post: ${subscribe}">
+    <a th:each="banner: ${subscribe}">
         <div class="row no-gutters">
             <div class="col-12 col-sm-6 col-md-8">
                 <h5>Марка:</h5>
-                <a th:href="@{/post/{id}(id=${post.id})}" th:text="${post.car.name}"></a>
+                <a th:href="@{/post/{id}(id=${banner.postId})}"
+                   th:text="${banner.markName} + ' ' + ${banner.carName}"></a>
                 <h5>Дата публикации:</h5>
-                <a th:text="${#dates.format(post.created, 'dd/MM/yyyy')}"></a>
+                <a th:text="${#dates.format(banner.created, 'dd/MM/yyyy')}"></a>
                 <div class="col-6 col-sm-3">
-                    <a th:href="@{/user/unsubscribe/{id}(id=${post.id})}">
+                    <a th:href="@{/user/unsubscribe/{id}(id=${banner.postId})}">
                         <button class="button">Отписаться</button>
                     </a>
                 </div>
             </div>
             <div class="col-6 col-md-4">
-                <a th:if="${!post.files.isEmpty()}">
-                    <img th:src="@{/files/{id}(id=*{post.files.stream().findFirst().get().id})}"
+                <a th:if="${banner.fileId != 0}">
+                    <img th:src="@{/files/{id}(id=*{banner.fileId})}"
                          class="card-img-top" height="222" alt="No image">
                 </a>
-                <a th:if="${post.files.isEmpty()}">
-                    <img src="https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80"
-                         class="card-img-top" height="222" alt="No image">
+                <a th:if="${banner.fileId == 0}">
+                    <img src="/static/img/default.png" class="card-img-top" height="222" alt="No image">
                 </a>
             </div>
         </div>

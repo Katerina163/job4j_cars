@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,6 +32,24 @@
                             <a th:href="@{/post/with-photo}" class="dropdown-item">С фото</a>
                         </div>
                     </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
+                        <div class="dropdown-menu">
+                            <div th:each="color : ${colors}">
+                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                   th:text="${color.name}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Марка</a>
+                        <div class="dropdown-menu">
+                            <div th:each="mark : ${marks}">
+                                <a th:href="@{/post/mark/{id}(id=${mark.id})}" class="dropdown-item"
+                                   th:text="${mark.name}"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <form th:action="@{/post/mark}" method="post" enctype="multipart/form-data" class="d-flex">
                     <div class="input-group">
@@ -51,33 +70,36 @@
     </nav>
 </div>
 
-
 <div class="container">
-    <form class="mt-3" th:action="@{/post/modify/{id}(id=${post.id})}" method="post" th:object="${post}" enctype="multipart/form-data">
-        <input type="hidden" name="id" th:field="*{id}">
+    <form class="mt-3" th:action="@{/post/modify}" method="post" th:object="${post}" enctype="multipart/form-data">
+        <input type="hidden" name="id" th:field="${post.id}">
+        <input type="hidden" name="created" th:field="${post.created}">
+        <input type="hidden" name="car.id" th:field="${post.car.id}">
+        <div class="mb-3">
+            <label for="car_name" class="form-label"><b>Модель машины:</b></label>
+            <input type="text" class="form-control" id="car_name" name="car.name"
+                   th:placeholder="${post.car.name}" th:field="*{car.name}">
+        </div>
+        <div class="form-group">
+            <label for="mark_id"><b>Марка:</b></label>
+            <select class="form-control" id="mark_id" name="mark.id">
+                <option th:each="mark : ${marks}" th:value="${mark.id}" th:field="*{car.mark.id}"
+                        th:text="${mark.name}" th:selected="${mark.id==post.car.mark.id}">
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="color_id"><b>Цвет:</b></label>
+            <select class="form-control" id="color_id" name="color.id">
+                <option th:each="color : ${colors}" th:value="${color.id}" th:field="*{car.color.id}"
+                        th:text="${color.name}" th:selected="${color.id==post.car.color.id}">
+                </option>
+            </select>
+        </div>
         <div class="mb-3">
             <label for="description" class="form-label"><b>Описание</b></label>
             <textarea class="form-control" id="description" name="description" rows="15"
-                      th:placeholder="${post.description}"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="price" class="form-label"><b>Цена:</b></label>
-            <input type="number"  class="form-control" id="price" name="price"
-                   th:placeholder="${post.priceHistories.get(post.priceHistories.size() - 1).after}">
-        </div>
-        <div class="mb-3">
-            <label for="car_name" class="form-label"><b>Марка машины</b></label>
-            <input type="text" class="form-control" id="car_name" name="car.name"
-                   th:placeholder="${post.car.name}">
-        </div>
-        <div class="mb-3">
-            <label for="engine_name" class="form-label"><b>Тип двигателя</b></label>
-            <input type="text" class="form-control" id="engine_name" name="engine.name"
-                   th:placeholder="${post.car.engine.name}">
-        </div>
-        <div class="mb-3">
-            <label for="owners" class="form-label"><b>Бывшие владельцы через запятую</b></label>
-            <input type="text" class="form-control" id="owners" name="owners">
+                      th:placeholder="${post.description}" th:field="*{description}"></textarea>
         </div>
         <div class="row">
             <div class="col-1">
