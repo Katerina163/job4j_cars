@@ -11,18 +11,16 @@
 <div>1. Страница регистрации и авторизации</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/fa726c78-5d87-4c7c-897d-811e11fcfc0e.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/dda0358c-08b6-467a-acc4-4bf0b5e2312d.png" width="450"/>
-<div>2. Добавление объявления (в данном случае без фото)</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/8d8e0c46-fd48-4f51-b57f-0474a633caa2" width="450"/>
+<div>2. Добавление объявления (текст писала нейросеть):</div>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c9132cbe-5c7c-4bdd-85e3-272b426fd46e.png" width="450"/>
 <div>3. Страница профиля (все объявления без фото отображаются с игрушечной машинкой)</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/1e46a6b6-181d-4581-9481-0775cc077b71" width="450"/>
-<div>4. Сраница со всеми объявлениями/с новыми/только с фото/поиск по марке машины "Fiat 500"</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/3956e551-8665-4554-8636-46254c4226b9" width="450"/>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/9e1f9658-b367-460b-91a7-2937e1999588" width="450"/>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/8b733128-46aa-4261-992c-630747dcd5ed" width="450"/>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/7d4098f8-8740-46b0-b7c5-fac004e47d6a" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c7789d34-9e2b-4d5a-b54b-0b3669e57381.png" width="450"/>
+<div>4. Сраница с поиском объявлений. Также возможно искать по марке, цвету автомобиля, есть поиск новых объявлений или поиск объявлений только с фото.</div>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c27d2f11-75b2-46b6-9748-99e870ae2148.png" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/538df726-9453-43cb-a713-59643bb80f6a.png" width="450"/>
 <div>5. Страница объявления для неавторизированного пользователя/для авторизированного/для автора объявления</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/f5c420a8-0cf6-438d-b367-498603885e54" width="450"/>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/701c9bd2-2ea9-4ee6-a553-ea1bbc77a479" width="450"/>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/afe4e378-04ac-4cfa-96c8-7ec1143d1a77" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/478120db-5e48-4ada-b11f-2c01cbf3a66f.png" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/f4323a4e-1204-4d94-8986-2c529d96972d.png" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/d125a428-b75b-466d-95f9-5d53337293d2.png" width="450"/>
 <div>6. Страница изменения объявления</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/3f7970d7-d5db-470c-b40a-e9e2e3d5eb7e" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/2ce20925-f55f-4db4-b888-50fc5065022a.png" width="450"/>
