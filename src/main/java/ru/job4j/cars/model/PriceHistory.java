@@ -10,11 +10,11 @@ import java.util.Date;
 @Table(name = "price_history")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PriceHistory {
+public class PriceHistory implements Comparable<PriceHistory> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int id;
+    private long id;
 
     private long before;
 
@@ -22,6 +22,12 @@ public class PriceHistory {
 
     private Date created;
 
-    @Column(name = "auto_post_id")
-    private int postId;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private AutoPost post;
+
+    @Override
+    public int compareTo(PriceHistory priceHistory) {
+        return Long.compare(this.id, priceHistory.id);
+    }
 }

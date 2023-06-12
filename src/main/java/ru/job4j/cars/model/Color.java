@@ -2,25 +2,26 @@ package ru.job4j.cars.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "history")
+@Table(name = "color")
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class History {
+@NoArgsConstructor
+@Cacheable
+public class Color {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int id;
+    private long id;
+    private String name;
 
-    @Column(name = "start_at")
-    private LocalDateTime startAt;
-
-    @Column(name = "end_at")
-    private LocalDateTime endAt;
+    public Color(long id) {
+        this.id = id;
+    }
 }

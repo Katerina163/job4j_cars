@@ -17,18 +17,21 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int id;
+    private long id;
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
-    private Engine engine;
+    @OneToOne
+    @JoinColumn(name = "color_id", nullable = false)
+    private Color color;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "history_owners", joinColumns = {
-            @JoinColumn(name = "car_id", nullable = false, updatable = false)},
-            inverseJoinColumns = {
-                    @JoinColumn(name = "owner_id", nullable = false, updatable = false)})
+    @OneToOne
+    @JoinColumn(name = "mark_id", nullable = false)
+    private Mark mark;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinTable(name = "history_owners",
+            joinColumns = {@JoinColumn(name = "car_id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name = "owner_id", nullable = false)})
     private Set<Owner> owners = new HashSet<>();
 }

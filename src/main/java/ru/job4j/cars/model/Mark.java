@@ -7,24 +7,21 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+@Entity
+@Table(name = "mark")
 @Getter
 @Setter
-@Entity
-@Table(name = "owners")
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class Owner {
+@Cacheable
+public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private long id;
     private String name;
 
-    public Owner(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
+    public Mark(long id) {
+        this.id = id;
     }
 }

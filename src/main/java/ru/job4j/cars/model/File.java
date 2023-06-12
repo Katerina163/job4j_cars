@@ -12,22 +12,27 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class File {
+public class File implements Comparable<File> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int id;
+    private long id;
 
     private String name;
 
     private String path;
 
-    @Column(name = "post_id")
-    private int postId;
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private AutoPost post;
 
-    public File(String name, String path, int postId) {
+    public File(String name, String path) {
         this.name = name;
         this.path = path;
-        this.postId = postId;
+    }
+
+    @Override
+    public int compareTo(File file) {
+        return Long.compare(this.id, file.id);
     }
 }
