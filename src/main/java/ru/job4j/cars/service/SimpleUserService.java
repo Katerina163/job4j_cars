@@ -1,57 +1,20 @@
 package ru.job4j.cars.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.repository.ParticipateRepository;
 import ru.job4j.cars.repository.UserRepository;
 
-import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @Service
 public class SimpleUserService implements UserService {
-    private UserRepository repository;
-
-    private ParticipateRepository participateRepository;
-
-    public SimpleUserService(UserRepository hiberUserRepository, ParticipateRepository hiberParticipateRepository) {
-        repository = hiberUserRepository;
-        participateRepository = hiberParticipateRepository;
-    }
+    private final UserRepository repository;
 
     @Override
-    public User create(User user) {
-        return repository.create(user);
-    }
-
-    @Override
-    public void update(User user) {
-        repository.update(user);
-    }
-
-    @Override
-    public void delete(int userId) {
-        repository.delete(userId);
-    }
-
-    @Override
-    public List<User> findAllOrderById() {
-        return repository.findAllOrderById();
-    }
-
-    @Override
-    public List<User> findParticipatesById(int userId) {
-        return repository.findParticipatesById(userId);
-    }
-
-    @Override
-    public Optional<User> findById(int userId) {
-        return repository.findById(userId);
-    }
-
-    @Override
-    public List<User> findByLikeLogin(String key) {
-        return repository.findByLikeLogin(key);
+    public Optional<User> findByLoginAndPassword(String login, String password) {
+        return repository.findByLoginAndPassword(login, password);
     }
 
     @Override
@@ -60,17 +23,17 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findByLoginAndPassword(String login, String password) {
-        return repository.findByLoginAndPassword(login, password);
+    public User create(User user) {
+        return repository.create(user);
     }
 
     @Override
-    public void deleteAutoPostByUserId(int userId, int postId) {
-        participateRepository.delete(userId, postId);
+    public void subscribe(long userId, long postId) {
+        repository.subscribe(userId, postId);
     }
 
     @Override
-    public void addAutoPostByUserId(int userId, int postId) {
-        participateRepository.create(userId, postId);
+    public void unsubscribe(long userId, long postId) {
+        repository.unsubscribe(userId, postId);
     }
 }

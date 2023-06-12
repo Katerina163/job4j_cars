@@ -13,5 +13,8 @@ public class StylesConfiguration implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/static/styles/**")
                 .addResourceLocations("classpath:/static/styles/");
+        registry
+                .addResourceHandler("/static/img/**")
+                .addResourceLocations("classpath:/static/img/");
     }
 }

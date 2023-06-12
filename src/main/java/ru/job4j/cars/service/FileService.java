@@ -6,9 +6,9 @@ import ru.job4j.cars.model.File;
 import java.util.Optional;
 
 public interface FileService {
-    Optional<FileDTO> findById(int id);
+    Optional<FileDTO> findById(long id);
 
     File save(FileDTO fileDto);
 
-    void deleteById(int id);
+    void deleteById(long id);
 }

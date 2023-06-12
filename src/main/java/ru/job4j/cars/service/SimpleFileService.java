@@ -3,6 +3,7 @@ package ru.job4j.cars.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.dto.FileDTO;
+import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.FileRepository;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Service
 public class SimpleFileService implements FileService {
-    private FileRepository repository;
+    private final FileRepository repository;
     private final String storageDirectory;
 
     public SimpleFileService(FileRepository simpleFileRepository,
@@ -33,13 +34,14 @@ public class SimpleFileService implements FileService {
     }
 
     @Override
-    public Optional<FileDTO> findById(int id) {
+    public Optional<FileDTO> findById(long id) {
         var fileOptional = repository.findById(id);
         if (fileOptional.isEmpty()) {
             return Optional.empty();
         }
         var content = readFileAsBytes(fileOptional.get().getPath());
-        return Optional.of(new FileDTO(fileOptional.get().getName(), fileOptional.get().getPostId(), content));
+        return Optional.of(new FileDTO(
+                fileOptional.get().getName(), fileOptional.get().getPost().getId(), content));
     }
 
     private byte[] readFileAsBytes(String path) {
@@ -54,7 +56,11 @@ public class SimpleFileService implements FileService {
     public File save(FileDTO fileDto) {
         var path = getNewFilePath(fileDto.getName());
         writeFileBytes(path, fileDto.getContent());
-        return repository.create(new File(fileDto.getName(), path, fileDto.getPostId()));
+        var file = new File();
+        file.setPost(new AutoPost(fileDto.getPostId()));
+        file.setName(fileDto.getName());
+        file.setPath(path);
+        return repository.create(file);
     }
 
     private String getNewFilePath(String sourceName) {
@@ -70,7 +76,7 @@ public class SimpleFileService implements FileService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(long id) {
         var fileOptional = repository.findById(id);
         if (fileOptional.isPresent()) {
             deleteFile(fileOptional.get().getPath());
