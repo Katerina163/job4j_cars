@@ -3,8 +3,10 @@ package ru.job4j.cars.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.PostService;
+import ru.job4j.cars.service.ColorService;
+import ru.job4j.cars.service.MarkService;
 import ru.job4j.cars.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +15,15 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private UserService service;
-    private PostService postService;
+    private final UserService service;
+    private final ColorService colorService;
+    private final MarkService markService;
 
-    public UserController(UserService simpleUserService, PostService simplePostService) {
+    public UserController(UserService simpleUserService, ColorService simpleColorService,
+                          MarkService simpleMarkService) {
         service = simpleUserService;
-        postService = simplePostService;
+        colorService = simpleColorService;
+        markService = simpleMarkService;
     }
 
     @GetMapping("/login")
@@ -56,27 +61,26 @@ public class UserController {
 
     @GetMapping("/profile")
     public String getProfile(Model model, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        model.addAttribute("posts", postService.findUsersCar(user.getLogin()));
-        model.addAttribute("subscribe",
-                service.findParticipatesById(user.getId())
-                .stream()
-                .flatMap(u -> u.getParticipates().stream())
-                .toList());
+        var userSession = (User) session.getAttribute("user");
+        var users = service.findByLogin(userSession.getLogin()).get();
+        model.addAttribute("posts", users.getUserPosts().stream().map(Banner::new).toList())
+                .addAttribute("subscribe", users.getParticipates().stream().map(Banner::new).toList())
+                .addAttribute("marks", markService.findAll())
+                .addAttribute("colors", colorService.findAll());
         return "/user/home";
     }
 
     @PostMapping("/subscribe")
     public String subscribe(@RequestParam int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.addAutoPostByUserId(user.getId(), id);
+        service.subscribe(user.getId(), id);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/unsubscribe/{id}")
     public String unsubscribe(@PathVariable int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.deleteAutoPostByUserId(user.getId(), id);
+        service.unsubscribe(user.getId(), id);
         return "redirect:/user/profile";
     }
 }

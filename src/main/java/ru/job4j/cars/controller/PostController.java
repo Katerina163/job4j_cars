@@ -10,105 +10,91 @@ import ru.job4j.cars.service.*;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/post")
 public class PostController {
-    private PostService service;
-    private FileService fileService;
-    private PriceHistoryService priceHistoryService;
+    private final AutoPostService service;
+    private final FileService fileService;
+    private final PriceHistoryService priceService;
+    private final ColorService colorService;
+    private final MarkService markService;
 
-    public PostController(PostService simplePostService, FileService simpleFileService,
-                          PriceHistoryService simplePriceHistoryService) {
-        service = simplePostService;
+    public PostController(AutoPostService simpleAutoPostService, FileService simpleFileService,
+                          PriceHistoryService simplePriceHistoryService, ColorService simpleColorService,
+                          MarkService simpleMarkService) {
+        service = simpleAutoPostService;
         fileService = simpleFileService;
-        priceHistoryService = simplePriceHistoryService;
+        priceService = simplePriceHistoryService;
+        colorService = simpleColorService;
+        markService = simpleMarkService;
     }
 
     @GetMapping("/")
     public String getAllPage(Model model) {
-        model.addAttribute("posts", service.findAll());
+        addMarkAndColor(model).addAttribute("posts", service.findAll());
         return "/post/list";
     }
 
     @GetMapping("/new")
     public String getNewPage(Model model) {
-        model.addAttribute("posts", service.findAllNew());
+        addMarkAndColor(model).addAttribute("posts", service.findAllNew());
         return "/post/list";
     }
 
     @GetMapping("/with-photo")
-    public String getPhotoPage(Model model) {
-        model.addAttribute("posts", service.findWithFile());
+    public String getPageWithFile(Model model) {
+        addMarkAndColor(model).addAttribute("posts", service.findWithFile());
         return "/post/list";
     }
 
-    @PostMapping("/mark")
+    @PostMapping("/brand")
     public String getMarkPage(@RequestParam String brand, Model model) {
-        var list = service.findCarBrand(brand);
+        var list = service.findByCarBrand(brand);
         if (list.isEmpty()) {
-            model.addAttribute("message", "По запросу \"" + brand + "\" ничего не найдено");
+            addMarkAndColor(model).addAttribute("message", "По запросу \"" + brand + "\" ничего не найдено");
             return "/error";
         }
-        model.addAttribute("posts", list);
+        addMarkAndColor(model).addAttribute("posts", list);
         return "/post/list";
+    }
+
+    @GetMapping("/mark/{id}")
+    public String getByBrand(@PathVariable long id, Model model) {
+        addMarkAndColor(model).addAttribute("posts", service.findByMark(id));
+        return "post/list";
+    }
+
+    @GetMapping("/color/{id}")
+    public String getByColor(@PathVariable long id, Model model) {
+        addMarkAndColor(model).addAttribute("posts", service.findByColor(id));
+        return "post/list";
     }
 
     @GetMapping("/{id}")
     public String getPostPage(@PathVariable int id, Model model) {
         var postOptional = service.findById(id);
         if (postOptional.isEmpty()) {
-            model.addAttribute("message", "Не удалось найти пост");
+            addMarkAndColor(model).addAttribute("message", "Не удалось найти пост");
             return "/error";
         }
-        model.addAttribute("post", postOptional.get());
+        addMarkAndColor(model).addAttribute("post", postOptional.get());
         return "/post/post";
     }
 
     @GetMapping("/create")
-    public String getCreatePage() {
+    public String getCreatePage(Model model) {
+        addMarkAndColor(model);
         return "/post/create";
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam Map<String, String> allParams, @RequestParam int price,
+    public String create(@RequestParam Map<String, String> allParams,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
-        var engine = new Engine();
-        engine.setName(allParams.get("engineName"));
-        var car = new Car();
-        car.setName(allParams.get("carName"));
-        car.setEngine(engine);
-        var post = new AutoPost();
-        post.setDescription(allParams.get("description"));
-        post.setCar(car);
-        post.setCreated(Date.valueOf(LocalDate.now()));
-        post.setSold(false);
-        post.setUser(user);
-        String[] ownersNames = allParams.get("owners").split(", ");
-        for (var name : ownersNames) {
-            var owner = new Owner();
-            owner.setUser(user);
-            owner.setName(name);
-            post.getCar().getOwners().add(owner);
-        }
-        post.getPriceHistories().add(getPriceHistory(price, price));
-        service.add(post);
-        if (!file.isEmpty()) {
-            fileService.save(new FileDTO(file.getOriginalFilename(), post.getId(), file.getBytes()));
-        }
+        service.create(user, allParams, file);
         return "redirect:/user/profile";
-    }
-
-    private PriceHistory getPriceHistory(long after, long before) {
-        var priceHistory = new PriceHistory();
-        priceHistory.setBefore(before);
-        priceHistory.setAfter(after);
-        priceHistory.setCreated(Date.valueOf(LocalDate.now()));
-        return priceHistory;
     }
 
     @PostMapping("/add/{id}")
@@ -126,30 +112,44 @@ public class PostController {
     }
 
     @PostMapping("/change-price")
-    public String changePrice(@RequestParam int id, @RequestParam String after,
-                              @RequestParam String price) {
-        var priceHistory = getPriceHistory(Integer.parseInt(price), Integer.parseInt(after));
-        priceHistory.setPostId(id);
-        priceHistoryService.create(priceHistory);
+    public String changePrice(@RequestParam long id, @RequestParam long after,
+                              @RequestParam long before) {
+        priceService.create(before, after, id);
         return "redirect:/post/" + id;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable int id) {
-        service.deleteById(id);
+        service.delete(id);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/modify/{id}")
     public String getModifyPage(@PathVariable int id, Model model) {
-        model.addAttribute("post", service.findById(id).get());
+        var post = service.findById(id);
+        if (post.isEmpty()) {
+            addMarkAndColor(model).addAttribute("message", "Не удалось найти пост");
+            return "error";
+        }
+        StringBuilder ab = new StringBuilder();
+        for (var s : post.get().getCar().getOwners()) {
+            ab.append(s);
+        }
+        addMarkAndColor(model).addAttribute("post", post.get())
+                .addAttribute("owners", ab.toString());
         return "/post/modify";
     }
 
-    @PostMapping("/modify/{id}")
-    public String modify(@RequestParam AutoPost post, @RequestParam String owners,
-                         @RequestParam int price, HttpSession session) {
-
+    @PostMapping("/modify")
+    public String modify(@RequestParam Map<String, String> params, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        service.modify(user, params);
         return "/post/modify";
+    }
+
+    private Model addMarkAndColor(Model model) {
+        model.addAttribute("marks", markService.findAll())
+                .addAttribute("colors", colorService.findAll());
+        return model;
     }
 }
