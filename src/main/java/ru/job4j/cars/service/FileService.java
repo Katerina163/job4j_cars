@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface FileService {
     Optional<FileDTO> findById(long id);
 
-    File save(FileDTO fileDto);
+    Optional<File> save(FileDTO fileDto);
 
     void deleteById(long id);
 }

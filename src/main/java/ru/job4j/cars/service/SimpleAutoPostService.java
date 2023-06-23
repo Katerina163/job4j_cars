@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.AutoPostRepository;
+import ru.job4j.cars.repository.CarRepository;
+import ru.job4j.cars.repository.MarkRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,12 +20,18 @@ import java.util.*;
 @Service
 public class SimpleAutoPostService implements AutoPostService {
     private final AutoPostRepository repository;
+    private final CarRepository carRepository;
     private final String storageDirectory;
+    private final MarkRepository markRepository;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
-                                 @Value("${file.directory}") String storageDirectory) {
+                                 CarRepository hiberCarRepository,
+                                 @Value("${file.directory}") String storageDirectory,
+                                 MarkRepository hiberMarkRepository) {
         repository = hiberAutoPostRepository;
+        carRepository = hiberCarRepository;
         this.storageDirectory = storageDirectory;
+        markRepository = hiberMarkRepository;
     }
 
     @Override
@@ -77,23 +85,19 @@ public class SimpleAutoPostService implements AutoPostService {
 
         var post = new AutoPost();
         post.setDescription(params.get("description"));
-        post.setCreated(new Date());
-        post.setUser(user);
+        post.setAuthor(user);
         post.setCar(car);
         post.setSold(false);
 
         if (!file.isEmpty()) {
             var f = convertFile(file);
-            f.setPost(post);
-            post.getFiles().add(f);
+            post.addFile(f);
         }
 
-        var priceHistory = new PriceHistory();
-        priceHistory.setCreated(new Date());
-        priceHistory.setBefore(Long.parseLong(params.get("price")));
-        priceHistory.setAfter(Long.parseLong(params.get("price")));
-        priceHistory.setPost(post);
-        post.getHistory().add(priceHistory);
+        var priceHistory = new PriceHistory(
+                Long.parseLong(params.get("price")),
+                Long.parseLong(params.get("price")));
+        post.addPriceHistory(priceHistory);
 
         repository.create(post);
     }
@@ -114,35 +118,29 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Override
     public void modify(User user, Map<String, String> params) {
-        var post = new AutoPost(Long.parseLong(params.get("id")));
-        post.setDescription(params.get("description"));
-        var car = convertCar(params);
-        post.setCar(car);
-        post.setUser(user);
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-        try {
-            post.setCreated(format.parse(params.get("created")));
-        } catch (ParseException pe) {
-            pe.printStackTrace();
+        var post = repository.findById(Long.parseLong(params.get("id")));
+        if (post.isPresent()) {
+            post.get().setDescription(params.get("description"));
+            var car = convertCar(params);
+            post.get().setCar(car);
+            post.get().setAuthor(user);
+
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            try {
+                post.get().setCreated(format.parse(params.get("created")));
+            } catch (ParseException pe) {
+                pe.printStackTrace();
+            }
+            repository.modify(post.get());
         }
-        repository.modify(post);
     }
 
     private Car convertCar(Map<String, String> params) {
-        var car = new Car();
-        if (params.get("car.id") != null && !params.get("car.id").isEmpty()) {
-            car.setId(Long.parseLong(params.get("car.id")));
-        }
+        var car = carRepository.findById(Long.parseLong(params.get("car.id"))).get();
         car.setName(params.get("car.name"));
-        car.setColor(new Color(Long.parseLong(params.get("color.id"))));
-        car.setMark(new Mark(Long.parseLong(params.get("mark.id"))));
-        if (params.get("owners") != null && !params.get("owners").isEmpty()) {
-            String[] ownersNames = params.get("owners").split(", ");
-            for (var name : ownersNames) {
-                var owner = new Owner(name);
-                car.getOwners().add(owner);
-            }
-        }
+        car.setColor(Color.valueOf(params.get("color")));
+        car.setMark(markRepository.findById(Integer.parseInt(params.get("mark.id"))).get());
+        car.setOwners(params.get("owners"));
         return car;
     }
 
