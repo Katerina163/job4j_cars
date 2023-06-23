@@ -90,7 +90,9 @@ public class SimpleFileService implements FileService {
         var fileOptional = repository.findById(id);
         if (fileOptional.isPresent()) {
             deleteFile(fileOptional.get().getPath());
-            repository.delete(id);
+            var file = new File();
+            file.setId(id);
+            repository.delete(file);
         }
     }
 

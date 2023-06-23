@@ -9,5 +9,5 @@ public interface FileRepository {
 
     File create(File file);
 
-    void delete(long id);
+    void delete(File file);
 }

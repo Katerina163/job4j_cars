@@ -10,12 +10,9 @@ import javax.persistence.*;
 @Table(name = "files")
 @Getter
 @Setter
-@EqualsAndHashCode(of = "path")
+@EqualsAndHashCode(of = "path", callSuper = true)
 @NoArgsConstructor
-public class File implements Comparable<File> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class File extends BaseId<Long> implements Comparable<File> {
 
     private String name;
 
@@ -29,10 +26,6 @@ public class File implements Comparable<File> {
     public File(String name, String path) {
         this.name = name;
         this.path = path;
-    }
-
-    public File(long id) {
-        this.id = id;
     }
 
     @Override

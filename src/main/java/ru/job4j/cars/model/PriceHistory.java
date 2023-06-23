@@ -1,6 +1,7 @@
 package ru.job4j.cars.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,11 +10,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "price_history")
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class PriceHistory implements Comparable<PriceHistory> {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class PriceHistory extends BaseId<Long> implements Comparable<PriceHistory> {
 
     private long before;
 

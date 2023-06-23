@@ -25,7 +25,7 @@ public class HiberFileRepository implements FileRepository {
     }
 
     @Override
-    public void delete(long id) {
-        crud.run(session -> session.delete(new File(id)));
+    public void delete(File file) {
+        crud.run(session -> session.delete(file));
     }
 }

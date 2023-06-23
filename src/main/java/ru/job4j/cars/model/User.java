@@ -12,13 +12,10 @@ import java.util.Set;
 @Entity
 @Table(name = "auto_user")
 @Data
-@EqualsAndHashCode(of = "login")
+@EqualsAndHashCode(of = "login", callSuper = true)
 @ToString(exclude = {"participates", "userPosts"})
 @NoArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class User  extends BaseId<Long> {
 
     @Column(unique = true)
     private String login;

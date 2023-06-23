@@ -10,13 +10,10 @@ import java.util.*;
 @Entity
 @Table(name = "auto_post")
 @Data
-@EqualsAndHashCode(exclude = {"files", "history"})
+@EqualsAndHashCode(exclude = {"files", "history"}, callSuper = true)
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
-public class AutoPost {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class AutoPost extends BaseId<Long> {
 
     private String description;
 
@@ -43,10 +40,6 @@ public class AutoPost {
 
     public AutoPost() {
         created = new Date();
-    }
-
-    public AutoPost(long id) {
-        this.id = id;
     }
 
     public void addFile(File file) {
