@@ -2,6 +2,8 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -10,11 +12,12 @@ import java.util.Set;
 @Entity
 @Table(name = "auto_user")
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "login")
+@ToString(exclude = {"participates", "userPosts"})
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
 
     @Column(unique = true)
@@ -32,6 +35,11 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AutoPost> userPosts = new HashSet<>();
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 
     public void addUserPost(AutoPost post) {
         userPosts.add(post);

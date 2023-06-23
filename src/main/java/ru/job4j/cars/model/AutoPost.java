@@ -1,8 +1,6 @@
 package ru.job4j.cars.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SortNatural;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,7 +11,10 @@ import java.util.*;
 @Table(name = "auto_post")
 @Data
 @EqualsAndHashCode(exclude = {"files", "history"})
+@ToString(exclude = {"files", "history"})
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AutoPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,15 +37,11 @@ public class AutoPost {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
-    private SortedSet<File> files = new TreeSet<>();
+    private List<File> files = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @SortNatural
     private SortedSet<PriceHistory> history = new TreeSet<>();
-
-    public AutoPost(long id) {
-        this.id = id;
-    }
 
     public void addFile(File file) {
         files.add(file);

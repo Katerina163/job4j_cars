@@ -12,13 +12,14 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(of = "path")
 @NoArgsConstructor
-public class File implements Comparable<File> {
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String name;
 
+    @Column(unique = true)
     private String path;
 
     @ManyToOne
@@ -28,10 +29,5 @@ public class File implements Comparable<File> {
     public File(String name, String path) {
         this.name = name;
         this.path = path;
-    }
-
-    @Override
-    public int compareTo(File file) {
-        return this.path.compareTo(file.getPath());
     }
 }
