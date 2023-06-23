@@ -91,7 +91,7 @@ public class PostController {
     public String create(@RequestParam Map<String, String> allParams,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
-        service.create(user, allParams, file);
+        service.create(user.getLogin(), allParams, file);
         return "redirect:/user/profile";
     }
 
@@ -135,8 +135,8 @@ public class PostController {
 
     @PostMapping("/modify")
     public String modify(@RequestParam Map<String, String> params, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        service.modify(user, params);
+      //  var user = (User) session.getAttribute("user");
+        service.modify(params);
         return "/post/modify";
     }
 

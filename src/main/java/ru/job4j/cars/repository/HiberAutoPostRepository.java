@@ -7,7 +7,9 @@ import ru.job4j.cars.model.Color;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -78,6 +80,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
 
     @Override
     public void delete(long id) {
-        crud.run(session -> session.remove(new AutoPost(id)));
+        var post = findById(id).get();
+        crud.run(session -> session.delete(post));
     }
 }

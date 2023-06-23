@@ -4,7 +4,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Color;
-import ru.job4j.cars.model.User;
 
 import java.util.Collection;
 import java.util.Map;
@@ -29,7 +28,7 @@ public interface AutoPostService {
 
     void delete(long id);
 
-    void create(User user, Map<String, String> params, MultipartFile file);
+    void create(String login, Map<String, String> params, MultipartFile file);
 
-    void modify(User user, Map<String, String> params);
+    void modify(Map<String, String> params);
 }

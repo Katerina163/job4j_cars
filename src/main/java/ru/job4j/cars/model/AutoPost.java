@@ -35,7 +35,7 @@ public class AutoPost {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
-    private Set<File> files = new HashSet<>();
+    private SortedSet<File> files = new TreeSet<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural

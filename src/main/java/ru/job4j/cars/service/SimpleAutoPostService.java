@@ -9,6 +9,7 @@ import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.CarRepository;
 import ru.job4j.cars.repository.MarkRepository;
+import ru.job4j.cars.repository.UserRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,15 +25,18 @@ public class SimpleAutoPostService implements AutoPostService {
     private final CarRepository carRepository;
     private final String storageDirectory;
     private final MarkRepository markRepository;
+    private final UserRepository userRepository;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
                                  CarRepository hiberCarRepository,
                                  @Value("${file.directory}") String storageDirectory,
-                                 MarkRepository hiberMarkRepository) {
+                                 MarkRepository hiberMarkRepository,
+                                 UserRepository hiberUserRepository) {
         repository = hiberAutoPostRepository;
         carRepository = hiberCarRepository;
         this.storageDirectory = storageDirectory;
         markRepository = hiberMarkRepository;
+        userRepository = hiberUserRepository;
     }
 
     @Override
@@ -75,6 +79,7 @@ public class SimpleAutoPostService implements AutoPostService {
         repository.soldById(postId, sold);
     }
 
+    @Transactional
     @Override
     public void delete(long id) {
         repository.delete(id);
@@ -82,11 +87,12 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void create(User user, Map<String, String> params, MultipartFile file) {
+    public void create(String login, Map<String, String> params, MultipartFile file) {
         var car = new Car();
         convertCar(params, car);
         var post = new AutoPost();
         post.setDescription(params.get("description"));
+        var user = userRepository.findByLogin(login).get();
         user.addUserPost(post);
         post.setCar(car);
         post.setSold(false);
@@ -117,7 +123,7 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void modify(User user, Map<String, String> params) {
+    public void modify(Map<String, String> params) {
         var post = repository.findById(Long.parseLong(params.get("id")));
         if (post.isPresent()) {
             post.get().setDescription(params.get("description"));
@@ -126,7 +132,6 @@ public class SimpleAutoPostService implements AutoPostService {
             convertCar(params, car);
 
             post.get().setCar(car);
-            post.get().setAuthor(user);
 
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
             try {
