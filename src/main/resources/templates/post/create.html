@@ -82,8 +82,8 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="color_id"><b>Цвет:</b></label>
-            <select class="form-control" id="color_id" name="color" required>
+            <label for="color"><b>Цвет:</b></label>
+            <select class="form-control" id="color" name="color" required>
                 <option th:each="color : ${colors}" th:value="${color}"
                         th:text="${color.name}">
                 </option>
