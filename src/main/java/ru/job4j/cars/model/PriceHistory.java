@@ -1,7 +1,6 @@
 package ru.job4j.cars.model;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,7 +9,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "price_history")
 @Data
-@EqualsAndHashCode(of = "created")
 @NoArgsConstructor
 public class PriceHistory implements Comparable<PriceHistory> {
     @Id
@@ -24,7 +22,7 @@ public class PriceHistory implements Comparable<PriceHistory> {
     private LocalDateTime created;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "post_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "post_id", nullable = false, updatable = false)
     private AutoPost post;
 
     public PriceHistory(long before, long after) {

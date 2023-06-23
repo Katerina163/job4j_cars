@@ -13,7 +13,6 @@ import java.util.*;
 @EqualsAndHashCode(exclude = {"files", "history"})
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
-@Builder
 public class AutoPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,15 +30,13 @@ public class AutoPost {
     private Car car;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
 
-    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
-    private List<File> files = new ArrayList<>();
+    private Set<File> files = new HashSet<>();
 
-    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private SortedSet<PriceHistory> history = new TreeSet<>();
@@ -58,7 +55,7 @@ public class AutoPost {
     }
 
     public void addPriceHistory(PriceHistory priceHistory) {
-        history.add(priceHistory);
         priceHistory.setPost(this);
+        history.add(priceHistory);
     }
 }

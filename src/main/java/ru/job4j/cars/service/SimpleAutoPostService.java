@@ -83,8 +83,8 @@ public class SimpleAutoPostService implements AutoPostService {
     @Transactional
     @Override
     public void create(User user, Map<String, String> params, MultipartFile file) {
-        var car = convertCar(params);
-
+        var car = new Car();
+        convertCar(params, car);
         var post = new AutoPost();
         post.setDescription(params.get("description"));
         post.setAuthor(user);
@@ -95,7 +95,6 @@ public class SimpleAutoPostService implements AutoPostService {
             var f = convertFile(file);
             post.addFile(f);
         }
-
         var priceHistory = new PriceHistory(
                 Long.parseLong(params.get("price")),
                 Long.parseLong(params.get("price")));
@@ -124,7 +123,10 @@ public class SimpleAutoPostService implements AutoPostService {
         var post = repository.findById(Long.parseLong(params.get("id")));
         if (post.isPresent()) {
             post.get().setDescription(params.get("description"));
-            var car = convertCar(params);
+
+            var car = carRepository.findById(Long.parseLong(params.get("car.id"))).get();
+            convertCar(params, car);
+
             post.get().setCar(car);
             post.get().setAuthor(user);
 
@@ -138,8 +140,7 @@ public class SimpleAutoPostService implements AutoPostService {
         }
     }
 
-    private Car convertCar(Map<String, String> params) {
-        var car = carRepository.findById(Long.parseLong(params.get("car.id"))).get();
+    private Car convertCar(Map<String, String> params, Car car) {
         car.setName(params.get("car.name"));
         car.setColor(Color.valueOf(params.get("color")));
         car.setMark(markRepository.findById(Integer.parseInt(params.get("mark.id"))).get());

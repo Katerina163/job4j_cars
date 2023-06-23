@@ -61,7 +61,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
 
     @Override
     public Optional<AutoPost> findById(long id) {
-        return crud.optional(getSqlQuery() + "where ap.id = :id",
+        return crud.optional(getSqlQuery() + " where ap.id = :id",
                 AutoPost.class, Map.of("id", id));
     }
 

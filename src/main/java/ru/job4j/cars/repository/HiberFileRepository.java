@@ -15,7 +15,7 @@ public class HiberFileRepository implements FileRepository {
     @Override
     public Optional<File> findById(long id) {
         return crud.optional(
-                "from File where id = :fId", File.class, Map.of("fId", id));
+                "select distinct f from File f where f.id = :fId", File.class, Map.of("fId", id));
     }
 
     @Override
@@ -26,8 +26,6 @@ public class HiberFileRepository implements FileRepository {
 
     @Override
     public void delete(long id) {
-        File file = new File();
-        file.setId(id);
-        crud.run(session -> session.delete(file));
+        crud.run(session -> session.delete(new File(id)));
     }
 }

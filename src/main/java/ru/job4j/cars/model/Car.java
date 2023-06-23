@@ -20,7 +20,7 @@ public class Car {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @OneToOne(optional = false)
-    @JoinColumn(name = "mark_id", nullable = false, insertable = false, updatable = false)
+    @OneToOne
+    @JoinColumn(name = "mark_id", updatable = false)
     private Mark mark;
 }

@@ -106,7 +106,7 @@
     <div><h4>Цена:</h4>
         <p class="textonleft" th:text="${post.history.last().after} + '₽'"></p>
         <p class="textonright"
-           th:text="'Последнее обновление цены ' + ${#dates.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
+           th:text="'Последнее обновление цены ' + ${#temporals.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
     </div>
     <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">

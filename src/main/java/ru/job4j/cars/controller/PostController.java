@@ -96,7 +96,7 @@ public class PostController {
     }
 
     @PostMapping("/add/{id}")
-    public String add(@RequestParam MultipartFile file, @PathVariable int id) throws IOException {
+    public String addFile(@RequestParam MultipartFile file, @PathVariable int id) throws IOException {
         if (!file.isEmpty()) {
             fileService.save(new FileDTO(file.getOriginalFilename(), id, file.getBytes()));
         }
