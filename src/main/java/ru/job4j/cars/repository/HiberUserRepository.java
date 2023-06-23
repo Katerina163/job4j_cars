@@ -32,14 +32,4 @@ public class HiberUserRepository implements UserRepository {
                 + " where login = :login";
         return crud.optional(sql, User.class, Map.of("login", login));
     }
-
-    @Override
-    public void subscribe(long userId, long postId) {
-        crud.addPostToUser(userId, postId, Set::add);
-    }
-
-    @Override
-    public void unsubscribe(long userId, long postId) {
-        crud.addPostToUser(userId, postId, Set::remove);
-    }
 }

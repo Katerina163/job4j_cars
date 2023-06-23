@@ -23,7 +23,7 @@ public class Banner {
         this.setPrice(post.getHistory().last().getAfter());
         this.setCreated(post.getCreated());
         if (!post.getFiles().isEmpty()) {
-            this.setFileId(post.getFiles().last().getId());
+            this.setFileId(post.getFiles().size() - 1);
         }
     }
 }

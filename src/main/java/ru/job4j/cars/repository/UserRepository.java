@@ -11,7 +11,7 @@ public interface UserRepository {
 
     Optional<User> findByLogin(String login);
 
-    void subscribe(long userId, long postId);
-
-    void unsubscribe(long userId, long postId);
+//    void subscribe(long userId, long postId);
+//
+//    void unsubscribe(long userId, long postId);
 }

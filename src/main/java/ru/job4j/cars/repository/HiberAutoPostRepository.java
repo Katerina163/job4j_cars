@@ -80,13 +80,11 @@ public class HiberAutoPostRepository implements AutoPostRepository {
 
     @Override
     public void delete(long id) {
-        var post = findById(id).get();
-        crud.run(session -> session.remove(post));
+        crud.run(session -> session.remove(new AutoPost(id)));
     }
 
     @Override
     public void modify(AutoPost post) {
-        crud.run(session -> session.update(post.getCar()));
        crud.run(session -> session.update(post));
     }
 }

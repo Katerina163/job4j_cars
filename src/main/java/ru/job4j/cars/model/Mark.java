@@ -12,10 +12,6 @@ import javax.persistence.*;
 public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private String name;
-
-    public Mark(long id) {
-        this.id = id;
-    }
 }

@@ -12,7 +12,6 @@ import java.util.*;
 @Data
 @EqualsAndHashCode(exclude = {"files", "history"})
 @ToString(exclude = {"files", "history"})
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AutoPost {
@@ -35,13 +34,23 @@ public class AutoPost {
     @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
     private User author;
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private List<File> files = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @SortNatural
     private SortedSet<PriceHistory> history = new TreeSet<>();
+
+    public AutoPost() {
+        created = new Date();
+    }
+
+    public AutoPost(long id) {
+        this.id = id;
+    }
 
     public void addFile(File file) {
         files.add(file);
