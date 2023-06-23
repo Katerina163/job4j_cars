@@ -4,8 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.cars.dto.Banner;
+import ru.job4j.cars.model.Color;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.ColorService;
 import ru.job4j.cars.service.MarkService;
 import ru.job4j.cars.service.UserService;
 
@@ -16,13 +16,10 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
     private final UserService service;
-    private final ColorService colorService;
     private final MarkService markService;
 
-    public UserController(UserService simpleUserService, ColorService simpleColorService,
-                          MarkService simpleMarkService) {
+    public UserController(UserService simpleUserService, MarkService simpleMarkService) {
         service = simpleUserService;
-        colorService = simpleColorService;
         markService = simpleMarkService;
     }
 
@@ -66,21 +63,21 @@ public class UserController {
         model.addAttribute("posts", users.getUserPosts().stream().map(Banner::new).toList())
                 .addAttribute("subscribe", users.getParticipates().stream().map(Banner::new).toList())
                 .addAttribute("marks", markService.findAll())
-                .addAttribute("colors", colorService.findAll());
+                .addAttribute("colors", Color.values());
         return "/user/home";
     }
 
     @PostMapping("/subscribe")
     public String subscribe(@RequestParam int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.subscribe(user.getId(), id);
+        service.subscribe(user.getLogin(), id);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/unsubscribe/{id}")
     public String unsubscribe(@PathVariable int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.unsubscribe(user.getId(), id);
+        service.unsubscribe(user.getLogin(), id);
         return "redirect:/user/profile";
     }
 }

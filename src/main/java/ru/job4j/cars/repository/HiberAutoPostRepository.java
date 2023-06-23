@@ -3,6 +3,7 @@ package ru.job4j.cars.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.AutoPost;
+import ru.job4j.cars.model.Color;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -39,10 +40,10 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     }
 
     @Override
-    public Collection<AutoPost> findByColor(long id) {
+    public Collection<AutoPost> findByColor(Color color) {
         return crud.query(
-                getSqlQuery() + " where car.color.id = :id",
-                AutoPost.class, Map.of("id", id));
+                getSqlQuery() + " where car.color = :color",
+                AutoPost.class, Map.of("color", color.name()));
     }
 
     @Override

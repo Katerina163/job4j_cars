@@ -18,16 +18,13 @@ public class PostController {
     private final AutoPostService service;
     private final FileService fileService;
     private final PriceHistoryService priceService;
-    private final ColorService colorService;
     private final MarkService markService;
 
     public PostController(AutoPostService simpleAutoPostService, FileService simpleFileService,
-                          PriceHistoryService simplePriceHistoryService, ColorService simpleColorService,
-                          MarkService simpleMarkService) {
+                          PriceHistoryService simplePriceHistoryService, MarkService simpleMarkService) {
         service = simpleAutoPostService;
         fileService = simpleFileService;
         priceService = simplePriceHistoryService;
-        colorService = simpleColorService;
         markService = simpleMarkService;
     }
 
@@ -66,9 +63,10 @@ public class PostController {
         return "post/list";
     }
 
-    @GetMapping("/color/{id}")
-    public String getByColor(@PathVariable long id, Model model) {
-        addMarkAndColor(model).addAttribute("posts", service.findByColor(id));
+    @GetMapping("/color/{name}")
+    public String getByColor(@PathVariable String name, Model model) {
+        var color = Color.valueOf(name);
+        addMarkAndColor(model).addAttribute("posts", service.findByColor(color));
         return "post/list";
     }
 
@@ -131,12 +129,11 @@ public class PostController {
             addMarkAndColor(model).addAttribute("message", "Не удалось найти пост");
             return "error";
         }
-        StringBuilder ab = new StringBuilder();
-        for (var s : post.get().getCar().getOwners()) {
-            ab.append(s);
-        }
-        addMarkAndColor(model).addAttribute("post", post.get())
-                .addAttribute("owners", ab.toString());
+//        StringBuilder ab = new StringBuilder();
+//        for (var s : post.get().getCar().getOwners()) {
+//            ab.append(s);
+//        }
+        addMarkAndColor(model).addAttribute("post", post.get());
         return "/post/modify";
     }
 
@@ -149,7 +146,7 @@ public class PostController {
 
     private Model addMarkAndColor(Model model) {
         model.addAttribute("marks", markService.findAll())
-                .addAttribute("colors", colorService.findAll());
+                .addAttribute("colors", Color.values());
         return model;
     }
 }

@@ -55,8 +55,8 @@ public class SimpleAutoPostService implements AutoPostService {
     }
 
     @Override
-    public Collection<Banner> findByColor(long id) {
-        return convert(repository.findByColor(id));
+    public Collection<Banner> findByColor(Color color) {
+        return convert(repository.findByColor(color));
     }
 
     @Override

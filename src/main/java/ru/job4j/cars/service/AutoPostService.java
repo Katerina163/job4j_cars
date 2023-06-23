@@ -3,6 +3,7 @@ package ru.job4j.cars.service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.AutoPost;
+import ru.job4j.cars.model.Color;
 import ru.job4j.cars.model.User;
 
 import java.util.Collection;
@@ -18,7 +19,7 @@ public interface AutoPostService {
 
     Collection<Banner> findByCarBrand(String brand);
 
-    Collection<Banner> findByColor(long id);
+    Collection<Banner> findByColor(Color color);
 
     Collection<Banner> findByMark(long id);
 
