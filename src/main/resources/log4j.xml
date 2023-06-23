@@ -6,7 +6,7 @@
         <param name="target" value="System.out"/>
 
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="conversionPattern" value="[%d{HH:mm:ss,SSS} %p [%c: %L] %m%n]"/>
+            <param name="conversionPattern" value="%d{HH:mm:ss,SSS} %p [%c: %L] %m%n"/>
         </layout>
     </appender>
 
@@ -18,7 +18,7 @@
         <param name="maxBackupIndex" value="10"/>
 
         <layout class="org.apache.log4j.PatternLayout">
-            <param name="conversionPattern" value="[%d{HH:mm:ss,SSS} %p [%c: %L] %m%n]"/>
+            <param name="conversionPattern" value="%d{HH:mm:ss,SSS} %p [%c: %L] %m%n"/>
         </layout>
 
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
