@@ -15,5 +15,5 @@ import java.io.Serializable;
 public abstract class BaseId<T extends Serializable> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected T id;
+    private T id;
 }
