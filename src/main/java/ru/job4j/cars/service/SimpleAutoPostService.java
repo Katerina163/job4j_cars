@@ -87,10 +87,9 @@ public class SimpleAutoPostService implements AutoPostService {
         convertCar(params, car);
         var post = new AutoPost();
         post.setDescription(params.get("description"));
-        post.setAuthor(user);
+        user.addUserPost(post);
         post.setCar(car);
         post.setSold(false);
-
         if (!file.isEmpty()) {
             var f = convertFile(file);
             post.addFile(f);
@@ -99,7 +98,6 @@ public class SimpleAutoPostService implements AutoPostService {
                 Long.parseLong(params.get("price")),
                 Long.parseLong(params.get("price")));
         post.addPriceHistory(priceHistory);
-
         repository.save(post);
     }
 

@@ -70,14 +70,14 @@ public class UserController {
     @PostMapping("/subscribe")
     public String subscribe(@RequestParam int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.subscribe(user.getLogin(), id);
+        service.subscribe(user.getId(), id);
         return "redirect:/user/profile";
     }
 
     @GetMapping("/unsubscribe/{id}")
     public String unsubscribe(@PathVariable int id, HttpSession session) {
         var user = (User) session.getAttribute("user");
-        service.unsubscribe(user.getLogin(), id);
+        service.unsubscribe(user.getId(), id);
         return "redirect:/user/profile";
     }
 }

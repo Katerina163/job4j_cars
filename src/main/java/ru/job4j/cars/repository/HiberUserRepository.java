@@ -2,9 +2,11 @@ package ru.job4j.cars.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 @AllArgsConstructor
 @Repository
@@ -28,7 +30,13 @@ public class HiberUserRepository implements UserRepository {
     public Optional<User> findByLogin(String login) {
         String sql = "from User u left join fetch u.userPosts post left join fetch u.participates part"
                 + " left join fetch post.history left join fetch post.files"
+                + " left join fetch part.history left join fetch part.files"
                 + " where login = :login";
         return crud.optional(sql, User.class, Map.of("login", login));
+    }
+
+    @Override
+    public void participate(long userId, long postId, BiFunction<Set<AutoPost>, AutoPost, Boolean> function) {
+        crud.participates(userId, postId, function);
     }
 }

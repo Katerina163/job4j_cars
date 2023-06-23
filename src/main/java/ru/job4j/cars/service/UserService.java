@@ -11,7 +11,7 @@ public interface UserService {
 
     Optional<User> findByLogin(String login);
 
-    void subscribe(String login, long postId);
+    void subscribe(long userId, long postId);
 
-    void unsubscribe(String login, long postId);
+    void unsubscribe(long userId, long postId);
 }
