@@ -10,12 +10,11 @@ import javax.persistence.*;
 @Table(name = "files")
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "path")
 @NoArgsConstructor
 public class File implements Comparable<File> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
 
     private String name;
@@ -23,7 +22,7 @@ public class File implements Comparable<File> {
     private String path;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false, insertable = false, updatable = false)
     private AutoPost post;
 
     public File(String name, String path) {
@@ -33,6 +32,6 @@ public class File implements Comparable<File> {
 
     @Override
     public int compareTo(File file) {
-        return Long.compare(this.id, file.id);
+        return this.path.compareTo(file.getPath());
     }
 }

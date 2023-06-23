@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,17 +19,12 @@ public class Car {
 
     private String name;
 
-    @OneToOne
-    @JoinColumn(name = "color_id", nullable = false)
+    private String owners;
+
+    @Enumerated(EnumType.STRING)
     private Color color;
 
     @OneToOne
-    @JoinColumn(name = "mark_id", nullable = false)
+    @JoinColumn(name = "mark_id", nullable = false, insertable = false, updatable = false)
     private Mark mark;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinTable(name = "history_owners",
-            joinColumns = {@JoinColumn(name = "car_id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name = "owner_id", nullable = false)})
-    private Set<Owner> owners = new HashSet<>();
 }

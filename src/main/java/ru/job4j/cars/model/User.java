@@ -17,24 +17,24 @@ public class User {
     @EqualsAndHashCode.Include
     private long id;
 
+    @Column(unique = true)
     private String login;
 
     private String password;
 
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST
-    },
-            targetEntity = AutoPost.class)
+    @ManyToMany
     @JoinTable(
             name = "participates",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "post_id")}
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
     )
     private Set<AutoPost> participates = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AutoPost> userPosts = new HashSet<>();
+
+    public void addUserPost(AutoPost post) {
+        userPosts.add(post);
+        post.setAuthor(this);
+    }
 }

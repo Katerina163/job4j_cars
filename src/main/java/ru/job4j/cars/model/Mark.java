@@ -11,13 +11,12 @@ import javax.persistence.*;
 @Table(name = "mark")
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @NoArgsConstructor
 @Cacheable
 public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
     private String name;
 

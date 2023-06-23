@@ -12,12 +12,11 @@ import java.util.*;
 @Entity
 @Table(name = "auto_post")
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(exclude = {"files", "history"})
 @NoArgsConstructor
 public class AutoPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
     private long id;
 
     private String description;
@@ -27,15 +26,15 @@ public class AutoPost {
 
     private boolean sold;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "car_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @JoinColumn(name = "car_id", nullable = false, unique = true)
     private Car car;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false, insertable = false, updatable = false)
+    private User author;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private SortedSet<File> files = new TreeSet<>();
 
@@ -45,5 +44,15 @@ public class AutoPost {
 
     public AutoPost(long id) {
         this.id = id;
+    }
+
+    public void addFile(File file) {
+        files.add(file);
+        file.setPost(this);
+    }
+
+    public void addPriceHistory(PriceHistory priceHistory) {
+        history.add(priceHistory);
+        priceHistory.setPost(this);
     }
 }
