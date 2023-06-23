@@ -25,5 +25,5 @@ public interface AutoPostRepository {
 
     void soldById(long postId, boolean sold);
 
-    void delete(long id);
+    void delete(AutoPost post);
 }

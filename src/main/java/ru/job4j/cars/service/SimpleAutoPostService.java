@@ -82,7 +82,20 @@ public class SimpleAutoPostService implements AutoPostService {
     @Transactional
     @Override
     public void delete(long id) {
-        repository.delete(id);
+        var post = repository.findById(id).get();
+        var set = post.getFiles();
+        for (var file : set) {
+            deleteFile(file.getPath());
+        }
+        repository.delete(post);
+    }
+
+    private void deleteFile(String path) {
+        try {
+            Files.deleteIfExists(Path.of(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional
