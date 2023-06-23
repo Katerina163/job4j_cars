@@ -36,7 +36,7 @@
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
                         <div class="dropdown-menu">
                             <div th:each="color : ${colors}">
-                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                <a th:href="@{/post/color/{name}(name=${color.name})}" class="dropdown-item"
                                    th:text="${color.name}"></a>
                             </div>
                         </div>
@@ -100,6 +100,11 @@
             <label for="description" class="form-label"><b>Описание</b></label>
             <textarea class="form-control" id="description" name="description" rows="15"
                       th:placeholder="${post.description}" th:field="*{description}"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="owners" class="form-label"><b>Бывшие владельцы (через запятую):</b></label>
+            <input type="text" class="form-control" id="owners" name="owners"
+                   th:placeholder="${post.car.owners}" th:field="*{car.owners}" required>
         </div>
         <div class="row">
             <div class="col-1">

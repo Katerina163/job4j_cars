@@ -35,7 +35,7 @@
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
                         <div class="dropdown-menu">
                             <div th:each="color : ${colors}">
-                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                <a th:href="@{/post/color/{name}(name=${color.name})}" class="dropdown-item"
                                    th:text="${color.name}"></a>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
         </form>
     </div>
     <p class="textonleft" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}"></p>
-    <p class="textonright" th:text="${post.user.login}"></p>
+    <p class="textonright" th:text="${post.author.login}"></p>
     <div><h4>Цвет:</h4>
         <div th:text="${post.car.color.name}"></div>
     </div>
@@ -101,16 +101,14 @@
         <p style="text-align: justify;" class="text-break" th:text="${post.description}"></p>
     </div>
     <div class="mb-3"><h4>Предыдущие владельцы:</h4>
-        <div th:each="owner: ${post.car.owners}">
-            <a th:text="${owner.name}"></a>
-        </div>
+            <a th:text="${post.car.owners}"></a>
     </div>
     <div><h4>Цена:</h4>
         <p class="textonleft" th:text="${post.history.last().after} + '₽'"></p>
         <p class="textonright"
            th:text="'Последнее обновление цены ' + ${#dates.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
     </div>
-    <div th:if="${user.login == post.user.login}">
+    <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" th:field="${post.id}">
             <input type="hidden" name="before" th:value="${post.history.last().after}">
@@ -129,7 +127,7 @@
     <div class="green" th:if="${post.sold}">
         <h4>Продано</h4>
     </div>
-    <div th:if="${user.login == post.user.login}">
+    <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/sold}" method="post" enctype="multipart/form-data" th:object="${post}">
             <input type="hidden" name="id" th:field="*{id}">
             <input type="hidden" name="sold" th:field="*{sold}">
@@ -141,7 +139,7 @@
             </div>
         </form>
     </div>
-    <div th:if="${user.login != 'Гость' && user.login != post.user.login}">
+    <div th:if="${user.login != 'Гость' && user.login != post.author.login}">
         <form th:action="@{/user/subscribe}" method="post" enctype="multipart/form-data" th:object="${post}">
             <input type="hidden" name="id" th:field="${post.id}">
             <div class="col-6">

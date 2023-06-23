@@ -34,7 +34,7 @@
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
                         <div class="dropdown-menu">
                             <div th:each="color : ${colors}">
-                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                <a th:href="@{/post/color/{name}(name=${color.name})}" class="dropdown-item"
                                    th:text="${color.name}"></a>
                             </div>
                         </div>

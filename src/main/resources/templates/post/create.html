@@ -33,7 +33,7 @@
                         <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
                         <div class="dropdown-menu">
                             <div th:each="color : ${colors}">
-                                <a th:href="@{/post/color/{id}(id=${color.id})}" class="dropdown-item"
+                                <a th:href="@{/post/color/{name}(name=${color.name})}" class="dropdown-item"
                                    th:text="${color.name}"></a>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
         <div class="form-group">
             <label for="color_id"><b>Цвет:</b></label>
             <select class="form-control" id="color_id" name="color.id" required>
-                <option th:each="color : ${colors}" th:value="${color.id}"
+                <option th:each="color : ${colors}" th:value="${color.name}"
                         th:text="${color.name}">
                 </option>
             </select>
