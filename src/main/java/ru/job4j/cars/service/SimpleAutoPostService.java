@@ -101,7 +101,7 @@ public class SimpleAutoPostService implements AutoPostService {
                 Long.parseLong(params.get("price")));
         post.addPriceHistory(priceHistory);
 
-        repository.create(post);
+        repository.save(post);
     }
 
     private File convertFile(MultipartFile file) {
@@ -134,7 +134,7 @@ public class SimpleAutoPostService implements AutoPostService {
             } catch (ParseException pe) {
                 pe.printStackTrace();
             }
-            repository.modify(post.get());
+            repository.save(post.get());
         }
     }
 

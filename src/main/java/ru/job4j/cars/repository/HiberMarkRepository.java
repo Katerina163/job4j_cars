@@ -19,7 +19,7 @@ public class HiberMarkRepository implements MarkRepository {
     }
 
     @Override
-    public Optional<Mark> findById(int id) {
+    public Optional<Mark> findById(long id) {
         return crud.optional("from Mark where id = :id", Mark.class, Map.of("id", id));
     }
 }

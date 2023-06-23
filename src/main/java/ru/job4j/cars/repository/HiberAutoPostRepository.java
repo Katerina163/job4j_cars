@@ -21,8 +21,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
 
     private String getSqlQuery() {
         return "select distinct ap from AutoPost ap left join fetch ap.history"
-                + " left join fetch ap.car as car left join fetch ap.files"
-                + " left join fetch car.mark left join fetch car.color";
+                + " left join fetch ap.files left join fetch ap.car as car";
     }
 
     @Override
@@ -43,7 +42,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     public Collection<AutoPost> findByColor(Color color) {
         return crud.query(
                 getSqlQuery() + " where car.color = :color",
-                AutoPost.class, Map.of("color", color.name()));
+                AutoPost.class, Map.of("color", color));
     }
 
     @Override
@@ -62,15 +61,13 @@ public class HiberAutoPostRepository implements AutoPostRepository {
 
     @Override
     public Optional<AutoPost> findById(long id) {
-        String sql = " left join fetch ap.user left join fetch car.owners left join fetch car.mark left join"
-                + " fetch car.color where ap.id = :id";
-        return crud.optional(getSqlQuery() + sql,
+        return crud.optional(getSqlQuery() + "where ap.id = :id",
                 AutoPost.class, Map.of("id", id));
     }
 
     @Override
-    public void create(AutoPost post) {
-        crud.run(session -> session.save(post));
+    public void save(AutoPost post) {
+        crud.run(session -> session.saveOrUpdate(post));
     }
 
     @Override
@@ -82,10 +79,5 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     @Override
     public void delete(long id) {
         crud.run(session -> session.remove(new AutoPost(id)));
-    }
-
-    @Override
-    public void modify(AutoPost post) {
-       crud.run(session -> session.update(post));
     }
 }

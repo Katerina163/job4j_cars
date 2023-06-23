@@ -33,7 +33,7 @@ public class User {
     )
     private Set<AutoPost> participates = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AutoPost> userPosts = new HashSet<>();
 
     public User(String login, String password) {

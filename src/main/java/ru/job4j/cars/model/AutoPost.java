@@ -40,7 +40,7 @@ public class AutoPost {
     private List<File> files = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private SortedSet<PriceHistory> history = new TreeSet<>();
 

@@ -129,10 +129,6 @@ public class PostController {
             addMarkAndColor(model).addAttribute("message", "Не удалось найти пост");
             return "error";
         }
-//        StringBuilder ab = new StringBuilder();
-//        for (var s : post.get().getCar().getOwners()) {
-//            ab.append(s);
-//        }
         addMarkAndColor(model).addAttribute("post", post.get());
         return "/post/modify";
     }

@@ -21,11 +21,9 @@ public interface AutoPostRepository {
 
     Optional<AutoPost> findById(long id);
 
-    void create(AutoPost post);
+    void save(AutoPost post);
 
     void soldById(long postId, boolean sold);
 
     void delete(long id);
-
-    void modify(AutoPost post);
 }

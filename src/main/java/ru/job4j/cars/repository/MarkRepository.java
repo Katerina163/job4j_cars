@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface MarkRepository {
     List<Mark> findAll();
 
-    Optional<Mark> findById(int id);
+    Optional<Mark> findById(long id);
 }
