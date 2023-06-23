@@ -1,6 +1,7 @@
 package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.PriceHistoryRepository;
@@ -18,6 +19,7 @@ public class SimplePriceHistoryService implements PriceHistoryService {
         repository = hiberPriceHistoryRepository;
     }
 
+    @Transactional
     @Override
     public Optional<PriceHistory> create(long before, long after, long postId) {
         var result = new PriceHistory(before, after);

@@ -1,6 +1,7 @@
 package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.AutoPostRepository;
@@ -35,6 +36,7 @@ public class SimpleUserService implements UserService {
         return repository.create(user);
     }
 
+    @Transactional
     @Override
     public void subscribe(String login, long postId) {
         participate(login, postId, Set::add);
@@ -46,6 +48,7 @@ public class SimpleUserService implements UserService {
         function.apply(user.getParticipates(), post);
     }
 
+    @Transactional
     @Override
     public void unsubscribe(String login, long postId) {
         participate(login, postId, Set::remove);

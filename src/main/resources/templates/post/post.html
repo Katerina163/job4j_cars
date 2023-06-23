@@ -75,7 +75,7 @@
             <img th:src="@{/files/{id}(id=*{file.id})}" height="222" alt="No image">
         </a>
     </div>
-    <div th:if="${user.login == post.user.login}">
+    <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/add/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
             <div class="container">
                 <div class="row">

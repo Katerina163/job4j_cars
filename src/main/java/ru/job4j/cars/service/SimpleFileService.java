@@ -2,6 +2,7 @@ package ru.job4j.cars.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.cars.dto.FileDTO;
 import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.AutoPostRepository;
@@ -55,6 +56,7 @@ public class SimpleFileService implements FileService {
         }
     }
 
+    @Transactional
     @Override
     public Optional<File> save(FileDTO fileDto) {
         var path = getNewFilePath(fileDto.getName());
@@ -82,6 +84,7 @@ public class SimpleFileService implements FileService {
         }
     }
 
+    @Transactional
     @Override
     public void deleteById(long id) {
         var fileOptional = repository.findById(id);

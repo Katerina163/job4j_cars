@@ -2,6 +2,7 @@ package ru.job4j.cars.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.*;
@@ -79,6 +80,7 @@ public class SimpleAutoPostService implements AutoPostService {
         repository.delete(id);
     }
 
+    @Transactional
     @Override
     public void create(User user, Map<String, String> params, MultipartFile file) {
         var car = convertCar(params);
@@ -116,6 +118,7 @@ public class SimpleAutoPostService implements AutoPostService {
         return storageDirectory + java.io.File.separator + UUID.randomUUID() + sourceName;
     }
 
+    @Transactional
     @Override
     public void modify(User user, Map<String, String> params) {
         var post = repository.findById(Long.parseLong(params.get("id")));
