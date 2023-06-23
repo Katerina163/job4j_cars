@@ -71,7 +71,7 @@
     <form class="mt-3" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="car_name" class="form-label"><b>Модель машины:</b></label>
-            <input type="text" class="form-control" id="car_name" name="car.name" required>
+            <input type="text" class="form-control" maxlength="25" id="car_name" name="car.name" required>
         </div>
         <div class="form-group">
             <label for="mark_id"><b>Марка:</b></label>

@@ -1,6 +1,6 @@
-insert into car(name, mark_id, color, owners) values ('500', (select mark.id from mark where mark.name = 'Fiat'), 'Зеленый', 'Иван Иванов');
-insert into car(name, mark_id, color, owners) values ('Huracán Evo', (select mark.id from mark where mark.name = 'Lamborghini'), 'Красный', 'Александра Александровна, Петр Петрович');
-insert into car(name, mark_id, color, owners) values ('RS 5', (select mark.id from mark where mark.name = 'Audi'), 'Желтый', 'Андрей Андреевич, Василий Васильевич');
+insert into car(name, mark_id, color, owners) values ('500', (select mark.id from mark where mark.name = 'Fiat'), 'GREEN', 'Иван Иванов');
+insert into car(name, mark_id, color, owners) values ('Huracán Evo', (select mark.id from mark where mark.name = 'Lamborghini'), 'RED', 'Александра Александровна, Петр Петрович');
+insert into car(name, mark_id, color, owners) values ('RS 5', (select mark.id from mark where mark.name = 'Audi'), 'YELLOW', 'Андрей Андреевич, Василий Васильевич');
 
 insert into auto_post(description, created, user_id, sold, car_id)
 values ('Продаю небольшой автомобиль с яркой зеленой окраской за хорошую цену. Он имеет круглую форму и привлекательный дизайн. Это машина для городской езды, компактная и удобная в управлении.',
