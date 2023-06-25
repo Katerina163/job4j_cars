@@ -110,9 +110,8 @@ public class PostController {
     }
 
     @PostMapping("/change-price")
-    public String changePrice(@RequestParam long id, @RequestParam long after,
-                              @RequestParam long before) {
-        priceService.create(before, after, id);
+    public String changePrice(@RequestParam long id, @RequestParam long price) {
+        priceService.create(price, id);
         return "redirect:/post/" + id;
     }
 

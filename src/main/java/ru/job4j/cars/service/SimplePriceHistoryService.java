@@ -21,8 +21,8 @@ public class SimplePriceHistoryService implements PriceHistoryService {
 
     @Transactional
     @Override
-    public Optional<PriceHistory> create(long before, long after, long postId) {
-        var result = new PriceHistory(before, after);
+    public Optional<PriceHistory> create(long price, long postId) {
+        var result = new PriceHistory(price);
         var postOpt = postRepository.findById(postId);
         if (postOpt.isEmpty()) {
             return Optional.empty();

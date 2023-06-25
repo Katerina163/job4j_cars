@@ -14,10 +14,10 @@ import ru.job4j.cars.repository.UserRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SimpleAutoPostService implements AutoPostService {
@@ -114,7 +114,6 @@ public class SimpleAutoPostService implements AutoPostService {
             post.addFile(f);
         }
         var priceHistory = new PriceHistory(
-                Long.parseLong(params.get("price")),
                 Long.parseLong(params.get("price")));
         post.addPriceHistory(priceHistory);
         repository.save(post);
@@ -146,12 +145,8 @@ public class SimpleAutoPostService implements AutoPostService {
 
             post.get().setCar(car);
 
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-            try {
-                post.get().setCreated(format.parse(params.get("created")));
-            } catch (ParseException pe) {
-                pe.printStackTrace();
-            }
+//            var format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+//            post.get().setCreated(format.parse(params.get("created")));
             repository.save(post.get());
         }
     }

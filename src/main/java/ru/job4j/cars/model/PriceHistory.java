@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class PriceHistory extends BaseId<Long> implements Comparable<PriceHistory> {
 
-    private long before;
-
-    private long after;
+    private long price;
 
     private LocalDateTime created;
 
@@ -24,9 +22,8 @@ public class PriceHistory extends BaseId<Long> implements Comparable<PriceHistor
     @JoinColumn(name = "post_id", nullable = false, updatable = false)
     private AutoPost post;
 
-    public PriceHistory(long before, long after) {
-        this.before = before;
-        this.after = after;
+    public PriceHistory(long price) {
+        this.price = price;
         created = LocalDateTime.now();
     }
 

@@ -13,4 +13,8 @@ import javax.persistence.*;
 @Cacheable
 public class Mark  extends BaseId<Long> {
     private String name;
+
+    public Mark(String name) {
+        this.name = name;
+    }
 }

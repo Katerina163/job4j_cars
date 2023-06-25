@@ -111,10 +111,9 @@
     <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="id" th:field="${post.id}">
-            <input type="hidden" name="before" th:value="${post.history.last().after}">
             <div class="mb-3">
-                <label for="after" class="form-label"><b>Цена:</b></label>
-                <input type="number" class="form-control" id="after" name="after">
+                <label for="price" class="form-label"><b>Цена:</b></label>
+                <input type="number" class="form-control" id="price" name="price">
             </div>
             <div class="col-6">
                 <button class="button" type="submit">Изменить цену</button>

@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Color;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -36,8 +35,8 @@ public class HiberAutoPostRepository implements AutoPostRepository {
         return crud.query(
                 getSqlQuery() + " where ap.created between :start and :end order by ap.created",
                 AutoPost.class, Map.of(
-                        "start", Date.valueOf(LocalDate.now().minusDays(1L)),
-                        "end", Date.valueOf(LocalDate.now())));
+                        "start", LocalDateTime.now().minusDays(1L),
+                        "end", LocalDateTime.now()));
     }
 
     @Override

@@ -2,12 +2,14 @@ package ru.job4j.cars.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@NoArgsConstructor
 public class Car extends BaseId<Long> {
 
     private String name;
@@ -20,4 +22,11 @@ public class Car extends BaseId<Long> {
     @OneToOne
     @JoinColumn(name = "mark_id", updatable = false)
     private Mark mark;
+
+    public Car(String name, String owners, Color color, Mark mark) {
+        this.name = name;
+        this.owners = owners;
+        this.color = color;
+        this.mark = mark;
+    }
 }

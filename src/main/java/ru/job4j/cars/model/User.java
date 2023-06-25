@@ -42,4 +42,8 @@ public class User  extends BaseId<Long> {
         userPosts.add(post);
         post.setAuthor(this);
     }
+
+    public void addParticipates(AutoPost post) {
+        participates.add(post);
+    }
 }

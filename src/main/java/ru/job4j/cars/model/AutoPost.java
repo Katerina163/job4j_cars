@@ -5,7 +5,9 @@ import org.hibernate.annotations.SortNatural;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Entity
 @Table(name = "auto_post")
@@ -13,12 +15,13 @@ import java.util.*;
 @EqualsAndHashCode(exclude = {"files", "history"}, callSuper = true)
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
+@Builder
 public class AutoPost extends BaseId<Long> {
 
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    private Date created;
+    private LocalDateTime created;
 
     private boolean sold;
 
@@ -39,7 +42,7 @@ public class AutoPost extends BaseId<Long> {
     private SortedSet<PriceHistory> history = new TreeSet<>();
 
     public AutoPost() {
-        created = new Date();
+        created = LocalDateTime.now();
     }
 
     public void addFile(File file) {
