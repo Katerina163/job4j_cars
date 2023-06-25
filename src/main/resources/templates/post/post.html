@@ -104,7 +104,7 @@
             <a th:text="${post.car.owners}"></a>
     </div>
     <div><h4>Цена:</h4>
-        <p class="textonleft" th:text="${post.history.last().after} + '₽'"></p>
+        <p class="textonleft" th:text="${post.history.last().price} + '₽'"></p>
         <p class="textonright"
            th:text="'Последнее обновление цены ' + ${#temporals.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
     </div>

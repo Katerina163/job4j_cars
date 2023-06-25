@@ -58,16 +58,16 @@ public class PostController {
     }
 
     @GetMapping("/mark/{id}")
-    public String getByBrand(@PathVariable long id, Model model) {
+    public String getByMark(@PathVariable long id, Model model) {
         addMarkAndColor(model).addAttribute("posts", service.findByMark(id));
-        return "post/list";
+        return "/post/list";
     }
 
     @GetMapping("/color/{name}")
     public String getByColor(@PathVariable String name, Model model) {
         var color = Color.valueOf(name);
         addMarkAndColor(model).addAttribute("posts", service.findByColor(color));
-        return "post/list";
+        return "/post/list";
     }
 
     @GetMapping("/{id}")
@@ -91,7 +91,7 @@ public class PostController {
     public String create(@RequestParam Map<String, String> allParams,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
-        service.create(user.getLogin(), allParams, file);
+        service.save(user.getLogin(), allParams, file);
         return "redirect:/user/profile";
     }
 
@@ -111,7 +111,7 @@ public class PostController {
 
     @PostMapping("/change-price")
     public String changePrice(@RequestParam long id, @RequestParam long price) {
-        priceService.create(price, id);
+        priceService.save(price, id);
         return "redirect:/post/" + id;
     }
 
