@@ -21,13 +21,13 @@ public class SimplePriceHistoryService implements PriceHistoryService {
 
     @Transactional
     @Override
-    public Optional<PriceHistory> create(long price, long postId) {
+    public Optional<PriceHistory> save(long price, long postId) {
         var result = new PriceHistory(price);
         var postOpt = postRepository.findById(postId);
         if (postOpt.isEmpty()) {
             return Optional.empty();
         }
         postOpt.get().addPriceHistory(result);
-        return Optional.of(repository.create(result));
+        return Optional.ofNullable(repository.save(result));
     }
 }

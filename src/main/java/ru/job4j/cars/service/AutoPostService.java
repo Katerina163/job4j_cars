@@ -28,7 +28,7 @@ public interface AutoPostService {
 
     void delete(long id);
 
-    void create(String login, Map<String, String> params, MultipartFile file);
+    void save(String login, Map<String, String> params, MultipartFile file);
 
     void modify(Map<String, String> params);
 }

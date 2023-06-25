@@ -10,7 +10,7 @@ public class HiberPriceHistoryRepository implements PriceHistoryRepository {
     private final CrudRepository crud;
 
     @Override
-    public PriceHistory create(PriceHistory priceHistory) {
+    public PriceHistory save(PriceHistory priceHistory) {
         crud.run(session -> session.save(priceHistory));
         return priceHistory;
     }

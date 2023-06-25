@@ -23,7 +23,7 @@ public class PriceHistoryRepositoryTest {
         var post = postRepository.findById(1L).get();
         var price = new PriceHistory(200);
         post.addPriceHistory(price);
-        repository.create(price);
+        repository.save(price);
         var postRes = postRepository.findById(1L).get();
         var result = postRes.getHistory().last();
         assertThat(result.getPrice(), is(200L));

@@ -100,7 +100,7 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void create(String login, Map<String, String> params, MultipartFile file) {
+    public void save(String login, Map<String, String> params, MultipartFile file) {
         var car = new Car();
         convertCar(params, car);
         var post = new AutoPost();
