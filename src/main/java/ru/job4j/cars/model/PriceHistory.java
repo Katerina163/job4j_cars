@@ -18,8 +18,8 @@ public class PriceHistory extends BaseId<Long> implements Comparable<PriceHistor
 
     private LocalDateTime created;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "post_id", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "post_id", updatable = false)
     private AutoPost post;
 
     public PriceHistory(long price) {

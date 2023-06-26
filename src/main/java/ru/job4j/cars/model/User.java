@@ -9,6 +9,13 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@NamedEntityGraph(
+        name = "ForProfile",
+        attributeNodes = {
+                @NamedAttributeNode("participates"),
+                @NamedAttributeNode("userPosts")
+        }
+)
 @Entity
 @Table(name = "auto_user")
 @Data

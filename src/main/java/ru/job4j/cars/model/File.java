@@ -19,7 +19,7 @@ public class File extends BaseId<Long> implements Comparable<File> {
     @Column(unique = true)
     private String path;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false, updatable = false)
     private AutoPost post;
 

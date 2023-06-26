@@ -1,20 +1,23 @@
 package ru.job4j.cars.dto;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.job4j.cars.model.AutoPost;
 
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 public class Banner {
-    private long postId;
+    private Long postId;
     private String carName;
     private String markName;
-    private long price;
+    private Long price;
     private LocalDateTime created;
-    private long fileId;
+    private Long fileId;
 
     public Banner(AutoPost post) {
         this.setPostId(post.getId());

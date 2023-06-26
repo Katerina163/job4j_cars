@@ -6,6 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+@NamedEntityGraph(
+        name = "CarWithMark",
+        attributeNodes = {
+                @NamedAttributeNode("mark")
+        }
+)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -19,7 +25,7 @@ public class Car extends BaseId<Long> {
     @Enumerated(EnumType.STRING)
     private Color color;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mark_id", updatable = false)
     private Mark mark;
 
