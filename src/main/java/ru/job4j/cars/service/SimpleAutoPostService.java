@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
+import ru.job4j.cars.dto.Criterion;
+import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.CarRepository;
@@ -14,10 +16,13 @@ import ru.job4j.cars.repository.UserRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import static ru.job4j.cars.model.QAutoPost.autoPost;
 
 @Service
 public class SimpleAutoPostService implements AutoPostService {
@@ -40,33 +45,37 @@ public class SimpleAutoPostService implements AutoPostService {
     }
 
     @Override
-    public Collection<Banner> findAll() {
-        return convert(repository.findAll());
-    }
-
-    @Override
-    public Collection<Banner> findWithFile() {
-        return convert(repository.findWithFile());
-    }
-
-    @Override
-    public Collection<Banner> findAllNew() {
-        return convert(repository.findAllNew());
-    }
-
-    @Override
-    public Collection<Banner> findByCarBrand(String brand) {
-        return convert(repository.findByCarBrand(brand));
-    }
-
-    @Override
-    public Collection<Banner> findByColor(Color color) {
-        return convert(repository.findByColor(color));
-    }
-
-    @Override
-    public Collection<Banner> findByMark(long id) {
-        return convert(repository.findByMark(id));
+    public Collection<Banner> search(Criterion criterion) {
+        var predicate = QPredicate.builder();
+        if (criterion.isFindAll()) {
+            return convert(repository.findWithPredicate(predicate.and()));
+        }
+        if (criterion.isWithFile()) {
+            predicate.addPredicate(1, autoPost.files.size()::goe);
+        }
+        if (criterion.isFresh()) {
+            predicate.addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between);
+        }
+        if (criterion.getBrand() != null && !criterion.getBrand().isEmpty()) {
+            predicate.addPredicate(criterion.getBrand(), autoPost.car.name::eq);
+        }
+        if (!criterion.getColors().isEmpty()) {
+            for (var color : criterion.getColors()) {
+                if (color == null) {
+                    break;
+                }
+                predicate.addPredicate(color, autoPost.car.color::eq);
+            }
+        }
+        if (!criterion.getMarkId().isEmpty()) {
+            for (var markId : criterion.getMarkId()) {
+                if (markId == null || markId == 0) {
+                    break;
+                }
+                predicate.addPredicate(markId, autoPost.car.mark.id::eq);
+            }
+        }
+        return convert(repository.findWithPredicate(predicate.and()));
     }
 
     @Override
@@ -76,7 +85,7 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Override
     public void soldById(long postId, boolean sold) {
-        repository.soldById(postId, sold);
+        repository.soldById(postId);
     }
 
     @Transactional
@@ -87,7 +96,7 @@ public class SimpleAutoPostService implements AutoPostService {
         for (var file : set) {
             deleteFile(file.getPath());
         }
-        repository.delete(post);
+        repository.cud(post, session -> session.delete(post));
     }
 
     private void deleteFile(String path) {
@@ -116,7 +125,7 @@ public class SimpleAutoPostService implements AutoPostService {
         var priceHistory = new PriceHistory(
                 Long.parseLong(params.get("price")));
         post.addPriceHistory(priceHistory);
-        repository.save(post);
+        repository.cud(post, session -> session.persist(post));
     }
 
     private File convertFile(MultipartFile file) {
@@ -147,7 +156,7 @@ public class SimpleAutoPostService implements AutoPostService {
 
 //            var format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 //            post.get().setCreated(format.parse(params.get("created")));
-            repository.save(post.get());
+            repository.cud(post.get(), session -> session.update(post));
         }
     }
 

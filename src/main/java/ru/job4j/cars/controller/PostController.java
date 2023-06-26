@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.FileDTO;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.service.*;
@@ -30,25 +31,28 @@ public class PostController {
 
     @GetMapping("/")
     public String getAllPage(Model model) {
-        addMarkAndColor(model).addAttribute("posts", service.findAll());
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(new Criterion().findAll()));
         return "/post/list";
     }
 
     @GetMapping("/new")
     public String getNewPage(Model model) {
-        addMarkAndColor(model).addAttribute("posts", service.findAllNew());
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(new Criterion().fresh()));
         return "/post/list";
     }
 
     @GetMapping("/with-photo")
     public String getPageWithFile(Model model) {
-        addMarkAndColor(model).addAttribute("posts", service.findWithFile());
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(new Criterion().withFile()));
         return "/post/list";
     }
 
     @PostMapping("/brand")
     public String getMarkPage(@RequestParam String brand, Model model) {
-        var list = service.findByCarBrand(brand);
+        var list = service.search(new Criterion().addBrand(brand));
         if (list.isEmpty()) {
             addMarkAndColor(model).addAttribute("message", "По запросу \"" + brand + "\" ничего не найдено");
             return "/error";
@@ -59,14 +63,16 @@ public class PostController {
 
     @GetMapping("/mark/{id}")
     public String getByMark(@PathVariable long id, Model model) {
-        addMarkAndColor(model).addAttribute("posts", service.findByMark(id));
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(new Criterion().addMarkId(id)));
         return "/post/list";
     }
 
     @GetMapping("/color/{name}")
     public String getByColor(@PathVariable String name, Model model) {
         var color = Color.valueOf(name);
-        addMarkAndColor(model).addAttribute("posts", service.findByColor(color));
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(new Criterion().addColor(color)));
         return "/post/list";
     }
 
@@ -135,8 +141,8 @@ public class PostController {
     @PostMapping("/modify")
     public String modify(@RequestParam AutoPost post, HttpSession session) {
         System.out.println(post);
-      //  var user = (User) session.getAttribute("user");
-   //     service.modify(params);
+        //  var user = (User) session.getAttribute("user");
+        //     service.modify(params);
         return "/post/modify";
     }
 
