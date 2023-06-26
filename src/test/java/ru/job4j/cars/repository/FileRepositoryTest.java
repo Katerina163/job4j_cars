@@ -16,6 +16,7 @@ public class FileRepositoryTest {
 
     @Before
     public void before() {
+        HibernateTestUtil.insertPosts();
         HibernateTestUtil.insertFiles();
     }
 

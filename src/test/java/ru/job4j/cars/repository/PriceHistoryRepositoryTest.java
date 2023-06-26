@@ -12,9 +12,9 @@ public class PriceHistoryRepositoryTest {
     private final AutoPostRepository postRepository;
 
     public PriceHistoryRepositoryTest() {
-        var crud = new CrudRepository(HibernateTestUtil.buildSessionFactory());
-        repository = new HiberPriceHistoryRepository(crud);
-        postRepository = new HiberAutoPostRepository(crud);
+        var sf = HibernateTestUtil.buildSessionFactory();
+        repository = new HiberPriceHistoryRepository(sf);
+        postRepository = new HiberAutoPostRepository(sf);
     }
 
     @Test

@@ -8,8 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class MarkRepositoryTest {
-    private final MarkRepository repository = new HiberMarkRepository(
-            new CrudRepository(HibernateTestUtil.buildSessionFactory()));
+    private final MarkRepository repository = new HiberMarkRepository(HibernateTestUtil.buildSessionFactory());
 
     @Before
     public void before() {

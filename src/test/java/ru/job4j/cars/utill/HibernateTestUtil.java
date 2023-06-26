@@ -101,7 +101,6 @@ public class HibernateTestUtil {
     }
 
     public static void insertParticipates() {
-        insertPosts();
         Transaction tr = null;
         try (var s = sf.openSession()) {
             tr = s.beginTransaction();
@@ -120,7 +119,6 @@ public class HibernateTestUtil {
     }
 
     public static void insertPrice() {
-        insertPosts();
         Transaction tr = null;
         try (var s = sf.openSession()) {
             tr = s.beginTransaction();
@@ -141,7 +139,6 @@ public class HibernateTestUtil {
     }
 
     public static void insertFiles() {
-        insertPosts();
         Transaction tr = null;
         try (var s = sf.openSession()) {
             tr = s.beginTransaction();

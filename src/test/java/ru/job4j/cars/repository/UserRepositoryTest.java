@@ -1,5 +1,6 @@
 package ru.job4j.cars.repository;
 
+import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.utill.HibernateTestUtil;
@@ -15,9 +16,14 @@ public class UserRepositoryTest {
     AutoPostRepository postRepository;
 
     public UserRepositoryTest() {
-        var crud = new CrudRepository(HibernateTestUtil.buildSessionFactory());
-        repository = new HiberUserRepository(crud);
-        postRepository = new HiberAutoPostRepository(crud);
+        var sf = HibernateTestUtil.buildSessionFactory();
+        repository = new HiberUserRepository(sf);
+        postRepository = new HiberAutoPostRepository(sf);
+    }
+
+    @Before
+    public void before() {
+        HibernateTestUtil.insertPosts();
     }
 
     @Test
@@ -28,6 +34,14 @@ public class UserRepositoryTest {
         assertThat(result.getPassword(), is("root"));
         assertThat(result.getParticipates().size(), is(1));
         assertThat(result.getUserPosts().size(), is(1));
+    }
+
+    @Test
+    public void whenFindByLoginAndPassword() {
+        HibernateTestUtil.insertParticipates();
+        User result = repository.findByLoginAndPassword("Ivanov", "root").get();
+        assertThat(result.getLogin(), is("Ivanov"));
+        assertThat(result.getPassword(), is("root"));
     }
 
     @Test
@@ -50,7 +64,6 @@ public class UserRepositoryTest {
 
     @Test
     public void whenUserSubscribe() {
-        HibernateTestUtil.insertPosts();
         var user = new User("login", "password");
         user = repository.create(user);
         var post = postRepository.findById(1).get();

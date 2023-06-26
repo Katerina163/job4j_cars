@@ -8,8 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class CarRepositoryTest {
-    private final CarRepository repository = new HiberCarRepository(
-            new CrudRepository(HibernateTestUtil.buildSessionFactory()));
+    private final CarRepository repository = new HiberCarRepository(HibernateTestUtil.buildSessionFactory());
 
     @Test
     public void whenFindById() {
