@@ -1,29 +1,19 @@
 package ru.job4j.cars.repository;
 
+import com.querydsl.core.types.Predicate;
+import org.hibernate.Session;
 import ru.job4j.cars.model.AutoPost;
-import ru.job4j.cars.model.Color;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 public interface AutoPostRepository {
-    Collection<AutoPost> findAll();
-
-    Collection<AutoPost> findWithFile();
-
-    Collection<AutoPost> findAllNew();
-
-    Collection<AutoPost> findByCarBrand(String brand);
-
-    Collection<AutoPost> findByColor(Color color);
-
-    Collection<AutoPost> findByMark(long id);
+    Collection<AutoPost> findWithPredicate(Predicate predicate);
 
     Optional<AutoPost> findById(long id);
 
-    void save(AutoPost post);
+    void soldById(long postId);
 
-    void soldById(long postId, boolean sold);
-
-    void delete(AutoPost post);
+    void cud(AutoPost post, Consumer<Session> function);
 }
