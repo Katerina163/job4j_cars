@@ -146,7 +146,7 @@ public class AutoPostRepositoryTest {
     @Test
     public void whenSoldAndFind() {
         var post = repository.findById(1L).get();
-        repository.soldById(post.getId());
+        repository.soldById(post.getId(), !post.isSold());
         var result = repository.findById(1L).get();
         assertThat(result.isSold(), is(!post.isSold()));
     }
