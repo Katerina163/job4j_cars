@@ -17,6 +17,7 @@ import ru.job4j.cars.service.PriceHistoryService;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -70,7 +71,7 @@ public class PostController {
     @GetMapping("/mark/{id}")
     public String getByMark(@PathVariable long id, Model model) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().addMarkId(id), QPredicate::and));
+                service.search(new Criterion().addMarkIds(id), QPredicate::and));
         return "/post/list";
     }
 
@@ -150,6 +151,16 @@ public class PostController {
         //  var user = (User) session.getAttribute("user");
         //     service.modify(params);
         return "/post/modify";
+    }
+
+    @PostMapping("/search")
+    public String search(@RequestParam Map<String, String> map,
+                         @RequestParam(value = "markIds", required = false) List<String> markIds,
+                         @RequestParam(value = "colors", required = false) List<String> colors,
+                         Model model) {
+        addMarkAndColor(model).addAttribute("posts",
+                service.search(map, markIds, colors, QPredicate::or));
+        return "/post/list";
     }
 
     private Model addMarkAndColor(Model model) {

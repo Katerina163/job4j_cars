@@ -63,7 +63,7 @@ public class AutoPostServiceTest {
                 QPredicate.builder()
                         .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().findAll());
+        var result = service.search(new Criterion().findAll(), QPredicate::and);
         Banner banner = null;
         for (var p : result) {
             banner = p;
@@ -79,7 +79,7 @@ public class AutoPostServiceTest {
                 .addPredicate(1, autoPost.files.size()::goe)
                 .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().withFile());
+        var result = service.search(new Criterion().withFile(), QPredicate::and);
         Banner banner = null;
         for (var p : result) {
             banner = p;
@@ -96,7 +96,7 @@ public class AutoPostServiceTest {
                 .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                 .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().fresh());
+        var result = service.search(new Criterion().fresh(), QPredicate::and);
         assertThat(result.size(), is(1));
         Banner banner = null;
         for (var p : result) {
@@ -113,7 +113,7 @@ public class AutoPostServiceTest {
                 .addPredicate("name", autoPost.car.name::eq)
                 .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().addBrand("name"));
+        var result = service.search(new Criterion().addBrand("name"), QPredicate::and);
         Banner banner = null;
         for (var p : result) {
             banner = p;
@@ -129,7 +129,7 @@ public class AutoPostServiceTest {
                 .addPredicate(Color.BLACK, autoPost.car.color::eq)
                 .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().addColor(Color.BLACK));
+        var result = service.search(new Criterion().addColor(Color.BLACK), QPredicate::and);
         Banner banner = null;
         for (var p : result) {
             banner = p;
@@ -145,7 +145,7 @@ public class AutoPostServiceTest {
                 .addPredicate(2L, autoPost.car.mark.id::eq)
                 .and()))
                 .thenReturn(collection);
-        var result = service.search(new Criterion().addMarkId(2L));
+        var result = service.search(new Criterion().addMarkIds(2L), QPredicate::and);
         Banner banner = null;
         for (var p : result) {
             banner = p;

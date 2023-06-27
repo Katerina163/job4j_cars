@@ -15,7 +15,7 @@ public class Criterion {
     private boolean fresh = false;
     private String brand;
     private List<Color> colors = new ArrayList<>(Color.values().length - 1);
-    private List<Long> markId = new ArrayList<>();
+    private List<Long> markIds = new ArrayList<>();
 
     public Criterion findAll() {
         this.findAll = true;
@@ -42,8 +42,8 @@ public class Criterion {
         return this;
     }
 
-    public Criterion addMarkId(Long markId) {
-        this.getMarkId().add(markId);
+    public Criterion addMarkIds(Long markId) {
+        this.getMarkIds().add(markId);
         return this;
     }
 }

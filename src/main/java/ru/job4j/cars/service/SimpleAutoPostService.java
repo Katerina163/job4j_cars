@@ -18,10 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 import static ru.job4j.cars.model.QAutoPost.autoPost;
@@ -70,8 +67,8 @@ public class SimpleAutoPostService implements AutoPostService {
                 predicate.addPredicate(color, autoPost.car.color::eq);
             }
         }
-        if (!criterion.getMarkId().isEmpty()) {
-            for (var markId : criterion.getMarkId()) {
+        if (!criterion.getMarkIds().isEmpty()) {
+            for (var markId : criterion.getMarkIds()) {
                 if (markId == null || markId == 0) {
                     break;
                 }
@@ -79,6 +76,29 @@ public class SimpleAutoPostService implements AutoPostService {
             }
         }
         return banner.convert(repository.findWithPredicate(function.apply(predicate)));
+    }
+
+    @Override
+    public Collection<Banner> search(Map<String, String> param, List<String> markIds, List<String> colors,
+                                     Function<QPredicate, Predicate> supplier) {
+        var criterion = new Criterion();
+        if (markIds != null && !markIds.isEmpty()) {
+            for (var markId : markIds) {
+                criterion.addMarkIds(Long.parseLong(markId));
+            }
+        }
+        if (colors != null && !colors.isEmpty()) {
+            for (var color : colors) {
+                criterion.addColor(Color.valueOf(color));
+            }
+        }
+        if (param.containsKey("brand")) {
+            criterion.addBrand(param.get("brand"));
+        }
+        if (param.containsKey("fresh") && param.get("fresh").equals("on")) {
+            criterion.fresh();
+        }
+        return search(criterion, supplier);
     }
 
     @Override

@@ -105,7 +105,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindByMark() throws Exception {
-        when(service.search(new Criterion().addMarkId(1L), QPredicate::and)).thenReturn(List.of(banner));
+        when(service.search(new Criterion().addMarkIds(1L), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/mark/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
