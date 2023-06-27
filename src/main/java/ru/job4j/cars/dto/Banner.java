@@ -1,15 +1,15 @@
 package ru.job4j.cars.dto;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import ru.job4j.cars.model.AutoPost;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.List;
 
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Builder
 public class Banner {
     private Long postId;
@@ -17,9 +17,9 @@ public class Banner {
     private String markName;
     private Long price;
     private LocalDateTime created;
-    private Long fileId;
+    private long fileId;
 
-    public Banner(AutoPost post) {
+    private Banner(AutoPost post) {
         this.setPostId(post.getId());
         this.setCarName(post.getCar().getName());
         this.setMarkName(post.getCar().getMark().getName());
@@ -28,5 +28,9 @@ public class Banner {
         if (!post.getFiles().isEmpty()) {
             this.setFileId(post.getFiles().last().getId());
         }
+    }
+
+    public List<Banner> convert(Collection<AutoPost> posts) {
+        return posts.stream().map(Banner::new).toList();
     }
 }

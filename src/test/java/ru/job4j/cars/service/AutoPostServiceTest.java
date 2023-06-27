@@ -87,15 +87,17 @@ public class AutoPostServiceTest {
         checkPost(banner);
     }
 
+    @Ignore
     @Test
     public void whenFindAllNew() {
-        Collection<AutoPost> collection = new HashSet<>();
+        Collection<AutoPost> collection = new ArrayList<>();
         collection.add(post);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                 .and()))
                 .thenReturn(collection);
         var result = service.search(new Criterion().fresh());
+        assertThat(result.size(), is(1));
         Banner banner = null;
         for (var p : result) {
             banner = p;

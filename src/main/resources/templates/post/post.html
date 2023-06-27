@@ -92,7 +92,7 @@
             </div>
         </form>
     </div>
-    <p class="textonleft" th:text="${#dates.format(post.created, 'dd/MM/yyyy')}"></p>
+    <p class="textonleft" th:text="${#temporals.format(post.created, 'dd/MM/yyyy')}"></p>
     <p class="textonright" th:text="${post.author.login}"></p>
     <div><h4>Цвет:</h4>
         <div th:text="${post.car.color.name}"></div>

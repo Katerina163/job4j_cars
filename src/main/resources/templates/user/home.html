@@ -73,7 +73,7 @@
                 <h4><a th:href="@{/post/{id}(id=${banner.postId})}"
                        th:text="${banner.markName} + ' ' + ${banner.carName}"></a></h4>
                 <h5>Дата публикации:</h5>
-                <a th:text="${#dates.format(banner.created, 'dd/MM/yyyy')}"></a>
+                <a th:text="${#temporals.format(banner.created, 'dd/MM/yyyy')}"></a>
                 <div class="col-6 col-sm-3">
                     <a th:href="@{/post/delete/{id}(id=${banner.postId})}">
                         <button class="button">Удалить</button>
@@ -104,7 +104,7 @@
                 <a th:href="@{/post/{id}(id=${banner.postId})}"
                    th:text="${banner.markName} + ' ' + ${banner.carName}"></a>
                 <h5>Дата публикации:</h5>
-                <a th:text="${#dates.format(banner.created, 'dd/MM/yyyy')}"></a>
+                <a th:text="${#temporals.format(banner.created, 'dd/MM/yyyy')}"></a>
                 <div class="col-6 col-sm-3">
                     <a th:href="@{/user/unsubscribe/{id}(id=${banner.postId})}">
                         <button class="button">Отписаться</button>

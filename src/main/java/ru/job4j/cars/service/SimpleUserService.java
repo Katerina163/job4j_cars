@@ -1,6 +1,8 @@
 package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
+import ru.job4j.cars.dto.Banner;
+import ru.job4j.cars.dto.Profile;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
@@ -21,8 +23,17 @@ public class SimpleUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) {
-        return repository.findByLogin(login);
+    public Optional<Profile> findAllPostsByLogin(String login) {
+        var user = repository.findByLogin(login);
+        if (user.isEmpty()) {
+            return Optional.empty();
+        }
+        var banner = new Banner();
+        var result = new Profile(
+                banner.convert(user.get().getUserPosts()),
+                banner.convert(user.get().getParticipates())
+        );
+        return Optional.of(result);
     }
 
     @Override

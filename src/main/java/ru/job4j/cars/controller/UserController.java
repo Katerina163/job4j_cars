@@ -3,7 +3,6 @@ package ru.job4j.cars.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.Color;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.service.MarkService;
@@ -59,9 +58,9 @@ public class UserController {
     @GetMapping("/profile")
     public String getProfile(Model model, HttpSession session) {
         var userSession = (User) session.getAttribute("user");
-        var users = service.findByLogin(userSession.getLogin()).get();
-        model.addAttribute("posts", users.getUserPosts().stream().map(Banner::new).toList())
-                .addAttribute("subscribe", users.getParticipates().stream().map(Banner::new).toList())
+        var profile = service.findAllPostsByLogin(userSession.getLogin()).get();
+        model.addAttribute("posts", profile.getUserPosts())
+                .addAttribute("subscribe", profile.getUserSubscribe())
                 .addAttribute("marks", markService.findAll())
                 .addAttribute("colors", Color.values());
         return "/user/home";

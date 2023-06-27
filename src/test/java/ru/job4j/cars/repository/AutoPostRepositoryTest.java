@@ -66,9 +66,6 @@ public class AutoPostRepositoryTest {
                         .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                         .and());
         assertThat(result.size(), is(2));
-        for (var v : result) {
-            System.out.println(v.getCar());
-        }
         var post = new AutoPost();
         for (var p : result) {
             post = p;
@@ -164,15 +161,14 @@ public class AutoPostRepositoryTest {
     private void carIsFiat(AutoPost post) {
         assertThat(post.getFiles().size(), is(0));
         assertThat(post.getHistory().size(), is(1));
-        assertThat(post.getHistory().last().getPrice(), is(450000L));
         assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
         assertThat(post.getCar().getName(), is("500"));
         assertThat(post.getCar().getColor(), is(Color.GREEN));
         assertThat(post.getCar().getMark().getName(), is("Fiat"));
+        assertThat(post.getHistory().last().getPrice(), is(450000L));
     }
 
     private void carIsAudi(AutoPost post) {
-        assertThat(post.getHistory().last().getPrice(), is(5120000L));
         assertThat(post.getFiles().size(), is(1));
         assertThat(post.getFiles().last().getName(), is("name"));
         assertThat(post.getDescription(), is("Audi description"));
@@ -183,12 +179,12 @@ public class AutoPostRepositoryTest {
         assertThat(post.getCar().getColor(), is(Color.YELLOW));
         assertThat(post.getCar().getMark().getName(), is("Audi"));
         assertThat(post.getAuthor().getLogin(), is("Petrov"));
+        assertThat(post.getHistory().last().getPrice(), is(5120000L));
     }
 
     private void carIsLamborghini(AutoPost post) {
         assertThat(post.getFiles().size(), is(0));
         assertThat(post.getHistory().size(), is(1));
-        assertThat(post.getHistory().last().getPrice(), is(16500000L));
         assertThat(post.getDescription(), is("Lamborghini description"));
         assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().minusDays(10).getDayOfWeek()));
         assertThat(post.isSold(), is(false));
@@ -197,5 +193,6 @@ public class AutoPostRepositoryTest {
         assertThat(post.getCar().getColor(), is(Color.RED));
         assertThat(post.getCar().getMark().getName(), is("Lamborghini"));
         assertThat(post.getAuthor().getLogin(), is("Petrov"));
+        assertThat(post.getHistory().last().getPrice(), is(16500000L));
     }
 }

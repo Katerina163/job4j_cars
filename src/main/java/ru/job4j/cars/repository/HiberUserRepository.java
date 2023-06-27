@@ -68,7 +68,7 @@ public class HiberUserRepository implements UserRepository {
         Optional<User> result;
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
-            var graph = session.getEntityGraph("ForProfile");
+            var graph = session.getEntityGraph("profile");
             result = session.createQuery("from User where login = :login", User.class)
                     .setParameter("login", login)
                     .setHint(GraphSemantic.LOAD.getJpaHintName(), graph)

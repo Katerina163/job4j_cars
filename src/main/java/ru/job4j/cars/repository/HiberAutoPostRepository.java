@@ -31,7 +31,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
             result = new JPAQuery<>(session)
-                    .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("ForSearch"))
+                    .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("All"))
                     .select(autoPost)
                     .from(autoPost)
                     .where(predicate)

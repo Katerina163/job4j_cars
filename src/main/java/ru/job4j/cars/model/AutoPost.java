@@ -10,32 +10,16 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 @NamedEntityGraph(
-        name = "ForSearch",
-        attributeNodes = {
-                @NamedAttributeNode(value = "car", subgraph = "CarMark"),
-                @NamedAttributeNode("files"),
-                @NamedAttributeNode("history")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "CarMark",
-                        attributeNodes = {
-                                @NamedAttributeNode("mark")
-                        }
-                )
-        }
-)
-@NamedEntityGraph(
         name = "All",
         attributeNodes = {
-                @NamedAttributeNode(value = "car", subgraph = "CarMark"),
+                @NamedAttributeNode(value = "car", subgraph = "car.mark"),
                 @NamedAttributeNode("files"),
                 @NamedAttributeNode("history"),
                 @NamedAttributeNode("author")
         },
         subgraphs = {
                 @NamedSubgraph(
-                        name = "CarMark",
+                        name = "car.mark",
                         attributeNodes = {
                                 @NamedAttributeNode("mark")
                         }

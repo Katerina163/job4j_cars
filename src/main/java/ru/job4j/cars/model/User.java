@@ -10,10 +10,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NamedEntityGraph(
-        name = "ForProfile",
+        name = "profile",
         attributeNodes = {
-                @NamedAttributeNode("participates"),
-                @NamedAttributeNode("userPosts")
+                @NamedAttributeNode(value = "participates", subgraph = "priceHistory"),
+                @NamedAttributeNode(value = "userPosts", subgraph = "priceHistory")
+        },
+        subgraphs = {
+                @NamedSubgraph(name = "priceHistory", attributeNodes = {
+                        @NamedAttributeNode(value = "car", subgraph = "CarWithMark"),
+                        @NamedAttributeNode("files"),
+                        @NamedAttributeNode("history"),
+                        @NamedAttributeNode("author")
+                }),
+                @NamedSubgraph(name = "CarWithMark",
+                        attributeNodes = @NamedAttributeNode("mark"))
         }
 )
 @Entity
@@ -22,7 +32,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "login", callSuper = true)
 @ToString(exclude = {"participates", "userPosts"})
 @NoArgsConstructor
-public class User  extends BaseId<Long> {
+public class User extends BaseId<Long> {
 
     @Column(unique = true)
     private String login;

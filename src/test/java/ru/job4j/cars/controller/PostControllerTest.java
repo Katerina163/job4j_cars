@@ -42,7 +42,6 @@ public class PostControllerTest {
             .markName("Audi")
             .carName("name")
             .price(10L)
-            .fileId(1L)
             .build();
 
     @Before
