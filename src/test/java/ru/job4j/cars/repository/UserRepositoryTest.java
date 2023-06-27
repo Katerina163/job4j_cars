@@ -29,11 +29,22 @@ public class UserRepositoryTest {
     @Test
     public void whenFindByLogin() {
         HibernateTestUtil.insertParticipates();
+        HibernateTestUtil.insertPrice();
+        HibernateTestUtil.insertFiles();
         User result = repository.findByLogin("Ivanov").get();
         assertThat(result.getLogin(), is("Ivanov"));
         assertThat(result.getPassword(), is("root"));
         assertThat(result.getParticipates().size(), is(1));
         assertThat(result.getUserPosts().size(), is(1));
+        for (var post : result.getUserPosts()) {
+            assertThat(post.getDescription(), is("Fiat description"));
+            assertThat(post.getHistory().size(), is(1));
+        }
+        for (var post : result.getParticipates()) {
+            assertThat(post.getDescription(), is("Audi description"));
+            assertThat(post.getHistory().size(), is(2));
+            assertThat(post.getFiles().size(), is(1));
+        }
     }
 
     @Test
