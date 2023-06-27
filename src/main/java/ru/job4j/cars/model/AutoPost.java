@@ -33,7 +33,9 @@ import java.util.TreeSet;
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
 @Builder
-public class AutoPost extends BaseId<Long> {
+public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
+    @Version
+    private int version;
 
     private String description;
 
@@ -70,5 +72,10 @@ public class AutoPost extends BaseId<Long> {
     public void addPriceHistory(PriceHistory priceHistory) {
         priceHistory.setPost(this);
         history.add(priceHistory);
+    }
+
+    @Override
+    public int compareTo(AutoPost post) {
+        return this.created.compareTo(post.created);
     }
 }

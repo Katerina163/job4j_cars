@@ -33,7 +33,7 @@ public class Criterion {
     }
 
     public Criterion addBrand(String brand) {
-        this.brand = brand;
+        this.brand = brand.trim();
         return this;
     }
 

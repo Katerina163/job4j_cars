@@ -81,7 +81,7 @@ public class PostControllerTest {
 
     @Test
     @Ignore
-    public void shouldFindWithMark() throws Exception {
+    public void shouldFindByBrand() throws Exception {
         when(service.search(new Criterion().addBrand("Audi"))).thenReturn(List.of(banner));
         this.mockMvc.perform(post("/post/brand")
                         .param("brand", "Audi"))
@@ -92,7 +92,7 @@ public class PostControllerTest {
     }
 
     @Test
-    public void shouldNotFindWithMark() throws Exception {
+    public void shouldNotFindByBrand() throws Exception {
         when(service.search(new Criterion().addBrand("hi"))).thenReturn(Collections.emptyList());
         this.mockMvc.perform(post("/post/brand")
                         .param("brand", "hi"))

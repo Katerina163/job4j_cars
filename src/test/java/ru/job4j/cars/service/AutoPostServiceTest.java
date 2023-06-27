@@ -191,14 +191,6 @@ public class AutoPostServiceTest {
         assertThat(post.getValue().getCar().getOwners(), is(map.get("owners")));
     }
 
-    @Test
-    public void whenSoldAndFind() {
-    }
-
-    @Test
-    public void whenDeleteAndFind() {
-    }
-
     private void checkPost(Banner banner) {
         assertThat(banner.getPostId(), is(post.getId()));
         assertThat(banner.getCarName(), is(post.getCar().getName()));

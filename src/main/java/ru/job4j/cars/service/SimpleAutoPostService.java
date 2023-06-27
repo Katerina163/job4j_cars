@@ -86,7 +86,7 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Override
     public void soldById(long postId, boolean sold) {
-        repository.soldById(postId);
+        repository.soldById(postId, sold);
     }
 
     @Transactional

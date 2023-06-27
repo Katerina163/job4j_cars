@@ -30,11 +30,29 @@
                             <a th:href="@{/post/with-photo}" class="dropdown-item">С фото</a>
                         </div>
                     </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Цвет</a>
+                        <div class="dropdown-menu">
+                            <div th:each="color : ${colors}">
+                                <a th:href="@{/post/color/{name}(name=${color})}" class="dropdown-item"
+                                   th:text="${color.name}"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Марка</a>
+                        <div class="dropdown-menu">
+                            <div th:each="mark : ${marks}">
+                                <a th:href="@{/post/mark/{id}(id=${mark.id})}" class="dropdown-item"
+                                   th:text="${mark.name}"></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <form th:action="@{/post/mark}" method="post" enctype="multipart/form-data" class="d-flex">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Найти" name="brand">
-                        <button type="submit" class="btn btn-secondary"><i class="bi-search"></i></button>
+                        <button type="submit" class="btn btn-warning"><i class="bi-search"></i></button>
                     </div>
                 </form>
                 <div class="navbar-nav" th:if="${user.login != 'Гость'}">

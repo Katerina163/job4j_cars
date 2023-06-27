@@ -4,10 +4,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.SortNatural;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @NamedEntityGraph(
         name = "profile",
@@ -39,16 +40,18 @@ public class User extends BaseId<Long> {
 
     private String password;
 
+    @SortNatural
     @ManyToMany
     @JoinTable(
             name = "participates",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
-    private Set<AutoPost> participates = new HashSet<>();
+    private SortedSet<AutoPost> participates = new TreeSet<>();
 
+    @SortNatural
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AutoPost> userPosts = new HashSet<>();
+    private SortedSet<AutoPost> userPosts = new TreeSet<>();
 
     public User(String login, String password) {
         this.login = login;

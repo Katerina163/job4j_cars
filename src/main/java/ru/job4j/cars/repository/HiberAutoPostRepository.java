@@ -30,6 +30,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
         Collection<AutoPost> result;
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
+            session.setDefaultReadOnly(true);
             result = new JPAQuery<>(session)
                     .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("All"))
                     .select(autoPost)
@@ -53,6 +54,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
         AutoPost result;
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
+            session.setDefaultReadOnly(true);
             Map<String, Object> map = Map.of(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("All"));
             result = session.find(AutoPost.class, id, map);
             tr.commit();
@@ -67,12 +69,12 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     }
 
     @Override
-    public void soldById(long postId) {
+    public void soldById(long postId, boolean sold) {
         Transaction tr = null;
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
             var post = session.find(AutoPost.class, postId);
-            post.setSold(!post.isSold());
+            post.setSold(sold);
             tr.commit();
         } catch (Exception e) {
             if (tr != null) {

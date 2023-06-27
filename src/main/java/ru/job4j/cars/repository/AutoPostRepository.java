@@ -13,7 +13,7 @@ public interface AutoPostRepository {
 
     Optional<AutoPost> findById(long id);
 
-    void soldById(long postId);
+    void soldById(long postId, boolean sold);
 
     void cud(AutoPost post, Consumer<Session> function);
 }
