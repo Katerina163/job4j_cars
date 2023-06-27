@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
+import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.service.AutoPostService;
 import ru.job4j.cars.service.MarkService;
@@ -51,7 +52,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindAll() throws Exception {
-        when(service.search(new Criterion().findAll())).thenReturn(List.of(banner));
+        when(service.search(new Criterion().findAll(), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -61,7 +62,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindNew() throws Exception {
-        when(service.search(new Criterion().fresh())).thenReturn(List.of(banner));
+        when(service.search(new Criterion().fresh(), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/new"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -71,7 +72,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindWithFile() throws Exception {
-        when(service.search(new Criterion().withFile())).thenReturn(List.of(banner));
+        when(service.search(new Criterion().withFile(), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/with-photo"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -82,7 +83,7 @@ public class PostControllerTest {
     @Test
     @Ignore
     public void shouldFindByBrand() throws Exception {
-        when(service.search(new Criterion().addBrand("Audi"))).thenReturn(List.of(banner));
+        when(service.search(new Criterion().addBrand("Audi"), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(post("/post/brand")
                         .param("brand", "Audi"))
                 .andDo(print())
@@ -93,7 +94,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldNotFindByBrand() throws Exception {
-        when(service.search(new Criterion().addBrand("hi"))).thenReturn(Collections.emptyList());
+        when(service.search(new Criterion().addBrand("hi"), QPredicate::and)).thenReturn(Collections.emptyList());
         this.mockMvc.perform(post("/post/brand")
                         .param("brand", "hi"))
                 .andDo(print())
@@ -104,7 +105,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindByMark() throws Exception {
-        when(service.search(new Criterion().addMarkId(1L))).thenReturn(List.of(banner));
+        when(service.search(new Criterion().addMarkId(1L), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/mark/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -114,7 +115,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldFindByColor() throws Exception {
-        when(service.search(new Criterion().addColor(Color.RED))).thenReturn(List.of(banner));
+        when(service.search(new Criterion().addColor(Color.RED), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(get("/post/color/RED"))
                 .andDo(print())
                 .andExpect(status().isOk())

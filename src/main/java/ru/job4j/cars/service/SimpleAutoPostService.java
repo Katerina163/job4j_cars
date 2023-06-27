@@ -1,5 +1,6 @@
 package ru.job4j.cars.service;
 
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 
 import static ru.job4j.cars.model.QAutoPost.autoPost;
 
@@ -45,7 +47,7 @@ public class SimpleAutoPostService implements AutoPostService {
     }
 
     @Override
-    public Collection<Banner> search(Criterion criterion) {
+    public Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> function) {
         var banner = new Banner();
         var predicate = QPredicate.builder();
         if (criterion.isFindAll()) {
@@ -76,7 +78,7 @@ public class SimpleAutoPostService implements AutoPostService {
                 predicate.addPredicate(markId, autoPost.car.mark.id::eq);
             }
         }
-        return banner.convert(repository.findWithPredicate(predicate.and()));
+        return banner.convert(repository.findWithPredicate(function.apply(predicate)));
     }
 
     @Override
