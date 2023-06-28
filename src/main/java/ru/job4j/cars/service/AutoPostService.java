@@ -6,6 +6,7 @@ import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.AutoPost;
+import ru.job4j.cars.model.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,5 +28,5 @@ public interface AutoPostService {
 
     void save(String login, Map<String, String> params, MultipartFile file);
 
-    void modify(Map<String, String> params);
+    void modify(Map<String, String> allParams, User user);
 }

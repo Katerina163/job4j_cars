@@ -24,7 +24,6 @@ import static ru.job4j.cars.model.QAutoPost.autoPost;
 public class AutoPostServiceTest {
     private final SimpleAutoPostService service;
     private final AutoPostRepository postRepository;
-    private final CarRepository carRepository;
     private final String storageDirectory;
     private final MarkRepository markRepository;
     private final UserRepository userRepository;
@@ -32,13 +31,11 @@ public class AutoPostServiceTest {
 
     public AutoPostServiceTest() {
         postRepository = Mockito.mock(HiberAutoPostRepository.class);
-        carRepository = Mockito.mock(HiberCarRepository.class);
         storageDirectory = "files";
         markRepository = Mockito.mock(HiberMarkRepository.class);
         userRepository = Mockito.mock(HiberUserRepository.class);
         service = new SimpleAutoPostService(
-                postRepository, carRepository, storageDirectory, markRepository, userRepository
-        );
+                postRepository, storageDirectory, markRepository, userRepository);
         post = AutoPost.builder()
                 .description("description")
                 .created(LocalDateTime.now())

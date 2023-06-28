@@ -146,11 +146,11 @@ public class PostController {
     }
 
     @PostMapping("/modify")
-    public String modify(@RequestParam AutoPost post, HttpSession session) {
-        System.out.println(post);
-        //  var user = (User) session.getAttribute("user");
-        //     service.modify(params);
-        return "/post/modify";
+    public String modify(@RequestParam(required = false) AutoPost post,
+                         @RequestParam Map<String, String> allParams, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        service.modify(allParams, user);
+        return "redirect:/post/" + allParams.get("id");
     }
 
     @PostMapping("/search")

@@ -10,7 +10,6 @@ import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.AutoPostRepository;
-import ru.job4j.cars.repository.CarRepository;
 import ru.job4j.cars.repository.MarkRepository;
 import ru.job4j.cars.repository.UserRepository;
 
@@ -26,18 +25,15 @@ import static ru.job4j.cars.model.QAutoPost.autoPost;
 @Service
 public class SimpleAutoPostService implements AutoPostService {
     private final AutoPostRepository repository;
-    private final CarRepository carRepository;
     private final String storageDirectory;
     private final MarkRepository markRepository;
     private final UserRepository userRepository;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
-                                 CarRepository hiberCarRepository,
                                  @Value("${file.directory}") String storageDirectory,
                                  MarkRepository hiberMarkRepository,
                                  UserRepository hiberUserRepository) {
         repository = hiberAutoPostRepository;
-        carRepository = hiberCarRepository;
         this.storageDirectory = storageDirectory;
         markRepository = hiberMarkRepository;
         userRepository = hiberUserRepository;
@@ -167,27 +163,37 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void modify(Map<String, String> params) {
-        var post = repository.findById(Long.parseLong(params.get("id")));
-        if (post.isPresent()) {
-            post.get().setDescription(params.get("description"));
+    public void modify(Map<String, String> allParams, User user) {
+        if (allParams != null && !allParams.get("id").isEmpty()) {
+            var findPost = repository.findById(Long.parseLong(allParams.get("id")));
+            if (findPost.isPresent() && !allParams.get("car.id").isEmpty()
+                    && findPost.get().getCar().getId().equals(Long.parseLong(allParams.get("car.id")))) {
+                if (!allParams.get("description").isEmpty()) {
+                    findPost.get().setDescription(allParams.get("description"));
+                }
+                if (!allParams.get("car.name").isEmpty()) {
+                    findPost.get().getCar().setName(allParams.get("car.name"));
+                }
+                if (!allParams.get("car.color").isEmpty()) {
+                    findPost.get().getCar().setColor(Color.valueOf(allParams.get("car.color")));
+                }
+                if (!allParams.get("car.owners").isEmpty()) {
+                    findPost.get().getCar().setOwners(allParams.get("car.owners"));
+                }
 
-            var car = carRepository.findById(Long.parseLong(params.get("car.id"))).get();
-            convertCar(params, car);
-
-            post.get().setCar(car);
-
-//            var format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//            post.get().setCreated(format.parse(params.get("created")));
-            repository.cud(post.get(), session -> session.update(post));
+                if (!allParams.get("car.mark.id").isEmpty()) {
+                    var mark = markRepository.findById(Long.parseLong(allParams.get("car.mark.id")));
+                    mark.ifPresent(value -> findPost.get().getCar().setMark(value));
+                }
+                repository.cud(findPost.get(), session -> session.update(findPost.get()));
+            }
         }
     }
 
-    private Car convertCar(Map<String, String> params, Car car) {
+    private void convertCar(Map<String, String> params, Car car) {
         car.setName(params.get("car.name"));
         car.setColor(Color.valueOf(params.get("color")));
         car.setMark(markRepository.findById(Integer.parseInt(params.get("mark.id"))).get());
         car.setOwners(params.get("owners"));
-        return car;
     }
 }
