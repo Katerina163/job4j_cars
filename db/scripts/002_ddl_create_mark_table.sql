@@ -1,4 +1,4 @@
 create table mark (
     id   serial primary key,
-    name varchar not null
+    name varchar(100) unique not null
 );
