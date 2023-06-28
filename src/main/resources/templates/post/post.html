@@ -101,12 +101,22 @@
         <p style="text-align: justify;" class="text-break" th:text="${post.description}"></p>
     </div>
     <div class="mb-3"><h4>Предыдущие владельцы:</h4>
-            <a th:text="${post.car.owners}"></a>
+        <a th:text="${post.car.owners}"></a>
     </div>
-    <div><h4>Цена:</h4>
-        <p class="textonleft" th:text="${post.history.last().price} + '₽'"></p>
-        <p class="textonright"
-           th:text="'Последнее обновление цены ' + ${#temporals.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
+    <div>
+        <div th:if="${user.login != 'Гость'}"><h4>Изменения цены:</h4>
+            <div th:each="price : ${post.history}">
+                <p class="textonleft" th:text="${price.price} + '₽'"></p>
+                <p class="textonright"
+                   th:text="'Обновлено ' + ${#temporals.format(price.created, 'dd/MM/yyyy')}"></p>
+            </div>
+        </div>
+        <h4>Цена:</h4>
+        <div th:if="${user.login == 'Гость'}">
+            <p class="textonleft" th:text="${post.history.last().price} + '₽'"></p>
+            <p class="textonright"
+               th:text="'Последнее обновление цены ' + ${#temporals.format(post.history.last().created, 'dd/MM/yyyy')}"></p>
+        </div>
     </div>
     <div th:if="${user.login == post.author.login}">
         <form th:action="@{/post/change-price}" method="post" enctype="multipart/form-data">
