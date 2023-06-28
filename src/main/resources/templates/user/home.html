@@ -100,9 +100,8 @@
     <a th:each="banner: ${subscribe}">
         <div class="row no-gutters">
             <div class="col-12 col-sm-6 col-md-8">
-                <h5>Марка:</h5>
-                <a th:href="@{/post/{id}(id=${banner.postId})}"
-                   th:text="${banner.markName} + ' ' + ${banner.carName}"></a>
+                <h4><a th:href="@{/post/{id}(id=${banner.postId})}"
+                   th:text="${banner.markName} + ' ' + ${banner.carName}"></a></h4>
                 <h5>Дата публикации:</h5>
                 <a th:text="${#temporals.format(banner.created, 'dd/MM/yyyy')}"></a>
                 <div class="col-6 col-sm-3">

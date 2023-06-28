@@ -3,6 +3,7 @@ package ru.job4j.cars.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Audited
 public class PriceHistory extends BaseId<Long> implements Comparable<PriceHistory> {
 
     private long price;

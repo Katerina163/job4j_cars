@@ -5,7 +5,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">org.h2.Driver</property>
-        <property name="hibernate.connection.url">jdbc:h2:./test;MODE=PostgreSQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;</property>
+        <property name="hibernate.connection.url">jdbc:h2:./test;CASE_INSENSITIVE_IDENTIFIERS=TRUE;</property>
         <property name="hibernate.connection.username" />
         <property name="hibernate.connection.password" />
         <property name="hibernate.connection.pool_size">1</property>
@@ -21,5 +21,6 @@
         <mapping class="ru.job4j.cars.model.Mark" />
         <mapping class="ru.job4j.cars.model.PriceHistory" />
         <mapping class="ru.job4j.cars.model.File" />
+        <mapping class="ru.job4j.cars.model.Revision" />
     </session-factory>
 </hibernate-configuration>

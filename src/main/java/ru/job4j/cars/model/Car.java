@@ -3,6 +3,8 @@ package ru.job4j.cars.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import javax.persistence.*;
 
@@ -16,6 +18,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @NoArgsConstructor
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 public class Car extends BaseId<Long> {
 
     private String name;

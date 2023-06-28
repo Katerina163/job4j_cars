@@ -1,8 +1,10 @@
 package ru.job4j.cars.model;
 
-import lombok.*;
-
-import javax.persistence.Entity;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -12,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(of = "path", callSuper = true)
 @NoArgsConstructor
+@Audited
 public class File extends BaseId<Long> implements Comparable<File> {
 
     private String name;

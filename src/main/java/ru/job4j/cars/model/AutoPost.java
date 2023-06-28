@@ -2,6 +2,8 @@ package ru.job4j.cars.model;
 
 import lombok.*;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -33,6 +35,7 @@ import java.util.TreeSet;
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
 @Builder
+@Audited
 public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
     @Version
     private int version;
@@ -48,6 +51,7 @@ public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
     @JoinColumn(name = "car_id", nullable = false, unique = true)
     private Car car;
 
+    @NotAudited
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;

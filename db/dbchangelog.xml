@@ -18,4 +18,5 @@
     <include file="scripts/009_dml_insert_mark.sql" relativeToChangelogFile="true"/>
     <include file="scripts/010_dml_insert_car_and_auto_post.sql" relativeToChangelogFile="true"/>
     <include file="scripts/011_dml_insert_participates_and_price_history.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/012_ddl_create_audit_tables.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

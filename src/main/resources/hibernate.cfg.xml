@@ -20,5 +20,6 @@
         <mapping class="ru.job4j.cars.model.Mark" />
         <mapping class="ru.job4j.cars.model.PriceHistory" />
         <mapping class="ru.job4j.cars.model.File" />
+        <mapping class="ru.job4j.cars.model.Revision" />
     </session-factory>
 </hibernate-configuration>
