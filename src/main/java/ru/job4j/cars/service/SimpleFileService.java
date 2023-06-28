@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.cars.dto.FileDTO;
+import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.File;
-import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.FileRepository;
 
 import java.io.IOException;
@@ -16,14 +16,11 @@ import java.util.UUID;
 
 @Service
 public class SimpleFileService implements FileService {
-    private final AutoPostRepository postRepository;
     private final FileRepository repository;
     private final String storageDirectory;
 
-    public SimpleFileService(AutoPostRepository hiberAutoPostRepository,
-                             FileRepository simpleFileRepository,
+    public SimpleFileService(FileRepository simpleFileRepository,
                              @Value("${file.directory}") String storageDirectory) {
-        postRepository = hiberAutoPostRepository;
         repository = simpleFileRepository;
         this.storageDirectory = storageDirectory;
         createStorageDirectory(storageDirectory);
@@ -64,11 +61,9 @@ public class SimpleFileService implements FileService {
         var file = new File();
         file.setName(fileDto.getName());
         file.setPath(path);
-        var post = postRepository.findById(fileDto.getPostId());
-        if (post.isEmpty()) {
-            return Optional.empty();
-        }
-        post.get().addFile(file);
+        var post = new AutoPost();
+        post.setId(fileDto.getPostId());
+        file.setPost(post);
         return Optional.of(repository.create(file));
     }
 
