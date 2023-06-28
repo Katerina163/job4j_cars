@@ -92,10 +92,10 @@ public class SimpleAutoPostService implements AutoPostService {
                 criterion.addColor(Color.valueOf(color));
             }
         }
-        if (param.containsKey("brand")) {
+        if (param != null && param.containsKey("brand")) {
             criterion.addBrand(param.get("brand"));
         }
-        if (param.containsKey("fresh") && param.get("fresh").equals("on")) {
+        if (param != null && param.containsKey("fresh") && param.get("fresh").equals("on")) {
             criterion.fresh();
         }
         return search(criterion, supplier);
