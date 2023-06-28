@@ -1,7 +1,6 @@
 package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.repository.PriceHistoryRepository;
 
@@ -15,7 +14,6 @@ public class SimplePriceHistoryService implements PriceHistoryService {
         repository = hiberPriceHistoryRepository;
     }
 
-    @Transactional
     @Override
     public Optional<PriceHistory> save(long price, long postId) {
         return repository.save(price, postId);
