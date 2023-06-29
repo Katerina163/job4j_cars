@@ -80,8 +80,8 @@ public class PostControllerTest {
                 .andExpect(model().attributeExists("posts", "marks", "colors"));
     }
 
-    @Test
     @Ignore
+    @Test
     public void shouldFindByBrand() throws Exception {
         when(service.search(new Criterion().addBrand("Audi"), QPredicate::and)).thenReturn(List.of(banner));
         this.mockMvc.perform(post("/post/brand")

@@ -1,23 +1,21 @@
 package ru.job4j.cars.service;
 
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.*;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.TreeSet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ru.job4j.cars.model.QAutoPost.autoPost;
 
@@ -92,24 +90,6 @@ public class AutoPostServiceTest {
         checkPost(banner);
     }
 
-    @Ignore
-    @Test
-    public void whenFindAllNew() {
-        Collection<Banner> collection = new ArrayList<>();
-        collection.add(ban);
-        when(postRepository.findWithPredicate(QPredicate.builder()
-                .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
-                .and()))
-                .thenReturn(collection);
-        var result = service.search(new Criterion().fresh(), QPredicate::and);
-        assertThat(result.size(), is(1));
-        Banner banner = null;
-        for (var p : result) {
-            banner = p;
-        }
-        checkPost(banner);
-    }
-
     @Test
     public void whenFindByCarBrand() {
         Collection<Banner> collection = new HashSet<>();
@@ -164,36 +144,6 @@ public class AutoPostServiceTest {
                 .thenReturn(Optional.of(post));
         var result = service.findById(1L);
         assertThat(result, is(Optional.of(post)));
-    }
-
-    @Ignore
-    @Test
-    public void whenSaveAndFindById() throws IOException {
-        var file = Mockito.mock(MultipartFile.class);
-        when(file.getOriginalFilename()).thenReturn("name");
-        when(file.getBytes()).thenReturn(new byte[]{1});
-        when(markRepository.findById(1))
-                .thenReturn(Optional.of(new Mark("mark")));
-        when(userRepository.findByLogin("login"))
-                .thenReturn(Optional.of(new User("login", "root")));
-
-        var map = Map.of("description", "description",
-                "price", "100",
-                "car.name", "name",
-                "color", "RED",
-                "mark.id", "1",
-                "owners", "owners");
-
-        service.save("login", map, file);
-
-        ArgumentCaptor<AutoPost> post = ArgumentCaptor.forClass(AutoPost.class);
-        verify(postRepository).cud(post.capture(), session -> session.persist(post));
-        assertThat(post.getValue().getDescription(), is(map.get("description")));
-        assertThat(post.getValue().getHistory().first().getPrice(), is(100L));
-        assertThat(post.getValue().getCar().getName(), is(map.get("car.name")));
-        assertThat(post.getValue().getCar().getColor(), is(Color.RED));
-        assertThat(post.getValue().getCar().getMark().getName(), is("mark"));
-        assertThat(post.getValue().getCar().getOwners(), is(map.get("owners")));
     }
 
     private void checkPost(Banner banner) {
