@@ -30,9 +30,14 @@ public class Revision {
     @Column(name = "user_id")
     private Long userId;
 
+
+    /**
+     * здесь должно происходить сохранение имени из контекста
+     * SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     * но в проекте авторизация реализована по-другому
+     */
     @PrePersist
     public void onCreate() {
-//        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         setUserId(1L);
     }
 }
