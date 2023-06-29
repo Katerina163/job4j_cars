@@ -13,6 +13,10 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+        <property name="cache.use_second_level_cache">true</property>
+        <property name="cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</property>
+        <property name="cache.provider_configuration_file_resource_path">/ehcache-config</property>
+        <property name="cache.use_query_cache">true</property>
 
         <mapping class="ru.job4j.cars.model.User" />
         <mapping class="ru.job4j.cars.model.AutoPost" />

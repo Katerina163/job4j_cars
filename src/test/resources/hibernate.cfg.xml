@@ -14,6 +14,8 @@
         <property name="hibernate.format_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
         <property name="hbm2ddl.auto">create</property>
+        <property name="cache.use_second_level_cache">true</property>
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.internal.JCacheRegionFactory</property>
 
         <mapping class="ru.job4j.cars.model.User" />
         <mapping class="ru.job4j.cars.model.AutoPost" />

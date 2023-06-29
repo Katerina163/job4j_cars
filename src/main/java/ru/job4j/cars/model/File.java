@@ -4,9 +4,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "files")
@@ -15,7 +18,8 @@ import javax.persistence.*;
 @EqualsAndHashCode(of = "path", callSuper = true)
 @NoArgsConstructor
 @Audited
-public class File extends BaseId<Long> implements Comparable<File> {
+@Cache(usage = CacheConcurrencyStrategy.READ_ONLY, region = "Files")
+public class File extends BaseId<Long> implements Comparable<File>, Serializable {
 
     private String name;
 

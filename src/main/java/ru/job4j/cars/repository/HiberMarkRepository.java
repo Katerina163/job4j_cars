@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.jpa.QueryHints;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Mark;
 
@@ -28,6 +29,7 @@ public class HiberMarkRepository implements MarkRepository {
             list = new JPAQuery<Mark>(session)
                     .select(mark)
                     .from(mark)
+                    .setHint(QueryHints.HINT_CACHEABLE, true)
                     .fetch();
             tr.commit();
         } catch (Exception e) {

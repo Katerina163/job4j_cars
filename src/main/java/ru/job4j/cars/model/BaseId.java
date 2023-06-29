@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseId<T extends Serializable> {
+public abstract class BaseId<T extends Serializable> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private T id;

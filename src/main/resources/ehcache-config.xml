@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache:config
+        xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns:ehcache='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3
+        http://www.ehcache.org/schema/ehcache-core-3.1.xsd">
+
+    <ehcache:cache alias="Marks" uses-template="simple"/>
+    <ehcache:cache alias="Files" uses-template="files"/>
+
+    <ehcache:cache-template name="simple">
+        <ehcache:expiry>
+            <ehcache:ttl>3600</ehcache:ttl>
+        </ehcache:expiry>
+        <ehcache:heap>10</ehcache:heap>
+    </ehcache:cache-template>
+
+    <ehcache:cache-template name="files">
+        <ehcache:expiry>
+            <ehcache:ttl>60</ehcache:ttl>
+        </ehcache:expiry>
+        <ehcache:heap>1000</ehcache:heap>
+    </ehcache:cache-template>
+
+</ehcache:config>
