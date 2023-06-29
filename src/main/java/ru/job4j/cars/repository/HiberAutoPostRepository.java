@@ -31,7 +31,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     @Override
     public Collection<Banner> findWithPredicate(Predicate predicate) {
         Transaction tr = null;
-        Collection<Banner> result = new ArrayList<>();
+        Collection<Banner> result = new PriorityQueue<>();
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
             session.setDefaultReadOnly(true);

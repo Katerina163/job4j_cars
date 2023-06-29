@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @Builder
-public class Banner {
+public class Banner implements Comparable<Banner> {
     private Long postId;
     private String carName;
     private String markName;
@@ -32,5 +32,10 @@ public class Banner {
 
     public List<Banner> convert(Collection<AutoPost> posts) {
         return posts.stream().map(Banner::new).toList();
+    }
+
+    @Override
+    public int compareTo(Banner ban) {
+        return created.compareTo(ban.created);
     }
 }
