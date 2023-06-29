@@ -1,5 +1,6 @@
 package ru.job4j.cars.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.jpa.impl.JPAQuery;
 import lombok.AllArgsConstructor;
@@ -9,14 +10,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.graph.GraphSemantic;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.model.AutoPost;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static ru.job4j.cars.model.QAutoPost.autoPost;
+import static ru.job4j.cars.model.QCar.car;
+import static ru.job4j.cars.model.QFile.file;
+import static ru.job4j.cars.model.QMark.mark;
+import static ru.job4j.cars.model.QPriceHistory.priceHistory;
 
 @Slf4j
 @Repository
@@ -25,18 +29,51 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     private final SessionFactory sf;
 
     @Override
-    public Collection<AutoPost> findWithPredicate(Predicate predicate) {
+    public Collection<Banner> findWithPredicate(Predicate predicate) {
         Transaction tr = null;
-        Collection<AutoPost> result;
+        Collection<Banner> result = new ArrayList<>();
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
             session.setDefaultReadOnly(true);
-            result = new JPAQuery<>(session)
-                    .setHint(GraphSemantic.LOAD.getJpaHintName(), session.getEntityGraph("All"))
-                    .select(autoPost)
+            var listTuple = new JPAQuery<Tuple>(session)
+                    .select(
+                            autoPost.id,
+                            autoPost.created,
+                            car.name,
+                            car.mark.name,
+                            priceHistory.price,
+                            file.id
+                    )
                     .from(autoPost)
+                    .leftJoin(priceHistory).on(priceHistory.id.eq(
+                            new JPAQuery<>()
+                                    .select(priceHistory.id.max())
+                                    .from(priceHistory)
+                                    .where(priceHistory.post.id.eq(autoPost.id))
+                    ))
+                    .leftJoin(file).on(file.id.eq(
+                            new JPAQuery<>()
+                                    .select(file.id.max())
+                                    .from(file)
+                                    .where(file.post.id.eq(autoPost.id))
+                    ))
+                    .leftJoin(car).on(autoPost.car.id.eq(car.id))
+                    .leftJoin(mark).on(autoPost.car.mark.id.eq(mark.id))
                     .where(predicate)
                     .fetch();
+            for (var row : listTuple) {
+                var banner = Banner.builder()
+                        .postId(row.get(autoPost.id))
+                        .created(row.get(autoPost.created))
+                        .carName(row.get(car.name))
+                        .markName(row.get(car.mark.name))
+                        .price(row.get(priceHistory.price))
+                        .build();
+                if (!Objects.isNull(row.get(file.id))) {
+                    banner.setFileId(row.get(file.id));
+                }
+                result.add(banner);
+            }
             tr.commit();
         } catch (Exception e) {
             if (tr != null) {

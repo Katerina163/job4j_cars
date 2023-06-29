@@ -2,6 +2,7 @@ package ru.job4j.cars.repository;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Car;
@@ -38,7 +39,7 @@ public class AutoPostRepositoryTest {
     public void whenFindAll() {
         var result = repository.findWithPredicate(QPredicate.builder().and());
         assertThat(result.size(), is(3));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
             break;
@@ -52,7 +53,7 @@ public class AutoPostRepositoryTest {
                 .addPredicate(1, autoPost.files.size()::goe)
                 .and());
         assertThat(result.size(), is(1));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
         }
@@ -66,7 +67,7 @@ public class AutoPostRepositoryTest {
                         .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                         .and());
         assertThat(result.size(), is(2));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
         }
@@ -80,7 +81,7 @@ public class AutoPostRepositoryTest {
                         .addPredicate("500", autoPost.car.name::eq)
                         .and());
         assertThat(result.size(), is(1));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
         }
@@ -94,7 +95,7 @@ public class AutoPostRepositoryTest {
                         .addPredicate(Color.RED, autoPost.car.color::eq)
                         .and());
         assertThat(result.size(), is(1));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
         }
@@ -107,7 +108,7 @@ public class AutoPostRepositoryTest {
                 .addPredicate(1L, autoPost.car.mark.id::eq)
                 .and());
         assertThat(result.size(), is(1));
-        var post = new AutoPost();
+        var post = new Banner();
         for (var p : result) {
             post = p;
         }
@@ -117,7 +118,18 @@ public class AutoPostRepositoryTest {
     @Test
     public void whenFindById() {
         var result = repository.findById(2L).get();
-        carIsLamborghini(result);
+        assertThat(result.getFiles().size(), is(0));
+        assertThat(result.getHistory().size(), is(1));
+        assertThat(result.getDescription(), is("Lamborghini description"));
+        assertThat(result.getCreated().getDayOfWeek(), is(LocalDateTime.now().minusDays(10).getDayOfWeek()));
+        assertThat(result.isSold(), is(false));
+        assertThat(result.getCar().getName(), is("Huracán Evo"));
+        assertThat(result.getCar().getOwners(), is("Александра Александровна"));
+        assertThat(result.getCar().getColor(), is(Color.RED));
+        assertThat(result.getCar().getMark().getName(), is("Lamborghini"));
+        assertThat(result.getAuthor().getLogin(), is("Petrov"));
+        assertThat(result.getHistory().last().getPrice(), is(16500000L));
+
     }
 
     @Test
@@ -158,41 +170,24 @@ public class AutoPostRepositoryTest {
         assertThat(repository.findById(1L), is(Optional.empty()));
     }
 
-    private void carIsFiat(AutoPost post) {
-        assertThat(post.getFiles().size(), is(0));
-        assertThat(post.getHistory().size(), is(1));
+    private void carIsFiat(Banner post) {
         assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
-        assertThat(post.getCar().getName(), is("500"));
-        assertThat(post.getCar().getColor(), is(Color.GREEN));
-        assertThat(post.getCar().getMark().getName(), is("Fiat"));
-        assertThat(post.getHistory().last().getPrice(), is(450000L));
+        assertThat(post.getCarName(), is("500"));
+        assertThat(post.getMarkName(), is("Fiat"));
+        assertThat(post.getPrice(), is(450000L));
     }
 
-    private void carIsAudi(AutoPost post) {
-        assertThat(post.getFiles().size(), is(1));
-        assertThat(post.getFiles().last().getName(), is("name"));
-        assertThat(post.getDescription(), is("Audi description"));
+    private void carIsAudi(Banner post) {
         assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
-        assertThat(post.isSold(), is(true));
-        assertThat(post.getCar().getName(), is("RS 5"));
-        assertThat(post.getCar().getOwners(), is("Андрей Андреевич, Василий Васильевич"));
-        assertThat(post.getCar().getColor(), is(Color.YELLOW));
-        assertThat(post.getCar().getMark().getName(), is("Audi"));
-        assertThat(post.getAuthor().getLogin(), is("Petrov"));
-        assertThat(post.getHistory().last().getPrice(), is(5120000L));
+        assertThat(post.getCarName(), is("RS 5"));
+        assertThat(post.getMarkName(), is("Audi"));
+        assertThat(post.getPrice(), is(5120000L));
     }
 
-    private void carIsLamborghini(AutoPost post) {
-        assertThat(post.getFiles().size(), is(0));
-        assertThat(post.getHistory().size(), is(1));
-        assertThat(post.getDescription(), is("Lamborghini description"));
+    private void carIsLamborghini(Banner post) {
         assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().minusDays(10).getDayOfWeek()));
-        assertThat(post.isSold(), is(false));
-        assertThat(post.getCar().getName(), is("Huracán Evo"));
-        assertThat(post.getCar().getOwners(), is("Александра Александровна"));
-        assertThat(post.getCar().getColor(), is(Color.RED));
-        assertThat(post.getCar().getMark().getName(), is("Lamborghini"));
-        assertThat(post.getAuthor().getLogin(), is("Petrov"));
-        assertThat(post.getHistory().last().getPrice(), is(16500000L));
+        assertThat(post.getCarName(), is("Huracán Evo"));
+        assertThat(post.getMarkName(), is("Lamborghini"));
+        assertThat(post.getPrice(), is(16500000L));
     }
 }

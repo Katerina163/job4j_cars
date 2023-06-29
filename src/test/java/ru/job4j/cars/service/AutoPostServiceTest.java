@@ -24,14 +24,14 @@ import static ru.job4j.cars.model.QAutoPost.autoPost;
 public class AutoPostServiceTest {
     private final SimpleAutoPostService service;
     private final AutoPostRepository postRepository;
-    private final String storageDirectory;
     private final MarkRepository markRepository;
     private final UserRepository userRepository;
     private AutoPost post;
+    private Banner ban;
 
     public AutoPostServiceTest() {
         postRepository = Mockito.mock(HiberAutoPostRepository.class);
-        storageDirectory = "files";
+        String storageDirectory = "files";
         markRepository = Mockito.mock(HiberMarkRepository.class);
         userRepository = Mockito.mock(HiberUserRepository.class);
         service = new SimpleAutoPostService(
@@ -50,12 +50,20 @@ public class AutoPostServiceTest {
         var file = new File("file", "path");
         file.setId(2L);
         post.addFile(file);
+        ban = Banner.builder()
+                .postId(1L)
+                .carName(post.getCar().getName())
+                .markName(post.getCar().getMark().getName())
+                .price(post.getHistory().last().getPrice())
+                .created(post.getCreated())
+                .fileId(post.getFiles().last().getId())
+                .build();
     }
 
     @Test
     public void whenFindAll() {
-        Collection<AutoPost> collection = new HashSet<>();
-        collection.add(post);
+        Collection<Banner> collection = new HashSet<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(
                 QPredicate.builder()
                         .and()))
@@ -70,8 +78,8 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindWithFile() {
-        Collection<AutoPost> collection = new HashSet<>();
-        collection.add(post);
+        Collection<Banner> collection = new HashSet<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(1, autoPost.files.size()::goe)
                 .and()))
@@ -87,8 +95,8 @@ public class AutoPostServiceTest {
     @Ignore
     @Test
     public void whenFindAllNew() {
-        Collection<AutoPost> collection = new ArrayList<>();
-        collection.add(post);
+        Collection<Banner> collection = new ArrayList<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                 .and()))
@@ -104,8 +112,8 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByCarBrand() {
-        Collection<AutoPost> collection = new HashSet<>();
-        collection.add(post);
+        Collection<Banner> collection = new HashSet<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate("name", autoPost.car.name::eq)
                 .and()))
@@ -120,8 +128,8 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByColor() {
-        Collection<AutoPost> collection = new HashSet<>();
-        collection.add(post);
+        Collection<Banner> collection = new HashSet<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(Color.BLACK, autoPost.car.color::eq)
                 .and()))
@@ -136,8 +144,8 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByMark() {
-        Collection<AutoPost> collection = new HashSet<>();
-        collection.add(post);
+        Collection<Banner> collection = new HashSet<>();
+        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(2L, autoPost.car.mark.id::eq)
                 .and()))

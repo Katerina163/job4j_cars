@@ -41,10 +41,9 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Override
     public Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> function) {
-        var banner = new Banner();
         var predicate = QPredicate.builder();
         if (criterion.isFindAll()) {
-            return banner.convert(repository.findWithPredicate(predicate.and()));
+            return repository.findWithPredicate(predicate.and());
         }
         if (criterion.isWithFile()) {
             predicate.addPredicate(1, autoPost.files.size()::goe);
@@ -71,7 +70,7 @@ public class SimpleAutoPostService implements AutoPostService {
                 predicate.addPredicate(markId, autoPost.car.mark.id::eq);
             }
         }
-        return banner.convert(repository.findWithPredicate(function.apply(predicate)));
+        return repository.findWithPredicate(function.apply(predicate));
     }
 
     @Override
