@@ -109,12 +109,14 @@ public class SimpleAutoPostService implements AutoPostService {
     @Transactional
     @Override
     public void delete(long id) {
-        var post = repository.findById(id).get();
-        var set = post.getFiles();
-        for (var file : set) {
-            deleteFile(file.getPath());
+        var post = repository.findById(id);
+        if (post.isPresent()) {
+            var set = post.get().getFiles();
+            for (var file : set) {
+                deleteFile(file.getPath());
+            }
+            repository.cud(post.get(), session -> session.delete(post.get()));
         }
-        repository.cud(post, session -> session.delete(post));
     }
 
     private void deleteFile(String path) {
@@ -131,19 +133,22 @@ public class SimpleAutoPostService implements AutoPostService {
         var car = new Car();
         convertCar(params, car);
         var post = new AutoPost();
-        post.setDescription(params.get("description"));
-        var user = userRepository.findByLogin(login).get();
-        user.addUserPost(post);
-        post.setCar(car);
-        post.setSold(false);
-        if (!file.isEmpty()) {
-            var f = convertFile(file);
-            post.addFile(f);
+        if (!params.get("description").isEmpty()) {
+            post.setDescription(params.get("description"));
         }
-        var priceHistory = new PriceHistory(
-                Long.parseLong(params.get("price")));
-        post.addPriceHistory(priceHistory);
-        repository.cud(post, session -> session.persist(post));
+        var user = userRepository.findByLogin(login);
+        if (user.isPresent()) {
+            user.get().addUserPost(post);
+            post.setCar(car);
+            if (!file.isEmpty()) {
+                var f = convertFile(file);
+                post.addFile(f);
+            }
+            var priceHistory = new PriceHistory(
+                    Long.parseLong(params.get("price")));
+            post.addPriceHistory(priceHistory);
+            repository.cud(post, session -> session.persist(post));
+        }
     }
 
     private File convertFile(MultipartFile file) {
@@ -166,33 +171,30 @@ public class SimpleAutoPostService implements AutoPostService {
         if (allParams != null && !allParams.get("id").isEmpty()) {
             var findPost = repository.findById(Long.parseLong(allParams.get("id")));
             if (findPost.isPresent() && !allParams.get("car.id").isEmpty()
+                    && findPost.get().getAuthor().getLogin().equals(user.getLogin())
                     && findPost.get().getCar().getId().equals(Long.parseLong(allParams.get("car.id")))) {
                 if (!allParams.get("description").isEmpty()) {
                     findPost.get().setDescription(allParams.get("description"));
                 }
-                if (!allParams.get("car.name").isEmpty()) {
-                    findPost.get().getCar().setName(allParams.get("car.name"));
-                }
-                if (!allParams.get("car.color").isEmpty()) {
-                    findPost.get().getCar().setColor(Color.valueOf(allParams.get("car.color")));
-                }
-                if (!allParams.get("car.owners").isEmpty()) {
-                    findPost.get().getCar().setOwners(allParams.get("car.owners"));
-                }
-
-                if (!allParams.get("car.mark.id").isEmpty()) {
-                    var mark = markRepository.findById(Long.parseLong(allParams.get("car.mark.id")));
-                    mark.ifPresent(value -> findPost.get().getCar().setMark(value));
-                }
+                convertCar(allParams, findPost.get().getCar());
                 repository.cud(findPost.get(), session -> session.update(findPost.get()));
             }
         }
     }
 
     private void convertCar(Map<String, String> params, Car car) {
-        car.setName(params.get("car.name"));
-        car.setColor(Color.valueOf(params.get("color")));
-        car.setMark(markRepository.findById(Integer.parseInt(params.get("mark.id"))).get());
-        car.setOwners(params.get("owners"));
+        if (!params.get("car.name").isEmpty()) {
+            car.setName(params.get("car.name"));
+        }
+        if (!params.get("car.color").isEmpty()) {
+            car.setColor(Color.valueOf(params.get("car.color")));
+        }
+        if (!params.get("car.owners").isEmpty()) {
+            car.setOwners(params.get("car.owners"));
+        }
+        if (!params.get("car.mark.id").isEmpty()) {
+            var mark = markRepository.findById(Long.parseLong(params.get("car.mark.id")));
+            mark.ifPresent(car::setMark);
+        }
     }
 }

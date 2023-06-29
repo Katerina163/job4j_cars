@@ -1,6 +1,6 @@
 create table auto_post (
     id             bigserial primary key,
-    version        int default 0 not null,
+    version        int default 1 not null,
     description    text not null,
     created        timestamp not null,
     sold           boolean not null,

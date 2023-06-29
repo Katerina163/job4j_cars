@@ -66,6 +66,8 @@ public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
 
     public AutoPost() {
         created = LocalDateTime.now();
+        sold = false;
+        version = 1;
     }
 
     public void addFile(File file) {
