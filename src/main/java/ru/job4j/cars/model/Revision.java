@@ -32,6 +32,7 @@ public class Revision {
 
     @PrePersist
     public void onCreate() {
+//        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         setUserId(1L);
     }
 }
