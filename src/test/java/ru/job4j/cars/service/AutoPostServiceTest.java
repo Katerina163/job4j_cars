@@ -6,6 +6,8 @@ import org.mockito.Mockito;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.mapper.PostCreateDTOAutoPostMapper;
+import ru.job4j.cars.mapper.PostModifyDTOAutoPostMapper;
 import ru.job4j.cars.mapper.TupleBannerMapper;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.*;
@@ -24,19 +26,18 @@ import static ru.job4j.cars.model.QAutoPost.autoPost;
 public class AutoPostServiceTest {
     private final SimpleAutoPostService service;
     private final AutoPostRepository postRepository;
-    private final MarkRepository markRepository;
-    private final UserRepository userRepository;
     private final AutoPost post;
     private final Collection<Tuple> collection;
 
     public AutoPostServiceTest() {
         postRepository = Mockito.mock(HiberAutoPostRepository.class);
         String storageDirectory = "files";
-        markRepository = Mockito.mock(HiberMarkRepository.class);
-        userRepository = Mockito.mock(HiberUserRepository.class);
+        UserRepository userRepository = Mockito.mock(HiberUserRepository.class);
         TupleBannerMapper mapper = Mockito.mock(TupleBannerMapper.class);
+        PostCreateDTOAutoPostMapper mapperCreate = Mockito.mock(PostCreateDTOAutoPostMapper.class);
+        PostModifyDTOAutoPostMapper mapperModify = Mockito.mock(PostModifyDTOAutoPostMapper.class);
         service = new SimpleAutoPostService(
-                postRepository, storageDirectory, markRepository, userRepository, mapper);
+                postRepository, storageDirectory, userRepository, mapper, mapperCreate, mapperModify);
         post = AutoPost.builder()
                 .description("description")
                 .created(LocalDateTime.now())
