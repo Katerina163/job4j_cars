@@ -1,5 +1,6 @@
 package ru.job4j.cars.service;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.mapper.Mapper;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.MarkRepository;
@@ -28,22 +30,25 @@ public class SimpleAutoPostService implements AutoPostService {
     private final String storageDirectory;
     private final MarkRepository markRepository;
     private final UserRepository userRepository;
+    private final Mapper<Tuple, Banner> mapper;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
                                  @Value("${file.directory}") String storageDirectory,
                                  MarkRepository hiberMarkRepository,
-                                 UserRepository hiberUserRepository) {
+                                 UserRepository hiberUserRepository,
+                                 Mapper<Tuple, Banner> tupleBannerMapper) {
         repository = hiberAutoPostRepository;
         this.storageDirectory = storageDirectory;
         markRepository = hiberMarkRepository;
         userRepository = hiberUserRepository;
+        mapper = tupleBannerMapper;
     }
 
     @Override
     public Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> function) {
         var predicate = QPredicate.builder();
         if (criterion.isFindAll()) {
-            return repository.findWithPredicate(predicate.and());
+            return repository.findWithPredicate(predicate.and()).stream().map(mapper::convert).toList();
         }
         if (criterion.isWithFile()) {
             predicate.addPredicate(1, autoPost.files.size()::goe);
@@ -70,7 +75,7 @@ public class SimpleAutoPostService implements AutoPostService {
                 predicate.addPredicate(markId, autoPost.car.mark.id::eq);
             }
         }
-        return repository.findWithPredicate(function.apply(predicate));
+        return repository.findWithPredicate(function.apply(predicate)).stream().map(mapper::convert).toList();
     }
 
     @Override

@@ -3,6 +3,8 @@ package ru.job4j.cars.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Profile;
+import ru.job4j.cars.mapper.Mapper;
+import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
@@ -12,9 +14,12 @@ import java.util.Set;
 @Service
 public class SimpleUserService implements UserService {
     private final UserRepository repository;
+    private final Mapper<AutoPost, Banner> mapper;
 
-    public SimpleUserService(UserRepository hiberUserRepository) {
+    public SimpleUserService(UserRepository hiberUserRepository,
+                             Mapper<AutoPost, Banner> autoPostBannerMapper) {
         repository = hiberUserRepository;
+        mapper = autoPostBannerMapper;
     }
 
     @Override
@@ -28,11 +33,9 @@ public class SimpleUserService implements UserService {
         if (user.isEmpty()) {
             return Optional.empty();
         }
-        var banner = new Banner();
         var result = new Profile(
-                banner.convert(user.get().getUserPosts()),
-                banner.convert(user.get().getParticipates())
-        );
+                user.get().getUserPosts().stream().map(mapper::convert).toList(),
+                user.get().getParticipates().stream().map(mapper::convert).toList());
         return Optional.of(result);
     }
 
