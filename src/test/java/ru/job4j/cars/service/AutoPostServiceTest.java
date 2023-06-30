@@ -1,10 +1,12 @@
 package ru.job4j.cars.service;
 
+import com.querydsl.core.Tuple;
 import org.junit.Test;
 import org.mockito.Mockito;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.mapper.TupleBannerMapper;
 import ru.job4j.cars.model.*;
 import ru.job4j.cars.repository.*;
 
@@ -24,16 +26,17 @@ public class AutoPostServiceTest {
     private final AutoPostRepository postRepository;
     private final MarkRepository markRepository;
     private final UserRepository userRepository;
-    private AutoPost post;
-    private Banner ban;
+    private final AutoPost post;
+    private final Collection<Tuple> collection;
 
     public AutoPostServiceTest() {
         postRepository = Mockito.mock(HiberAutoPostRepository.class);
         String storageDirectory = "files";
         markRepository = Mockito.mock(HiberMarkRepository.class);
         userRepository = Mockito.mock(HiberUserRepository.class);
+        TupleBannerMapper mapper = Mockito.mock(TupleBannerMapper.class);
         service = new SimpleAutoPostService(
-                postRepository, storageDirectory, markRepository, userRepository);
+                postRepository, storageDirectory, markRepository, userRepository, mapper);
         post = AutoPost.builder()
                 .description("description")
                 .created(LocalDateTime.now())
@@ -48,7 +51,8 @@ public class AutoPostServiceTest {
         var file = new File("file", "path");
         file.setId(2L);
         post.addFile(file);
-        ban = Banner.builder()
+
+        var ban = Banner.builder()
                 .postId(1L)
                 .carName(post.getCar().getName())
                 .markName(post.getCar().getMark().getName())
@@ -56,12 +60,16 @@ public class AutoPostServiceTest {
                 .created(post.getCreated())
                 .fileId(post.getFiles().last().getId())
                 .build();
+
+        Tuple tuple = Mockito.mock(Tuple.class);
+        when(mapper.convert(tuple)).thenReturn(ban);
+
+        collection = new HashSet<>();
+        collection.add(tuple);
     }
 
     @Test
     public void whenFindAll() {
-        Collection<Banner> collection = new HashSet<>();
-        collection.add(ban);
         when(postRepository.findWithPredicate(
                 QPredicate.builder()
                         .and()))
@@ -76,8 +84,6 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindWithFile() {
-        Collection<Banner> collection = new HashSet<>();
-        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(1, autoPost.files.size()::goe)
                 .and()))
@@ -92,8 +98,6 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByCarBrand() {
-        Collection<Banner> collection = new HashSet<>();
-        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate("name", autoPost.car.name::eq)
                 .and()))
@@ -108,8 +112,6 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByColor() {
-        Collection<Banner> collection = new HashSet<>();
-        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(Color.BLACK, autoPost.car.color::eq)
                 .and()))
@@ -124,8 +126,6 @@ public class AutoPostServiceTest {
 
     @Test
     public void whenFindByMark() {
-        Collection<Banner> collection = new HashSet<>();
-        collection.add(ban);
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(2L, autoPost.car.mark.id::eq)
                 .and()))

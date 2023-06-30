@@ -1,8 +1,8 @@
 package ru.job4j.cars.repository;
 
+import com.querydsl.core.Tuple;
 import org.junit.Before;
 import org.junit.Test;
-import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.QPredicate;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Car;
@@ -15,6 +15,8 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static ru.job4j.cars.model.QAutoPost.autoPost;
+import static ru.job4j.cars.model.QCar.car;
+import static ru.job4j.cars.model.QPriceHistory.priceHistory;
 
 public class AutoPostRepositoryTest {
     private final AutoPostRepository repository;
@@ -39,7 +41,7 @@ public class AutoPostRepositoryTest {
     public void whenFindAll() {
         var result = repository.findWithPredicate(QPredicate.builder().and());
         assertThat(result.size(), is(3));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
             break;
@@ -53,7 +55,7 @@ public class AutoPostRepositoryTest {
                 .addPredicate(1, autoPost.files.size()::goe)
                 .and());
         assertThat(result.size(), is(1));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
         }
@@ -67,7 +69,7 @@ public class AutoPostRepositoryTest {
                         .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
                         .and());
         assertThat(result.size(), is(2));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
         }
@@ -81,7 +83,7 @@ public class AutoPostRepositoryTest {
                         .addPredicate("500", autoPost.car.name::eq)
                         .and());
         assertThat(result.size(), is(1));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
         }
@@ -95,7 +97,7 @@ public class AutoPostRepositoryTest {
                         .addPredicate(Color.RED, autoPost.car.color::eq)
                         .and());
         assertThat(result.size(), is(1));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
         }
@@ -108,7 +110,7 @@ public class AutoPostRepositoryTest {
                 .addPredicate(1L, autoPost.car.mark.id::eq)
                 .and());
         assertThat(result.size(), is(1));
-        var post = new Banner();
+        Tuple post = null;
         for (var p : result) {
             post = p;
         }
@@ -170,24 +172,24 @@ public class AutoPostRepositoryTest {
         assertThat(repository.findById(1L), is(Optional.empty()));
     }
 
-    private void carIsFiat(Banner post) {
-        assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
-        assertThat(post.getCarName(), is("500"));
-        assertThat(post.getMarkName(), is("Fiat"));
-        assertThat(post.getPrice(), is(450000L));
+    private void carIsFiat(Tuple tuple) {
+        assertThat(tuple.get(autoPost.created).getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
+        assertThat(tuple.get(car.name), is("500"));
+        assertThat(tuple.get(car.mark.name), is("Fiat"));
+        assertThat(tuple.get(priceHistory.price), is(450000L));
     }
 
-    private void carIsAudi(Banner post) {
-        assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
-        assertThat(post.getCarName(), is("RS 5"));
-        assertThat(post.getMarkName(), is("Audi"));
-        assertThat(post.getPrice(), is(5120000L));
+    private void carIsAudi(Tuple tuple) {
+        assertThat(tuple.get(autoPost.created).getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
+        assertThat(tuple.get(car.name), is("RS 5"));
+        assertThat(tuple.get(car.mark.name), is("Audi"));
+        assertThat(tuple.get(priceHistory.price), is(5120000L));
     }
 
-    private void carIsLamborghini(Banner post) {
-        assertThat(post.getCreated().getDayOfWeek(), is(LocalDateTime.now().minusDays(10).getDayOfWeek()));
-        assertThat(post.getCarName(), is("Huracán Evo"));
-        assertThat(post.getMarkName(), is("Lamborghini"));
-        assertThat(post.getPrice(), is(16500000L));
+    private void carIsLamborghini(Tuple tuple) {
+        assertThat(tuple.get(autoPost.created).getDayOfWeek(), is(LocalDateTime.now().minusDays(10).getDayOfWeek()));
+        assertThat(tuple.get(car.name), is("Huracán Evo"));
+        assertThat(tuple.get(car.mark.name), is("Lamborghini"));
+        assertThat(tuple.get(priceHistory.price), is(16500000L));
     }
 }
