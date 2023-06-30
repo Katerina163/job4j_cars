@@ -70,20 +70,20 @@
 <div class="container">
     <form class="mt-3" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="car_name" class="form-label"><b>Модель машины:</b></label>
-            <input type="text" class="form-control" maxlength="25" id="car_name" name="car.name" required>
+            <label for="carName" class="form-label"><b>Модель машины:</b></label>
+            <input type="text" class="form-control" maxlength="25" id="carName" name="carName" required>
         </div>
         <div class="form-group">
-            <label for="car_mark_id"><b>Марка:</b></label>
-            <select class="form-control" id="car_mark_id" name="car.mark.id" required>
+            <label for="markId"><b>Марка:</b></label>
+            <select class="form-control" id="markId" name="markId" required>
                 <option th:each="mark : ${marks}" th:value="${mark.id}"
                         th:text="${mark.name}">
                 </option>
             </select>
         </div>
         <div class="form-group">
-            <label for="car_color"><b>Цвет:</b></label>
-            <select class="form-control" id="car_color" name="car.color" required>
+            <label for="color"><b>Цвет:</b></label>
+            <select class="form-control" id="color" name="color" required>
                 <option th:each="color : ${colors}" th:value="${color}"
                         th:text="${color.name}">
                 </option>
@@ -104,8 +104,8 @@
             <input class="form-control form-control-sm w-100" type="file" id="file" name="file">
         </div>
         <div class="mb-3">
-            <label for="car_owners" class="form-label"><b>Бывшие владельцы (через запятую):</b></label>
-            <input type="text" class="form-control" id="car_owners" name="car.owners"
+            <label for="owners" class="form-label"><b>Бывшие владельцы (через запятую):</b></label>
+            <input type="text" class="form-control" id="owners" name="owners"
                    placeholder="Иван Иванов, Александра Александровна" required>
         </div>
         <div class="row">

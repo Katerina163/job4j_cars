@@ -4,9 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.dto.Criterion;
-import ru.job4j.cars.dto.FileDTO;
-import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.dto.*;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Color;
 import ru.job4j.cars.model.User;
@@ -101,10 +99,10 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam Map<String, String> allParams,
+    public String create(@ModelAttribute PostCreateDTO postCreateDTO,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
-        service.save(user.getLogin(), allParams, file);
+        service.save(user.getLogin(), postCreateDTO, file);
         return "redirect:/user/profile";
     }
 
@@ -146,11 +144,9 @@ public class PostController {
     }
 
     @PostMapping("/modify")
-    public String modify(@RequestParam(required = false) AutoPost post,
-                         @RequestParam Map<String, String> allParams, HttpSession session) {
-        var user = (User) session.getAttribute("user");
-        service.modify(allParams, user);
-        return "redirect:/post/" + allParams.get("id");
+    public String modify(@ModelAttribute PostModifyDTO postDTO) {
+        service.modify(postDTO);
+        return "redirect:/post/" + postDTO.getPostId();
     }
 
     @PostMapping("/search")

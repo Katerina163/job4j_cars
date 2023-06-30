@@ -2,19 +2,22 @@ package ru.job4j.cars.service;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.dto.Banner;
-import ru.job4j.cars.dto.Criterion;
-import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.dto.*;
 import ru.job4j.cars.mapper.Mapper;
-import ru.job4j.cars.model.*;
+import ru.job4j.cars.model.AutoPost;
+import ru.job4j.cars.model.Color;
+import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.AutoPostRepository;
-import ru.job4j.cars.repository.MarkRepository;
 import ru.job4j.cars.repository.UserRepository;
 
+import javax.validation.ConstraintViolationException;
+import javax.validation.Validation;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,24 +27,30 @@ import java.util.function.Function;
 
 import static ru.job4j.cars.model.QAutoPost.autoPost;
 
+@Slf4j
 @Service
 public class SimpleAutoPostService implements AutoPostService {
     private final AutoPostRepository repository;
     private final String storageDirectory;
-    private final MarkRepository markRepository;
     private final UserRepository userRepository;
     private final Mapper<Tuple, Banner> mapper;
+    private final Mapper<PostCreateDTO, AutoPost> mapperCreate;
+    private final Mapper<PostModifyDTO, AutoPost> mapperModify;
+    private final ValidatorFactory factory;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
                                  @Value("${file.directory}") String storageDirectory,
-                                 MarkRepository hiberMarkRepository,
                                  UserRepository hiberUserRepository,
-                                 Mapper<Tuple, Banner> tupleBannerMapper) {
+                                 Mapper<Tuple, Banner> tupleBannerMapper,
+                                 Mapper<PostCreateDTO, AutoPost> postCreateDTOAutoPostMapper,
+                                 Mapper<PostModifyDTO, AutoPost> postModifyDTOAutoPostMapper) {
         repository = hiberAutoPostRepository;
         this.storageDirectory = storageDirectory;
-        markRepository = hiberMarkRepository;
         userRepository = hiberUserRepository;
         mapper = tupleBannerMapper;
+        mapperCreate = postCreateDTOAutoPostMapper;
+        mapperModify = postModifyDTOAutoPostMapper;
+        factory = Validation.buildDefaultValidatorFactory();
     }
 
     @Override
@@ -134,24 +143,16 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void save(String login, Map<String, String> params, MultipartFile file) {
-        var car = new Car();
-        convertCar(params, car);
-        var post = new AutoPost();
-        if (!params.get("description").isEmpty()) {
-            post.setDescription(params.get("description"));
+    public void save(String login, PostCreateDTO dto, MultipartFile file) {
+        validation(dto);
+        var post = mapperCreate.convert(dto);
+        if (!file.isEmpty()) {
+            var f = convertFile(file);
+            post.addFile(f);
         }
         var user = userRepository.findByLogin(login);
         if (user.isPresent()) {
             user.get().addUserPost(post);
-            post.setCar(car);
-            if (!file.isEmpty()) {
-                var f = convertFile(file);
-                post.addFile(f);
-            }
-            var priceHistory = new PriceHistory(
-                    Long.parseLong(params.get("price")));
-            post.addPriceHistory(priceHistory);
             repository.cud(post, session -> session.persist(post));
         }
     }
@@ -172,34 +173,19 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void modify(Map<String, String> allParams, User user) {
-        if (allParams != null && !allParams.get("id").isEmpty()) {
-            var findPost = repository.findById(Long.parseLong(allParams.get("id")));
-            if (findPost.isPresent() && !allParams.get("car.id").isEmpty()
-                    && findPost.get().getAuthor().getLogin().equals(user.getLogin())
-                    && findPost.get().getCar().getId().equals(Long.parseLong(allParams.get("car.id")))) {
-                if (!allParams.get("description").isEmpty()) {
-                    findPost.get().setDescription(allParams.get("description"));
-                }
-                convertCar(allParams, findPost.get().getCar());
-                repository.cud(findPost.get(), session -> session.update(findPost.get()));
-            }
-        }
+    public void modify(PostModifyDTO dto) {
+        validation(dto);
+        var post = mapperModify.convert(dto);
+        repository.cud(post, session -> session.update(post));
     }
 
-    private void convertCar(Map<String, String> params, Car car) {
-        if (!params.get("car.name").isEmpty()) {
-            car.setName(params.get("car.name"));
-        }
-        if (!params.get("car.color").isEmpty()) {
-            car.setColor(Color.valueOf(params.get("car.color")));
-        }
-        if (!params.get("car.owners").isEmpty()) {
-            car.setOwners(params.get("car.owners"));
-        }
-        if (!params.get("car.mark.id").isEmpty()) {
-            var mark = markRepository.findById(Long.parseLong(params.get("car.mark.id")));
-            mark.ifPresent(car::setMark);
+    private void validation(Object dto) {
+        var validationResult = factory.getValidator().validate(dto);
+        if (!validationResult.isEmpty()) {
+            for (var error : validationResult) {
+                log.error(error.getMessage());
+            }
+            throw new ConstraintViolationException(validationResult);
         }
     }
 }

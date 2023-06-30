@@ -34,18 +34,22 @@ import java.util.TreeSet;
 @EqualsAndHashCode(exclude = {"files", "history"}, callSuper = true)
 @ToString(exclude = {"files", "history"})
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Audited
 public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
+    @Builder.Default
     @Version
-    private int version;
+    private int version = 1;
 
     private String description;
 
+    @Builder.Default
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
-    private boolean sold;
+    @Builder.Default
+    private boolean sold = false;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
     @JoinColumn(name = "car_id", nullable = false, unique = true)
@@ -56,19 +60,15 @@ public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     private User author;
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private SortedSet<File> files = new TreeSet<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @SortNatural
     private SortedSet<PriceHistory> history = new TreeSet<>();
-
-    public AutoPost() {
-        created = LocalDateTime.now();
-        sold = false;
-        version = 1;
-    }
 
     public void addFile(File file) {
         files.add(file);
