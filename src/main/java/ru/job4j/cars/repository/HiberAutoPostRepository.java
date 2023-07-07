@@ -46,7 +46,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
                             file.id
                     )
                     .from(autoPost)
-                    .leftJoin(priceHistory).on(priceHistory.id.eq(
+                    .innerJoin(priceHistory).on(priceHistory.id.eq(
                             new JPAQuery<>()
                                     .select(priceHistory.id.max())
                                     .from(priceHistory)
@@ -58,8 +58,8 @@ public class HiberAutoPostRepository implements AutoPostRepository {
                                     .from(file)
                                     .where(file.post.id.eq(autoPost.id))
                     ))
-                    .leftJoin(car).on(autoPost.car.id.eq(car.id))
-                    .leftJoin(mark).on(autoPost.car.mark.id.eq(mark.id))
+                    .innerJoin(car).on(autoPost.car.id.eq(car.id))
+                    .innerJoin(mark).on(autoPost.car.mark.id.eq(mark.id))
                     .where(predicate)
                     .fetch();
             tr.commit();
