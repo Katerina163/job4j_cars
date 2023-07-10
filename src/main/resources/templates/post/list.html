@@ -82,7 +82,8 @@
 </div>
 <div th:if="${user.login != 'Гость'}">
     <div class="container-fluid">
-        <form class="mt-4" th:action="@{/post/search}" method="post" th:object="${criterion}" enctype="multipart/form-data">
+        <form class="mt-4" th:action="@{/post/search}" method="post" th:object="${criterion}"
+              enctype="multipart/form-data">
             <div class="checkboxes">
             <span>
                 <label for="markIds"><h5>Марка:</h5></label>
@@ -106,11 +107,6 @@
             </span>
             </div>
             <div>
-                <label for="brand" class="form-label"><h5>Название:</h5></label>
-                <input type="text" class="form-control" id="brand" name="brand" th:field="${criterion.brand}"
-                       placeholder="Название машины без марки">
-            </div>
-            <div>
                 <input type="checkbox" id="fresh" name="fresh" th:field="${criterion.fresh}"/>
                 <label for="fresh"><h5>Свежие объявления</h5></label>
             </div>
@@ -119,20 +115,26 @@
                 <label for="withFile"><h5>С фото</h5></label>
             </div>
             <div class="container">
-                <div class="row">
+                <div class="row row-cols-3">
                     <div class="col">
-                <label for="limit" class="form-label"><h5>Количество постов на странице:</h5></label>
-                <input type="number" class="form-control" id="limit" name="limit" th:field="${criterion.limit}">
-            </div>
+                        <label for="limit" class="form-label"><h5>Количество постов на странице:</h5></label>
+                        <input type="number" class="form-control" id="limit" name="limit" th:field="${criterion.limit}">
+                    </div>
                     <div class="col">
-                <label for="offset" class="form-label"><h5>Номер страницы:</h5></label>
-                <input type="number" class="form-control" id="offset" name="offset" th:field="${criterion.offset}">
-            </div>
+                        <label for="offset" class="form-label"><h5>Номер страницы:</h5></label>
+                        <input type="number" class="form-control" id="offset" name="offset"
+                               th:field="${criterion.offset}">
+                    </div>
+                    <div class="col">
+                        <label for="brand" class="form-label"><h5>Название:</h5></label>
+                        <input type="text" class="form-control" id="brand" name="brand" th:field="${criterion.brand}"
+                               placeholder="Название машины без марки">
+                    </div>
                 </div>
             </div>
             <div class="d-grid gap-2 col-3 mx-auto">
-                    <button class="btn btn-success" type="submit">Найти</button>
-                </div>
+                <button class="btn btn-success" type="submit">Найти</button>
+            </div>
         </form>
     </div>
 </div>
