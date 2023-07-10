@@ -90,7 +90,7 @@
                        th:each="mark : ${marks}"
                        th:text="${mark.name}"
                        th:value="${mark.id}"
-                       th:selected="${criterion.markIds.contains(mark.id)}"
+                       th:field="${criterion.markIds}"
                 />
             </span>
             </div>
@@ -101,7 +101,7 @@
                        th:each="color : ${colors}"
                        th:text="${color.name}"
                        th:value="${color}"
-                       th:selected="${criterion.markIds.contains(color)}"
+                       th:field="${criterion.colors}"
                 />
             </span>
             </div>
