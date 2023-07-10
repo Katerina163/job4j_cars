@@ -118,19 +118,21 @@
                 <input type="checkbox" id="withFile" name="withFile" th:field="${criterion.withFile}"/>
                 <label for="withFile"><h5>С фото</h5></label>
             </div>
-            <div>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
                 <label for="limit" class="form-label"><h5>Количество постов на странице:</h5></label>
                 <input type="number" class="form-control" id="limit" name="limit" th:field="${criterion.limit}">
             </div>
-            <div>
+                    <div class="col">
                 <label for="offset" class="form-label"><h5>Номер страницы:</h5></label>
                 <input type="number" class="form-control" id="offset" name="offset" th:field="${criterion.offset}">
             </div>
-            <div>
-                <div class="col-sm">
-                    <button class="btn btn-success" type="submit">Найти</button>
                 </div>
             </div>
+            <div class="d-grid gap-2 col-3 mx-auto">
+                    <button class="btn btn-success" type="submit">Найти</button>
+                </div>
         </form>
     </div>
 </div>
