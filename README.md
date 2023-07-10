@@ -19,11 +19,11 @@
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c9132cbe-5c7c-4bdd-85e3-272b426fd46e.png" width="450"/>
 <div>3. Страница профиля (все объявления без фото отображаются с игрушечной машинкой)</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c7789d34-9e2b-4d5a-b54b-0b3669e57381.png" width="450"/>
-<div>4. Сраница с поиском объявлений. Также возможно искать по марке, цвету автомобиля, есть поиск новых объявлений или поиск объявлений только с фото.</div>
+<div>4. Сраница с поиском объявлений. Также возможно искать по марке, цвету автомобиля, есть поиск новых объявлений или поиск объявлений только с фото. Для незарегестрированных пользователей отображается только первые 10 результатов поиска:</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c27d2f11-75b2-46b6-9748-99e870ae2148.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/538df726-9453-43cb-a713-59643bb80f6a.png" width="450"/>
 <div>Для зарегистрированных пользователей возможен поиск по нескольким категориям:</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/a4fb931c-b2c0-459b-b57a-131f7879186a.png" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c668828b-f800-43d5-ba75-8343f6f95f46.png" width="450"/>
 <div>5. Страница объявления для неавторизированного пользователя/для авторизированного/для автора объявления</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/478120db-5e48-4ada-b11f-2c01cbf3a66f.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/f4323a4e-1204-4d94-8986-2c529d96972d.png" width="450"/>
