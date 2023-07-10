@@ -82,7 +82,7 @@
 </div>
 <div th:if="${user.login != 'Гость'}">
     <div class="container-fluid">
-        <form class="mt-4" th:action="@{/post/search}" method="post" enctype="multipart/form-data">
+        <form class="mt-4" th:action="@{/post/search}" method="post" th:object="${criterion}" enctype="multipart/form-data">
             <div class="checkboxes">
             <span>
                 <label for="markIds"><h5>Марка:</h5></label>
@@ -90,6 +90,7 @@
                        th:each="mark : ${marks}"
                        th:text="${mark.name}"
                        th:value="${mark.id}"
+                       th:selected="${criterion.markIds.contains(mark.id)}"
                 />
             </span>
             </div>
@@ -100,17 +101,22 @@
                        th:each="color : ${colors}"
                        th:text="${color.name}"
                        th:value="${color}"
+                       th:selected="${criterion.markIds.contains(color)}"
                 />
             </span>
             </div>
             <div>
                 <label for="brand" class="form-label"><h5>Название:</h5></label>
-                <input type="text" class="form-control" id="brand" name="brand"
+                <input type="text" class="form-control" id="brand" name="brand" th:field="${criterion.brand}"
                        placeholder="Название машины без марки">
             </div>
             <div>
-                <input type="checkbox" id="fresh" name="fresh"/>
+                <input type="checkbox" id="fresh" name="fresh" th:field="${criterion.fresh}"/>
                 <label for="fresh"><h5>Свежие объявления</h5></label>
+            </div>
+            <div>
+                <input type="checkbox" id="withFile" name="withFile" th:field="${criterion.withFile}"/>
+                <label for="withFile"><h5>С фото</h5></label>
             </div>
             <div>
                 <div class="col-sm">

@@ -150,18 +150,17 @@ public class PostController {
     }
 
     @PostMapping("/search")
-    public String search(@RequestParam Map<String, String> map,
-                         @RequestParam(value = "markIds", required = false) List<String> markIds,
-                         @RequestParam(value = "colors", required = false) List<String> colors,
-                         Model model) {
+    public String search(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(map, markIds, colors, QPredicate::or));
+                service.search(criterion, QPredicate::or))
+                .addAttribute("criterion", criterion);
         return "/post/list";
     }
 
     private Model addMarkAndColor(Model model) {
         model.addAttribute("marks", markService.findAll())
-                .addAttribute("colors", Color.values());
+                .addAttribute("colors", Color.values())
+                .addAttribute("criterion", new Criterion());
         return model;
     }
 }

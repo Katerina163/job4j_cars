@@ -14,9 +14,6 @@ import java.util.function.Function;
 public interface AutoPostService {
     Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> supplier);
 
-    Collection<Banner> search(Map<String, String> param, List<String> markIds, List<String> colors,
-                              Function<QPredicate, Predicate> supplier);
-
     Optional<AutoPost> findById(long id);
 
     void soldById(long postId, boolean sold);

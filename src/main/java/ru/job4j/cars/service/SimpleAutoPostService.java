@@ -88,29 +88,6 @@ public class SimpleAutoPostService implements AutoPostService {
     }
 
     @Override
-    public Collection<Banner> search(Map<String, String> param, List<String> markIds, List<String> colors,
-                                     Function<QPredicate, Predicate> supplier) {
-        var criterion = new Criterion();
-        if (markIds != null && !markIds.isEmpty()) {
-            for (var markId : markIds) {
-                criterion.addMarkIds(Long.parseLong(markId));
-            }
-        }
-        if (colors != null && !colors.isEmpty()) {
-            for (var color : colors) {
-                criterion.addColor(Color.valueOf(color));
-            }
-        }
-        if (param != null && param.containsKey("brand")) {
-            criterion.addBrand(param.get("brand"));
-        }
-        if (param != null && param.containsKey("fresh") && param.get("fresh").equals("on")) {
-            criterion.fresh();
-        }
-        return search(criterion, supplier);
-    }
-
-    @Override
     public Optional<AutoPost> findById(long id) {
         return repository.findById(id);
     }

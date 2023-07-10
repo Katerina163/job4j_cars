@@ -2,6 +2,7 @@ package ru.job4j.cars.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.job4j.cars.model.Color;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 public class Criterion {
     private boolean findAll = false;
     private boolean withFile = false;
