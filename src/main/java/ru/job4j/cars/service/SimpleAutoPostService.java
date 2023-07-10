@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.dto.*;
 import ru.job4j.cars.mapper.Mapper;
 import ru.job4j.cars.model.AutoPost;
-import ru.job4j.cars.model.Color;
 import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.UserRepository;
@@ -22,7 +21,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static ru.job4j.cars.model.QAutoPost.autoPost;
@@ -57,7 +58,8 @@ public class SimpleAutoPostService implements AutoPostService {
     public Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> function) {
         var predicate = QPredicate.builder();
         if (criterion.isFindAll()) {
-            return repository.findWithPredicate(predicate.and()).stream().map(mapper::convert).toList();
+            return repository.findWithPredicate(predicate.and(), criterion.getLimit(), criterion.getOffset())
+                    .stream().map(mapper::convert).toList();
         }
         if (criterion.isWithFile()) {
             predicate.addPredicate(1, autoPost.files.size()::goe);
@@ -84,7 +86,9 @@ public class SimpleAutoPostService implements AutoPostService {
                 predicate.addPredicate(markId, autoPost.car.mark.id::eq);
             }
         }
-        return repository.findWithPredicate(function.apply(predicate)).stream().map(mapper::convert).toList();
+        return repository.findWithPredicate(
+                        function.apply(predicate), criterion.getLimit(), criterion.getOffset())
+                .stream().map(mapper::convert).toList();
     }
 
     @Override

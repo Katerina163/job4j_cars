@@ -18,6 +18,8 @@ public class Criterion {
     private String brand;
     private List<Color> colors = new ArrayList<>(Color.values().length - 1);
     private List<Long> markIds = new ArrayList<>();
+    private long limit = 10L;
+    private long offset = 0L;
 
     public Criterion findAll() {
         this.findAll = true;
@@ -46,6 +48,16 @@ public class Criterion {
 
     public Criterion addMarkIds(Long markId) {
         this.getMarkIds().add(markId);
+        return this;
+    }
+
+    public Criterion limit(Long limit) {
+        this.limit = limit;
+        return this;
+    }
+
+    public Criterion offset(Long offset) {
+        this.offset = offset;
         return this;
     }
 }

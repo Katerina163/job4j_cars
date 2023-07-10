@@ -73,7 +73,7 @@ public class AutoPostServiceTest {
     public void whenFindAll() {
         when(postRepository.findWithPredicate(
                 QPredicate.builder()
-                        .and()))
+                        .and(), 10L, 0L))
                 .thenReturn(collection);
         var result = service.search(new Criterion().findAll(), QPredicate::and);
         Banner banner = null;
@@ -87,7 +87,7 @@ public class AutoPostServiceTest {
     public void whenFindWithFile() {
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(1, autoPost.files.size()::goe)
-                .and()))
+                .and(), 10L, 0L))
                 .thenReturn(collection);
         var result = service.search(new Criterion().withFile(), QPredicate::and);
         Banner banner = null;
@@ -101,7 +101,7 @@ public class AutoPostServiceTest {
     public void whenFindByCarBrand() {
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate("name", autoPost.car.name::eq)
-                .and()))
+                .and(), 10L, 0L))
                 .thenReturn(collection);
         var result = service.search(new Criterion().addBrand("name"), QPredicate::and);
         Banner banner = null;
@@ -115,7 +115,7 @@ public class AutoPostServiceTest {
     public void whenFindByColor() {
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(Color.BLACK, autoPost.car.color::eq)
-                .and()))
+                .and(), 10L, 0L))
                 .thenReturn(collection);
         var result = service.search(new Criterion().addColor(Color.BLACK), QPredicate::and);
         Banner banner = null;
@@ -129,7 +129,7 @@ public class AutoPostServiceTest {
     public void whenFindByMark() {
         when(postRepository.findWithPredicate(QPredicate.builder()
                 .addPredicate(2L, autoPost.car.mark.id::eq)
-                .and()))
+                .and(), 10L, 0L))
                 .thenReturn(collection);
         var result = service.search(new Criterion().addMarkIds(2L), QPredicate::and);
         Banner banner = null;

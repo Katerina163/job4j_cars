@@ -39,7 +39,7 @@ public class AutoPostRepositoryTest {
 
     @Test
     public void whenFindAll() {
-        var result = repository.findWithPredicate(QPredicate.builder().and());
+        var result = repository.findWithPredicate(QPredicate.builder().and(), 10L, 0L);
         assertThat(result.size(), is(3));
         Tuple post = null;
         for (var p : result) {
@@ -53,7 +53,7 @@ public class AutoPostRepositoryTest {
     public void whenFindWithFile() {
         var result = repository.findWithPredicate(QPredicate.builder()
                 .addPredicate(1, autoPost.files.size()::goe)
-                .and());
+                .and(), 10L, 0L);
         assertThat(result.size(), is(1));
         Tuple post = null;
         for (var p : result) {
@@ -67,7 +67,7 @@ public class AutoPostRepositoryTest {
         var result = repository.findWithPredicate(
                 QPredicate.builder()
                         .addBiPredicate(LocalDateTime.now().minusDays(1L), LocalDateTime.now(), autoPost.created::between)
-                        .and());
+                        .and(), 10L, 0L);
         assertThat(result.size(), is(2));
         Tuple post = null;
         for (var p : result) {
@@ -81,7 +81,7 @@ public class AutoPostRepositoryTest {
         var result = repository.findWithPredicate(
                 QPredicate.builder()
                         .addPredicate("500", autoPost.car.name::eq)
-                        .and());
+                        .and(), 10L, 0L);
         assertThat(result.size(), is(1));
         Tuple post = null;
         for (var p : result) {
@@ -95,7 +95,7 @@ public class AutoPostRepositoryTest {
         var result = repository.findWithPredicate(
                 QPredicate.builder()
                         .addPredicate(Color.RED, autoPost.car.color::eq)
-                        .and());
+                        .and(), 10L, 0L);
         assertThat(result.size(), is(1));
         Tuple post = null;
         for (var p : result) {
@@ -108,7 +108,7 @@ public class AutoPostRepositoryTest {
     public void whenFindByMark() {
         var result = repository.findWithPredicate(QPredicate.builder()
                 .addPredicate(1L, autoPost.car.mark.id::eq)
-                .and());
+                .and(), 10L, 0L);
         assertThat(result.size(), is(1));
         Tuple post = null;
         for (var p : result) {

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public interface AutoPostRepository {
-    Collection<Tuple> findWithPredicate(Predicate predicate);
+    Collection<Tuple> findWithPredicate(Predicate predicate, Long limit, Long offset);
 
     Optional<AutoPost> findById(long id);
 

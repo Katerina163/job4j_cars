@@ -30,7 +30,7 @@ public class HiberAutoPostRepository implements AutoPostRepository {
     private final SessionFactory sf;
 
     @Override
-    public Collection<Tuple> findWithPredicate(Predicate predicate) {
+    public Collection<Tuple> findWithPredicate(Predicate predicate, Long limit, Long offset) {
         Transaction tr = null;
         Collection<Tuple> result;
         try (var session = sf.openSession()) {
@@ -61,6 +61,8 @@ public class HiberAutoPostRepository implements AutoPostRepository {
                     .innerJoin(car).on(autoPost.car.id.eq(car.id))
                     .innerJoin(mark).on(autoPost.car.mark.id.eq(mark.id))
                     .where(predicate)
+                    .limit(limit)
+                    .offset(offset)
                     .fetch();
             tr.commit();
         } catch (Exception e) {
