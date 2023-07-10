@@ -35,29 +35,29 @@ public class PostController {
     }
 
     @GetMapping("/")
-    public String getAllPage(Model model) {
+    public String getAllPage(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().findAll(), QPredicate::and));
+                service.search(criterion.findAll(), QPredicate::and));
         return "/post/list";
     }
 
     @GetMapping("/new")
-    public String getNewPage(Model model) {
+    public String getNewPage(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().fresh(), QPredicate::and));
+                service.search(criterion.fresh(), QPredicate::and));
         return "/post/list";
     }
 
     @GetMapping("/with-photo")
-    public String getPageWithFile(Model model) {
+    public String getPageWithFile(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().withFile(), QPredicate::and));
+                service.search(criterion.withFile(), QPredicate::and));
         return "/post/list";
     }
 
     @PostMapping("/brand")
-    public String getMarkPage(@RequestParam String brand, Model model) {
-        var list = service.search(new Criterion().addBrand(brand), QPredicate::and);
+    public String getMarkPage(@RequestParam String brand, Model model, Criterion criterion) {
+        var list = service.search(criterion.addBrand(brand), QPredicate::and);
         if (list.isEmpty()) {
             addMarkAndColor(model).addAttribute("message", "По запросу \"" + brand + "\" ничего не найдено");
             return "/error";
@@ -67,17 +67,17 @@ public class PostController {
     }
 
     @GetMapping("/mark/{id}")
-    public String getByMark(@PathVariable long id, Model model) {
+    public String getByMark(@PathVariable long id, Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().addMarkIds(id), QPredicate::and));
+                service.search(criterion.addMarkIds(id), QPredicate::and));
         return "/post/list";
     }
 
     @GetMapping("/color/{name}")
-    public String getByColor(@PathVariable String name, Model model) {
+    public String getByColor(@PathVariable String name, Model model, Criterion criterion) {
         var color = Color.valueOf(name);
         addMarkAndColor(model).addAttribute("posts",
-                service.search(new Criterion().addColor(color), QPredicate::and));
+                service.search(criterion.addColor(color), QPredicate::and));
         return "/post/list";
     }
 
