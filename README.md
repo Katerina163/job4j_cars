@@ -23,7 +23,7 @@
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c27d2f11-75b2-46b6-9748-99e870ae2148.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/538df726-9453-43cb-a713-59643bb80f6a.png" width="450"/>
 <div>Для зарегистрированных пользователей возможен поиск по нескольким категориям:</div>
-<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/c668828b-f800-43d5-ba75-8343f6f95f46.png" width="450"/>
+<img src="https://github.com/Katerina163/job4j_cars/assets/79073032/b819c9ea-78db-4e37-b8b5-8a1fdbc6faff.png" width="450"/>
 <div>5. Страница объявления для неавторизированного пользователя/для авторизированного/для автора объявления</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/478120db-5e48-4ada-b11f-2c01cbf3a66f.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/f4323a4e-1204-4d94-8986-2c529d96972d.png" width="450"/>
