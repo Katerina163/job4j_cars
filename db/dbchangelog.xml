@@ -7,16 +7,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <include file="scripts/001_ddl_create_auto_user_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/002_ddl_create_mark_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/003_ddl_create_car_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/004_ddl_create_auto_post_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/005_ddl_create_price_history_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/006_ddl_create_participates_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/007_ddl_create_files_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/008_dml_insert_auto_user.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/009_dml_insert_mark.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/010_dml_insert_car_and_auto_post.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/011_dml_insert_participates_and_price_history.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/012_ddl_create_audit_tables.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/001_ddl_create_tables.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/002_dml_insert.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/003_ddl_create_audit_tables.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

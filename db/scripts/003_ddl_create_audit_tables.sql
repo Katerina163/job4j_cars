@@ -1,9 +1,13 @@
+--liquibase formatted sql
+--changeset Katerina163:1
 create table revinfo (
                          rev serial primary key,
                          revtstmp timestamp,
                          user_id int not null references auto_user(id)
 );
+--rollback drop table revinfo;
 
+--changeset Katerina163:2
 create table auto_post_aud (
                                id int not null,
                                rev int not null references revinfo(rev),
@@ -14,6 +18,9 @@ create table auto_post_aud (
                                car_id int,
                                primary key (id, rev)
 );
+--rollback drop table auto_post_aud;
+
+--changeset Katerina163:3
 create table car_aud (
                          id int not null,
                          rev int not null references revinfo(rev),
@@ -24,7 +31,9 @@ create table car_aud (
                          mark_id int,
                          primary key (id, rev)
 );
+--rollback drop table car_aud;
 
+--changeset Katerina163:4
 create table files_aud (
                            id int not null,
                            rev int not null references revinfo(rev),
@@ -34,7 +43,9 @@ create table files_aud (
                            post_id int,
                            primary key (id, rev)
 );
+--rollback drop table files_aud;
 
+--changeset Katerina163:5
 create table price_history_aud (
                                    id int not null,
                                    rev int not null references revinfo(rev),
@@ -44,3 +55,4 @@ create table price_history_aud (
                                    post_id int,
                                    primary key (id, rev)
 );
+--rollback drop table price_history_aud;
