@@ -1,16 +1,16 @@
 package ru.job4j.cars.mapper;
 
 import org.springframework.stereotype.Component;
-import ru.job4j.cars.dto.PostCreateDTO;
+import ru.job4j.cars.dto.PostDTO;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Mark;
 import ru.job4j.cars.model.PriceHistory;
 
 @Component
-public class PostCreateDTOAutoPostMapper implements Mapper<PostCreateDTO, AutoPost> {
+public class PostCreateDTOAutoPostMapper implements Mapper<PostDTO, AutoPost> {
     @Override
-    public AutoPost convert(PostCreateDTO dto) {
+    public AutoPost convert(PostDTO dto) {
         var mark = new Mark();
         mark.setId(dto.getMarkId());
         var post = AutoPost.builder()

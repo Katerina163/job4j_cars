@@ -15,8 +15,6 @@ import ru.job4j.cars.service.PriceHistoryService;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/post")
@@ -99,10 +97,10 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute PostCreateDTO postCreateDTO,
+    public String create(@ModelAttribute PostDTO postDTO,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
-        service.save(user.getLogin(), postCreateDTO, file);
+        service.save(user.getLogin(), postDTO, file);
         return "redirect:/user/profile";
     }
 
@@ -144,7 +142,7 @@ public class PostController {
     }
 
     @PostMapping("/modify")
-    public String modify(@ModelAttribute PostModifyDTO postDTO) {
+    public String modify(@ModelAttribute PostDTO postDTO) {
         service.modify(postDTO);
         return "redirect:/post/" + postDTO.getPostId();
     }

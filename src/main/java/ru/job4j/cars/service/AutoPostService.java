@@ -18,7 +18,7 @@ public interface AutoPostService {
 
     void delete(long id);
 
-    void save(String login, PostCreateDTO dto, MultipartFile file);
+    void save(String login, PostDTO dto, MultipartFile file);
 
-    void modify(PostModifyDTO dto);
+    void modify(PostDTO dto);
 }

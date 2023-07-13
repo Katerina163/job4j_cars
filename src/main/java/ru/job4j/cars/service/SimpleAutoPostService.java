@@ -13,10 +13,14 @@ import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.UserRepository;
+import ru.job4j.cars.validation.CreateAction;
+import ru.job4j.cars.validation.ModifyAction;
+import ru.job4j.cars.validation.GroupValidation;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
+import javax.validation.groups.Default;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,16 +39,16 @@ public class SimpleAutoPostService implements AutoPostService {
     private final String storageDirectory;
     private final UserRepository userRepository;
     private final Mapper<Tuple, Banner> mapper;
-    private final Mapper<PostCreateDTO, AutoPost> mapperCreate;
-    private final Mapper<PostModifyDTO, AutoPost> mapperModify;
+    private final Mapper<PostDTO, AutoPost> mapperCreate;
+    private final Mapper<PostDTO, AutoPost> mapperModify;
     private final ValidatorFactory factory;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
                                  @Value("${file.directory}") String storageDirectory,
                                  UserRepository hiberUserRepository,
                                  Mapper<Tuple, Banner> tupleBannerMapper,
-                                 Mapper<PostCreateDTO, AutoPost> postCreateDTOAutoPostMapper,
-                                 Mapper<PostModifyDTO, AutoPost> postModifyDTOAutoPostMapper) {
+                                 Mapper<PostDTO, AutoPost> postCreateDTOAutoPostMapper,
+                                 Mapper<PostDTO, AutoPost> postModifyDTOAutoPostMapper) {
         repository = hiberAutoPostRepository;
         this.storageDirectory = storageDirectory;
         userRepository = hiberUserRepository;
@@ -124,8 +128,8 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void save(String login, PostCreateDTO dto, MultipartFile file) {
-        validation(dto);
+    public void save(String login, PostDTO dto, MultipartFile file) {
+        validation(dto, CreateAction.class);
         var post = mapperCreate.convert(dto);
         if (!file.isEmpty()) {
             var f = convertFile(file);
@@ -154,14 +158,14 @@ public class SimpleAutoPostService implements AutoPostService {
 
     @Transactional
     @Override
-    public void modify(PostModifyDTO dto) {
-        validation(dto);
+    public void modify(PostDTO dto) {
+        validation(dto, ModifyAction.class);
         var post = mapperModify.convert(dto);
         repository.cud(post, session -> session.update(post));
     }
 
-    private void validation(Object dto) {
-        var validationResult = factory.getValidator().validate(dto);
+    private void validation(Object dto, Class<? extends GroupValidation> clazz) {
+        var validationResult = factory.getValidator().validate(dto, Default.class, clazz);
         if (!validationResult.isEmpty()) {
             for (var error : validationResult) {
                 log.error(error.getMessage());
