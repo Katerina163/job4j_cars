@@ -54,10 +54,10 @@ public class PostController {
     }
 
     @PostMapping("/brand")
-    public String getMarkPage(@RequestParam String brand, Model model, Criterion criterion) {
-        var list = service.search(criterion.addBrand(brand), QPredicate::and);
+    public String getMarkPage(Model model, Criterion criterion) {
+        var list = service.search(criterion, QPredicate::and);
         if (list.isEmpty()) {
-            addMarkAndColor(model).addAttribute("message", "По запросу \"" + brand + "\" ничего не найдено");
+            addMarkAndColor(model).addAttribute("message", "По запросу \"" + criterion.getBrand() + "\" ничего не найдено");
             return "/error";
         }
         addMarkAndColor(model).addAttribute("posts", list);
