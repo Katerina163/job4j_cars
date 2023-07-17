@@ -50,8 +50,12 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute User user) {
-        service.create(user);
+    public String register(@ModelAttribute User user, Model model) {
+        var userRes = service.create(user);
+        if (userRes.isEmpty()) {
+            model.addAttribute("message", "Придумайте другой логин");
+            return "/user/register";
+        }
         return "/user/login";
     }
 

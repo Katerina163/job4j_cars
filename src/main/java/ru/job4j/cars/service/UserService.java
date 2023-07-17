@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface UserService {
     Optional<User> findByLoginAndPassword(String login, String password);
 
-    User create(User user);
+    Optional<User> create(User user);
 
     Optional<Profile> findAllPostsByLogin(String login);
 

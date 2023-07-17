@@ -30,10 +30,10 @@ public class HiberUserRepository implements UserRepository {
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
             result = new JPAQuery<User>(session)
-                            .select(user)
-                            .from(user)
-                            .where(user.login.eq(login).and(user.password.eq(password)))
-                            .fetchOne();
+                    .select(user)
+                    .from(user)
+                    .where(user.login.eq(login).and(user.password.eq(password)))
+                    .fetchOne();
             tr.commit();
         } catch (Exception e) {
             if (tr != null) {
@@ -46,11 +46,18 @@ public class HiberUserRepository implements UserRepository {
     }
 
     @Override
-    public User create(User user) {
+    public Optional<User> create(User user) {
         Transaction tr = null;
+        Optional<User> result = Optional.empty();
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
-            session.persist(user);
+            var findUser = session.createQuery("from User where login = :login", User.class)
+                    .setParameter("login", user.getLogin())
+                    .uniqueResultOptional();
+            if (findUser.isEmpty()) {
+                session.persist(user);
+                result = Optional.of(user);
+            }
             tr.commit();
         } catch (Exception e) {
             if (tr != null) {
@@ -59,7 +66,7 @@ public class HiberUserRepository implements UserRepository {
             log.error("Ошибка при сохранении пользователя: {}", user);
             throw e;
         }
-        return user;
+        return result;
     }
 
     @Override

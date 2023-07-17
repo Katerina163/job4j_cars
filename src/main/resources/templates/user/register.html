@@ -22,7 +22,13 @@
                                 <div class="mb-5">
                                     <h3 class="h4 font-weight-bold text-theme">Регистрация</h3>
                                 </div>
-                                <p class="text-muted mt-2 mb-5">Придумайте логин и пароль</p>
+                                <div th:if="${message} != null">
+                                    <p class="text-muted mt-2 mb-5" th:text="${message}"></p>
+                                </div>
+                                <div th:if="${message} == null">
+                                    <p class="text-muted mt-2 mb-5">Придумайте логин и
+                                        пароль</p>
+                                </div>
                                 <form>
                                     <div class="form-group">
                                         <label for="login">Логин</label>

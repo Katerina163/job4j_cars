@@ -10,7 +10,7 @@ import java.util.function.BiFunction;
 public interface UserRepository {
     Optional<User> findByLoginAndPassword(String login, String password);
 
-    User create(User user);
+    Optional<User> create(User user);
 
     Optional<User> findByLogin(String login);
 
