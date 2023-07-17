@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.SortNatural;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -45,7 +44,6 @@ public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
     private String description;
 
     @Builder.Default
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime created = LocalDateTime.now();
 
     @Builder.Default

@@ -14,6 +14,7 @@ import ru.job4j.cars.service.MarkService;
 import ru.job4j.cars.service.PriceHistoryService;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.IOException;
 
 @Controller
@@ -119,9 +120,9 @@ public class PostController {
     }
 
     @PostMapping("/change-price")
-    public String changePrice(@RequestParam long id, @RequestParam long price) {
-        priceService.save(price, id);
-        return "redirect:/post/" + id;
+    public String changePrice(@Valid @ModelAttribute PriceDto dto) {
+        priceService.save(dto);
+        return "redirect:/post/" + dto.id();
     }
 
     @GetMapping("/delete/{id}")
@@ -150,7 +151,7 @@ public class PostController {
     @PostMapping("/search")
     public String search(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
-                service.search(criterion, QPredicate::or))
+                        service.search(criterion, QPredicate::or))
                 .addAttribute("criterion", criterion);
         return "/post/list";
     }

@@ -1,6 +1,7 @@
 package ru.job4j.cars.service;
 
 import org.springframework.stereotype.Service;
+import ru.job4j.cars.dto.PriceDto;
 import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.repository.PriceHistoryRepository;
 
@@ -15,7 +16,7 @@ public class SimplePriceHistoryService implements PriceHistoryService {
     }
 
     @Override
-    public Optional<PriceHistory> save(long price, long postId) {
-        return repository.save(price, postId);
+    public Optional<PriceHistory> save(PriceDto dto) {
+        return repository.save(dto.price(), dto.id());
     }
 }
