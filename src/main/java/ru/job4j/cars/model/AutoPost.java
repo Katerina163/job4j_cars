@@ -36,7 +36,7 @@ import java.util.TreeSet;
 @NoArgsConstructor
 @Builder
 @Audited
-public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
+public class AutoPost extends BaseId<Long> {
     @Builder.Default
     @Version
     private int version = 1;
@@ -76,10 +76,5 @@ public class AutoPost extends BaseId<Long> implements Comparable<AutoPost> {
     public void addPriceHistory(PriceHistory priceHistory) {
         priceHistory.setPost(this);
         history.add(priceHistory);
-    }
-
-    @Override
-    public int compareTo(AutoPost post) {
-        return this.created.compareTo(post.created);
     }
 }

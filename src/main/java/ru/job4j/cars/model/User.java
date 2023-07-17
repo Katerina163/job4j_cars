@@ -1,29 +1,14 @@
 package ru.job4j.cars.model;
 
-import lombok.*;
-import org.hibernate.annotations.SortNatural;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
-@NamedEntityGraph(
-        name = "profile",
-        attributeNodes = {
-                @NamedAttributeNode(value = "participates", subgraph = "priceHistory"),
-                @NamedAttributeNode(value = "userPosts", subgraph = "priceHistory")
-        },
-        subgraphs = {
-                @NamedSubgraph(name = "priceHistory", attributeNodes = {
-                        @NamedAttributeNode(value = "car", subgraph = "CarWithMark"),
-                        @NamedAttributeNode("files"),
-                        @NamedAttributeNode("history"),
-                        @NamedAttributeNode("author")
-                }),
-                @NamedSubgraph(name = "CarWithMark",
-                        attributeNodes = @NamedAttributeNode("mark"))
-        }
-)
 @Entity
 @Table(name = "auto_user")
 @Data
@@ -37,18 +22,16 @@ public class User extends BaseId<Long> {
 
     private String password;
 
-    @SortNatural
     @ManyToMany
     @JoinTable(
             name = "participates",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
-    private SortedSet<AutoPost> participates = new TreeSet<>();
+    private List<AutoPost> participates = new ArrayList<>();
 
-    @SortNatural
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private SortedSet<AutoPost> userPosts = new TreeSet<>();
+    private List<AutoPost> userPosts = new ArrayList<>();
 
     public User(String login, String password) {
         this.login = login;

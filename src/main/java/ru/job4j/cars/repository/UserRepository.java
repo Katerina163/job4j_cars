@@ -3,8 +3,8 @@ package ru.job4j.cars.repository;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 public interface UserRepository {
@@ -12,7 +12,9 @@ public interface UserRepository {
 
     Optional<User> create(User user);
 
-    Optional<User> findByLogin(String login);
+    Optional<User> findByLoginParticipates(String login);
 
-    void participate(long userId, long postId, BiFunction<Set<AutoPost>, AutoPost, Boolean> function);
+    Optional<User> findByLoginUsersPost(String login);
+
+    void participate(long userId, long postId, BiFunction<List<AutoPost>, AutoPost, Boolean> function);
 }

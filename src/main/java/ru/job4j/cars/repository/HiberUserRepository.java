@@ -6,13 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.graph.GraphSemantic;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 
 import static ru.job4j.cars.model.QUser.user;
@@ -70,15 +69,28 @@ public class HiberUserRepository implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) {
+    public Optional<User> findByLoginParticipates(String login) {
+        return findByLogin(login, "u.participates");
+    }
+
+    @Override
+    public Optional<User> findByLoginUsersPost(String login) {
+        return findByLogin(login, "u.userPosts");
+    }
+
+    private Optional<User> findByLogin(String login, String join) {
+        var sql = "from User u left join fetch " + join
+                + " p left join fetch p.car c "
+                + " left join fetch c.mark "
+                + " left join fetch p.history "
+                + " left join fetch p.files "
+                + " where u.login = :login";
         Transaction tr = null;
         Optional<User> result;
         try (var session = sf.openSession()) {
             tr = session.beginTransaction();
-            var graph = session.getEntityGraph("profile");
-            result = session.createQuery("from User where login = :login", User.class)
+            result = session.createQuery(sql, User.class)
                     .setParameter("login", login)
-                    .setHint(GraphSemantic.LOAD.getJpaHintName(), graph)
                     .uniqueResultOptional();
             tr.commit();
         } catch (Exception e) {
@@ -93,7 +105,7 @@ public class HiberUserRepository implements UserRepository {
     }
 
     @Override
-    public void participate(long userId, long postId, BiFunction<Set<AutoPost>, AutoPost, Boolean> function) {
+    public void participate(long userId, long postId, BiFunction<List<AutoPost>, AutoPost, Boolean> function) {
         Transaction tx = null;
         try (Session session = sf.openSession()) {
             tx = session.beginTransaction();

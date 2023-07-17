@@ -8,8 +8,8 @@ import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class SimpleUserService implements UserService {
@@ -29,13 +29,14 @@ public class SimpleUserService implements UserService {
 
     @Override
     public Optional<Profile> findAllPostsByLogin(String login) {
-        var user = repository.findByLogin(login);
-        if (user.isEmpty()) {
+        var usersPosts = repository.findByLoginUsersPost(login);
+        var usersParticipates = repository.findByLoginParticipates(login);
+        if (usersPosts.isEmpty() || usersParticipates.isEmpty()) {
             return Optional.empty();
         }
         var result = new Profile(
-                user.get().getUserPosts().stream().map(mapper::convert).toList(),
-                user.get().getParticipates().stream().map(mapper::convert).toList());
+                usersPosts.get().getUserPosts().stream().map(mapper::convert).toList(),
+                usersParticipates.get().getParticipates().stream().map(mapper::convert).toList());
         return Optional.of(result);
     }
 
@@ -46,11 +47,11 @@ public class SimpleUserService implements UserService {
 
     @Override
     public void subscribe(long userId, long postId) {
-        repository.participate(userId, postId, Set::add);
+        repository.participate(userId, postId, List::add);
     }
 
     @Override
     public void unsubscribe(long userId, long postId) {
-        repository.participate(userId, postId, Set::remove);
+        repository.participate(userId, postId, List::remove);
     }
 }

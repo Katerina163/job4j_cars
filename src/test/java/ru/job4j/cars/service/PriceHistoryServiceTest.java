@@ -2,6 +2,7 @@ package ru.job4j.cars.service;
 
 import org.junit.Test;
 import org.mockito.Mockito;
+import ru.job4j.cars.dto.PriceDto;
 import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.PriceHistoryRepository;
@@ -27,10 +28,11 @@ public class PriceHistoryServiceTest {
     @Test
     public void whenCreate() {
         var priceHistory = new PriceHistory(1000L);
+        var price = new PriceDto(1L, 1000L);
         when(priceRepository.save(1000L, 1L))
                 .thenReturn(Optional.of(priceHistory));
 
-        var result = service.save(1000L, 1L).get();
+        var result = service.save(price).get();
 
         assertThat(result.getPrice(), is(1000L));
         assertThat(result.getCreated().getDayOfWeek(), is(LocalDateTime.now().getDayOfWeek()));
@@ -40,7 +42,8 @@ public class PriceHistoryServiceTest {
     public void whenCreateButNotFound() {
         when(postRepository.findById(1L))
                 .thenReturn(Optional.empty());
-        var result = service.save(1000L, 1L);
+        var price = new PriceDto(1L, 1000L);
+        var result = service.save(price);
         assertThat(result, is(Optional.empty()));
     }
 }
