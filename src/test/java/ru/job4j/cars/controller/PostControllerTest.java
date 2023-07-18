@@ -1,6 +1,7 @@
 package ru.job4j.cars.controller;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import ru.job4j.cars.utill.HibernateTestUtil;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -48,8 +48,9 @@ public class PostControllerTest {
     @Disabled
     @Test
     public void shouldFindByBrand() throws Exception {
-        this.mockMvc.perform(post("/post/brand")
-                        .param("brand", "Audi"))
+        HibernateTestUtil.insertPosts();
+        this.mockMvc.perform(get("/post/brand")
+                        .param("brand", "500"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("/post/list"))
@@ -58,7 +59,7 @@ public class PostControllerTest {
 
     @Test
     public void shouldNotFindByBrand() throws Exception {
-        this.mockMvc.perform(post("/post/brand")
+        this.mockMvc.perform(get("/post/brand")
                         .param("brand", "hi"))
                 .andDo(print())
                 .andExpect(status().isOk())
