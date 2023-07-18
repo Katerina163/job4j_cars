@@ -26,7 +26,7 @@
 <div th:insert="~{fragments :: menu}"></div>
 <div th:if="${user.login != 'Гость'}">
     <div class="container-fluid">
-        <form class="mt-4" th:action="@{/post/search}" method="post" th:object="${criterion}"
+        <form class="mt-4" th:action="@{/post/search}" th:object="${criterion}"
               enctype="multipart/form-data">
             <div class="checkboxes">
             <span>

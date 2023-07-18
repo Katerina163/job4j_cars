@@ -54,7 +54,7 @@ public class PostController {
         return "/post/list";
     }
 
-    @PostMapping("/brand")
+    @GetMapping("/brand")
     public String getMarkPage(Model model, Criterion criterion) {
         var list = service.search(criterion, QPredicate::and);
         if (list.isEmpty()) {
@@ -98,7 +98,7 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute PostDTO postDTO,
+    public String create(PostDTO postDTO,
                          @RequestParam MultipartFile file, HttpSession session) throws IOException {
         var user = (User) session.getAttribute("user");
         service.save(user.getLogin(), postDTO, file);
@@ -114,13 +114,13 @@ public class PostController {
     }
 
     @PostMapping("/sold")
-    public String sold(@ModelAttribute AutoPost post) {
+    public String sold(AutoPost post) {
         service.soldById(post.getId(), !post.isSold());
         return "redirect:/post/" + post.getId();
     }
 
     @PostMapping("/change-price")
-    public String changePrice(@Valid @ModelAttribute PriceDto dto) {
+    public String changePrice(@Valid PriceDto dto) {
         priceService.save(dto);
         return "redirect:/post/" + dto.id();
     }
@@ -148,7 +148,7 @@ public class PostController {
         return "redirect:/post/" + postDTO.getPostId();
     }
 
-    @PostMapping("/search")
+    @GetMapping("/search")
     public String search(Model model, Criterion criterion) {
         addMarkAndColor(model).addAttribute("posts",
                         service.search(criterion, QPredicate::or))
