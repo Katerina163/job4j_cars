@@ -1,10 +1,10 @@
 package ru.job4j.cars.service;
 
+import com.querydsl.core.Tuple;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Profile;
 import ru.job4j.cars.mapper.Mapper;
-import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
@@ -14,12 +14,12 @@ import java.util.Optional;
 @Service
 public class SimpleUserService implements UserService {
     private final UserRepository repository;
-    private final Mapper<AutoPost, Banner> mapper;
+    private final Mapper<Tuple, Banner> mapper;
 
     public SimpleUserService(UserRepository hiberUserRepository,
-                             Mapper<AutoPost, Banner> autoPostBannerMapper) {
+                             Mapper<Tuple, Banner> tupleBannerMapper) {
         repository = hiberUserRepository;
-        mapper = autoPostBannerMapper;
+        mapper = tupleBannerMapper;
     }
 
     @Override
@@ -29,14 +29,15 @@ public class SimpleUserService implements UserService {
 
     @Override
     public Optional<Profile> findAllPostsByLogin(String login) {
-        var usersPosts = repository.findByLoginUsersPost(login);
-        var usersParticipates = repository.findByLoginParticipates(login);
-        if (usersPosts.isEmpty() || usersParticipates.isEmpty()) {
-            return Optional.empty();
+        var usersPosts = repository.findUsersPostByLogin(login);
+        var usersParticipates = repository.findParticipatesByLogin(login);
+        var result = new Profile();
+        if (usersPosts != null) {
+            result.setUserPosts(usersPosts.stream().map(mapper::convert).toList());
         }
-        var result = new Profile(
-                usersPosts.get().getUserPosts().stream().map(mapper::convert).toList(),
-                usersParticipates.get().getParticipates().stream().map(mapper::convert).toList());
+        if (usersParticipates != null) {
+            result.setUserSubscribe(usersParticipates.stream().map(mapper::convert).toList());
+        }
         return Optional.of(result);
     }
 

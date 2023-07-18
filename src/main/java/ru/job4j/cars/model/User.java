@@ -9,6 +9,12 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@NamedEntityGraph(
+        name = "withUserPosts",
+        attributeNodes = {
+                @NamedAttributeNode("userPosts")
+        }
+)
 @Entity
 @Table(name = "auto_user")
 @Data

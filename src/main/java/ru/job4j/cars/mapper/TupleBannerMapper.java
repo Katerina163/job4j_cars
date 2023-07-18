@@ -15,16 +15,18 @@ import static ru.job4j.cars.model.QPriceHistory.priceHistory;
 public class TupleBannerMapper implements Mapper<Tuple, Banner> {
     @Override
     public Banner convert(Tuple tuple) {
-            var banner = Banner.builder()
-                    .postId(tuple.get(autoPost.id))
-                    .created(tuple.get(autoPost.created))
-                    .carName(tuple.get(car.name))
-                    .markName(tuple.get(car.mark.name))
-                    .price(tuple.get(priceHistory.price))
-                    .build();
-            if (!Objects.isNull(tuple.get(file.id))) {
-                banner.setFileId(tuple.get(file.id));
-            }
-            return banner;
+        var banner = Banner.builder()
+                .postId(tuple.get(autoPost.id))
+                .created(tuple.get(autoPost.created))
+                .carName(tuple.get(car.name))
+                .markName(tuple.get(car.mark.name))
+                .build();
+        if (!Objects.isNull(tuple.get(priceHistory.price))) {
+            banner.setPrice(tuple.get(priceHistory.price));
+        }
+        if (!Objects.isNull(tuple.get(file.id))) {
+            banner.setFileId(tuple.get(file.id));
+        }
+        return banner;
     }
 }

@@ -135,7 +135,7 @@ public class SimpleAutoPostService implements AutoPostService {
             var f = convertFile(file);
             post.addFile(f);
         }
-        var user = userRepository.findByLoginUsersPost(login);
+        var user = userRepository.findByLoginWithPosts(login);
         if (user.isPresent()) {
             user.get().addUserPost(post);
             repository.cud(post, session -> session.persist(post));
