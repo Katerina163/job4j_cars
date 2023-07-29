@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class FileRepositoryTest {
-    private final FileRepository repository = new HiberFileRepository(HibernateTestUtil.buildSessionFactory());
+    private final FileRepository repository = new HibernateFileRepository(HibernateTestUtil.buildSessionFactory());
 
     @Before
     public void before() {

@@ -26,7 +26,7 @@ import static ru.job4j.cars.model.QPriceHistory.priceHistory;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class HiberAutoPostRepository implements AutoPostRepository {
+public class HibernateAutoPostRepository implements AutoPostRepository {
     private final SessionFactory sf;
 
     @Override

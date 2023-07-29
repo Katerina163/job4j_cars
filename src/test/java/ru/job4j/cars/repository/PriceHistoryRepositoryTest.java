@@ -12,8 +12,8 @@ public class PriceHistoryRepositoryTest {
 
     public PriceHistoryRepositoryTest() {
         var sf = HibernateTestUtil.buildSessionFactory();
-        repository = new HiberPriceHistoryRepository(sf);
-        postRepository = new HiberAutoPostRepository(sf);
+        repository = new HibernatePriceHistoryRepository(sf);
+        postRepository = new HibernateAutoPostRepository(sf);
     }
 
     @Test

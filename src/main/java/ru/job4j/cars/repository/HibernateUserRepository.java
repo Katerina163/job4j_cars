@@ -27,7 +27,7 @@ import static ru.job4j.cars.model.QUser.user;
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class HiberUserRepository implements UserRepository {
+public class HibernateUserRepository implements UserRepository {
     private final SessionFactory sf;
 
     @Override

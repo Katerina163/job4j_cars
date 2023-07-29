@@ -17,7 +17,7 @@ import static ru.job4j.cars.model.QMark.mark;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class HiberMarkRepository implements MarkRepository {
+public class HibernateMarkRepository implements MarkRepository {
     private SessionFactory sf;
 
     @Override

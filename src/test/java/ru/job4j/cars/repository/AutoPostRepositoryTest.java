@@ -25,9 +25,9 @@ public class AutoPostRepositoryTest {
 
     public AutoPostRepositoryTest() {
         var sf = HibernateTestUtil.buildSessionFactory();
-        repository = new HiberAutoPostRepository(sf);
-        markRepository = new HiberMarkRepository(sf);
-        userRepository = new HiberUserRepository(sf);
+        repository = new HibernateAutoPostRepository(sf);
+        markRepository = new HibernateMarkRepository(sf);
+        userRepository = new HibernateUserRepository(sf);
     }
 
     @Before

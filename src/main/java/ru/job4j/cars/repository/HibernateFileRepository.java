@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @AllArgsConstructor
 @Repository
-public class HiberFileRepository implements FileRepository {
+public class HibernateFileRepository implements FileRepository {
     private final SessionFactory sf;
 
     @Override

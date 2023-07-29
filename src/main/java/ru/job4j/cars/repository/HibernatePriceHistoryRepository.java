@@ -14,7 +14,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @AllArgsConstructor
-public class HiberPriceHistoryRepository implements PriceHistoryRepository {
+public class HibernatePriceHistoryRepository implements PriceHistoryRepository {
     private final SessionFactory sf;
 
     @Override

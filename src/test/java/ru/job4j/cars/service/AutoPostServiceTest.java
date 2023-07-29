@@ -30,9 +30,9 @@ public class AutoPostServiceTest {
     private final Collection<Tuple> collection;
 
     public AutoPostServiceTest() {
-        postRepository = Mockito.mock(HiberAutoPostRepository.class);
+        postRepository = Mockito.mock(HibernateAutoPostRepository.class);
         String storageDirectory = "files";
-        UserRepository userRepository = Mockito.mock(HiberUserRepository.class);
+        UserRepository userRepository = Mockito.mock(HibernateUserRepository.class);
         TupleBannerMapper mapper = Mockito.mock(TupleBannerMapper.class);
         PostCreateDTOAutoPostMapper mapperCreate = Mockito.mock(PostCreateDTOAutoPostMapper.class);
         PostModifyDTOAutoPostMapper mapperModify = Mockito.mock(PostModifyDTOAutoPostMapper.class);
