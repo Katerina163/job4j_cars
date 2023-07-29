@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
+import ru.job4j.cars.listener.RevisionListener;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -16,6 +17,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @RevisionEntity
+@EntityListeners({RevisionListener.class})
 public class Revision {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,15 +31,4 @@ public class Revision {
 
     @Column(name = "user_id")
     private Long userId;
-
-
-    /**
-     * здесь должно происходить сохранение имени из контекста
-     * SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-     * но в проекте авторизация реализована по-другому
-     */
-    @PrePersist
-    public void onCreate() {
-        setUserId(1L);
-    }
 }
