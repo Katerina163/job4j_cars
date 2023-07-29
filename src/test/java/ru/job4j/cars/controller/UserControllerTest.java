@@ -59,7 +59,7 @@ public class UserControllerTest {
                         .param("password", "password"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("/error"))
+                .andExpect(view().name("/user/login"))
                 .andExpect(model().attributeExists("message"));
     }
 
