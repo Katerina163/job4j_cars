@@ -32,7 +32,7 @@ public class UserController {
         var loginUser = service.findByLoginAndPassword(user.getLogin(), user.getPassword());
         if (loginUser.isEmpty()) {
             model.addAttribute("message", "Неверно введен логин или пароль");
-            return "/error";
+            return "/user/login";
         }
         request.getSession().setAttribute("user", loginUser.get());
         return "redirect:/post/";
