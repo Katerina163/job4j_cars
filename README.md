@@ -1,17 +1,38 @@
 <h2 align="center">Сайт с объявлениями о продаже машин</h2>
+<h3>О проекте</h3>
 <div>Реализован сайт для публикации объявлениий с фотографиями о продаже машин. В объявлении указывается: описание машины, марка машины и тип кузова, бывшие владельцы, цена, дата публикации. Можно просмотреть все объявления, новые объявления, объявления с фотографиями.</div>
-&nbsp;
-<p align="justify">Стек технологий: </p>
-<div>1. Spring boot (v.2.7.3), </div>
-<div>2. Thymeleaf (v.2.7.3), </div>
-<div>3. Bootstrap (v.5.2.3), </div>
-<div>4. Hibernate (v.5.6.11.Final), </div>
-<div>5. PostgreSql (v.42.2.27).</div>
-<div>6. Liquibase (v.4.22.0),</div>
-<div>7. Ehcache (v.3.10.8),</div>
-<div>8. Querydsl (v.5.0.0),</div>
-<div>9. Slf4j (v.2.0.7) и Log4j (v.2.20.0).</div>
-<h3 align="right">Внешний вид страниц:</h3>
+<h3>Стек технологий:</h3>
+<div>
+  <img src="https://badgen.net/badge/Spring%20boot/v.2.7.3/green"> 
+</div>
+<div>
+<img src="https://badgen.net/badge/PostgreSql/v.42.2.27/blue?icon=postgresql"/>
+</div>
+<div>
+  <img src="https://badgen.net/badge/Thymeleaf/v.2.7.3/green">
+</div>
+<div>
+  <img src="https://badgen.net/badge/Bootstrap/v.5.2.3/purple">
+</div>
+<div>
+  <img src="https://badgen.net/badge/Hibernate/v.5.6.11.Final/grey"> 
+</div>
+<div>
+  <img src="https://badgen.net/badge/Liquibase/v.4.22.0/blue"/>
+</div>
+<div>
+  <img src="https://badgen.net/badge/Ehcache/v.3.10.8/orange"/>
+</div>
+<div>
+  <img src="https://badgen.net/badge/Querydsl/v.5.0.0/blue"/>
+</div>
+<div>
+  <img src="https://badgen.net/badge/Slf4j/v.2.0.7/orange"/>
+</div>
+<div>
+  <img src="https://badgen.net/badge/Log4j/v.2.20.0/red"/>
+</div>
+<h3>Внешний вид страниц:</h3>
 <div>1. Страница регистрации и авторизации</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/fa726c78-5d87-4c7c-897d-811e11fcfc0e.png" width="450"/>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/dda0358c-08b6-467a-acc4-4bf0b5e2312d.png" width="450"/>
@@ -30,3 +51,21 @@
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/d125a428-b75b-466d-95f9-5d53337293d2.png" width="450"/>
 <div>6. Страница изменения объявления</div>
 <img src="https://github.com/Katerina163/job4j_cars/assets/79073032/2ce20925-f55f-4db4-b888-50fc5065022a.png" width="450"/>
+<h3>Сборка</h3>
+<div>
+Осуществляется через <img src="https://badgen.net/badge/Maven/v.3.9.3/red?icon=maven">
+  </div>
+<h3>Дальнейшее развитие проекта</h3>
+<ul>
+  <li>Подкорректировать кнопки на странице профиля</li>
+  <li>Добавить сборку через Docker</li>
+  <li>Дописать тесты</li>
+  <li>Написать JavaDoc</li>  
+</ul>
+<h3>Контакты</h3>
+В случае возникновения вопросов (и предложений) по проекту, свяжитесь со мной:
+<div>
+<a href="https://t.me/kat163n" target="_blank">
+  <img src="https://badgen.net/badge/Telegram/@kat163n/blue?icon=telegram">
+</a>
+</div>
