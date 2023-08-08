@@ -4,7 +4,7 @@ import com.querydsl.core.Tuple;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Profile;
-import ru.job4j.cars.mapper.Mapper;
+import ru.job4j.cars.mapper.CompositeMapper;
 import ru.job4j.cars.model.User;
 import ru.job4j.cars.repository.UserRepository;
 
@@ -14,12 +14,12 @@ import java.util.Optional;
 @Service
 public class SimpleUserService implements UserService {
     private final UserRepository repository;
-    private final Mapper<Tuple, Banner> mapper;
+    private final CompositeMapper mapper;
 
     public SimpleUserService(UserRepository hiberUserRepository,
-                             Mapper<Tuple, Banner> tupleBannerMapper) {
+                             CompositeMapper mapper) {
         repository = hiberUserRepository;
-        mapper = tupleBannerMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -32,11 +32,16 @@ public class SimpleUserService implements UserService {
         var usersPosts = repository.findUsersPostByLogin(login);
         var usersParticipates = repository.findParticipatesByLogin(login);
         var result = new Profile();
+        var tupleBannerMapper = mapper.mapper(Tuple.class, Banner.class);
         if (usersPosts != null) {
-            result.setUserPosts(usersPosts.stream().map(mapper::convert).toList());
+            result.setUserPosts(usersPosts.stream().map(
+                    post -> (Banner) tupleBannerMapper.convert(post))
+                    .toList());
         }
         if (usersParticipates != null) {
-            result.setUserSubscribe(usersParticipates.stream().map(mapper::convert).toList());
+            result.setUserSubscribe(usersParticipates.stream().map(
+                    post -> (Banner) tupleBannerMapper.convert(post))
+            .toList());
         }
         return Optional.of(result);
     }

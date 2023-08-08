@@ -7,15 +7,18 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.dto.*;
-import ru.job4j.cars.mapper.Mapper;
+import ru.job4j.cars.dto.Banner;
+import ru.job4j.cars.dto.Criterion;
+import ru.job4j.cars.dto.PostDTO;
+import ru.job4j.cars.dto.QPredicate;
+import ru.job4j.cars.mapper.CompositeMapper;
 import ru.job4j.cars.model.AutoPost;
 import ru.job4j.cars.model.File;
 import ru.job4j.cars.repository.AutoPostRepository;
 import ru.job4j.cars.repository.UserRepository;
 import ru.job4j.cars.validation.CreateAction;
-import ru.job4j.cars.validation.ModifyAction;
 import ru.job4j.cars.validation.GroupValidation;
+import ru.job4j.cars.validation.ModifyAction;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
@@ -38,32 +41,29 @@ public class SimpleAutoPostService implements AutoPostService {
     private final AutoPostRepository repository;
     private final String storageDirectory;
     private final UserRepository userRepository;
-    private final Mapper<Tuple, Banner> mapper;
-    private final Mapper<PostDTO, AutoPost> mapperCreate;
-    private final Mapper<PostDTO, AutoPost> mapperModify;
+    private final CompositeMapper mapper;
     private final ValidatorFactory factory;
 
     public SimpleAutoPostService(AutoPostRepository hiberAutoPostRepository,
                                  @Value("${file.directory}") String storageDirectory,
                                  UserRepository hiberUserRepository,
-                                 Mapper<Tuple, Banner> tupleBannerMapper,
-                                 Mapper<PostDTO, AutoPost> postCreateDTOAutoPostMapper,
-                                 Mapper<PostDTO, AutoPost> postModifyDTOAutoPostMapper) {
+                                 CompositeMapper mapper) {
         repository = hiberAutoPostRepository;
         this.storageDirectory = storageDirectory;
         userRepository = hiberUserRepository;
-        mapper = tupleBannerMapper;
-        mapperCreate = postCreateDTOAutoPostMapper;
-        mapperModify = postModifyDTOAutoPostMapper;
+        this.mapper = mapper;
         factory = Validation.buildDefaultValidatorFactory();
     }
 
     @Override
     public Collection<Banner> search(Criterion criterion, Function<QPredicate, Predicate> function) {
         var predicate = QPredicate.builder();
+        var tupleBannerMapper = mapper.mapper(Tuple.class, Banner.class);
         if (criterion.isFindAll()) {
             return repository.findWithPredicate(predicate.and(), criterion.getLimit(), criterion.getOffset())
-                    .stream().map(mapper::convert).toList();
+                    .stream().map(
+                            post -> (Banner) tupleBannerMapper.convert(post))
+                    .toList();
         }
         if (criterion.isWithFile()) {
             predicate.addPredicate(1, autoPost.files.size()::goe);
@@ -92,7 +92,9 @@ public class SimpleAutoPostService implements AutoPostService {
         }
         return repository.findWithPredicate(
                         function.apply(predicate), criterion.getLimit(), criterion.getOffset())
-                .stream().map(mapper::convert).toList();
+                .stream().map(
+                        post -> (Banner) tupleBannerMapper.convert(post))
+                .toList();
     }
 
     @Override
@@ -130,7 +132,8 @@ public class SimpleAutoPostService implements AutoPostService {
     @Override
     public void save(String login, PostDTO dto, MultipartFile file) {
         validation(dto, CreateAction.class);
-        var post = mapperCreate.convert(dto);
+        var mapperCreate = mapper.mapper(PostDTO.class, AutoPost.class, CreateAction.class);
+        var post = (AutoPost) mapperCreate.convert(dto);
         if (!file.isEmpty()) {
             var f = convertFile(file);
             post.addFile(f);
@@ -160,7 +163,8 @@ public class SimpleAutoPostService implements AutoPostService {
     @Override
     public void modify(PostDTO dto) {
         validation(dto, ModifyAction.class);
-        var post = mapperModify.convert(dto);
+        var mapperModify = mapper.mapper(PostDTO.class, AutoPost.class, ModifyAction.class);
+        var post = (AutoPost) mapperModify.convert(dto);
         repository.cud(post, session -> session.update(post));
     }
 

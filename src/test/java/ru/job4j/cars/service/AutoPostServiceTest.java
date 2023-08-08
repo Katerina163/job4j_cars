@@ -6,11 +6,13 @@ import org.mockito.Mockito;
 import ru.job4j.cars.dto.Banner;
 import ru.job4j.cars.dto.Criterion;
 import ru.job4j.cars.dto.QPredicate;
-import ru.job4j.cars.mapper.PostCreateDTOAutoPostMapper;
-import ru.job4j.cars.mapper.PostModifyDTOAutoPostMapper;
+import ru.job4j.cars.mapper.CompositeMapper;
 import ru.job4j.cars.mapper.TupleBannerMapper;
 import ru.job4j.cars.model.*;
-import ru.job4j.cars.repository.*;
+import ru.job4j.cars.repository.AutoPostRepository;
+import ru.job4j.cars.repository.HibernateAutoPostRepository;
+import ru.job4j.cars.repository.HibernateUserRepository;
+import ru.job4j.cars.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -33,11 +35,9 @@ public class AutoPostServiceTest {
         postRepository = Mockito.mock(HibernateAutoPostRepository.class);
         String storageDirectory = "files";
         UserRepository userRepository = Mockito.mock(HibernateUserRepository.class);
-        TupleBannerMapper mapper = Mockito.mock(TupleBannerMapper.class);
-        PostCreateDTOAutoPostMapper mapperCreate = Mockito.mock(PostCreateDTOAutoPostMapper.class);
-        PostModifyDTOAutoPostMapper mapperModify = Mockito.mock(PostModifyDTOAutoPostMapper.class);
+        CompositeMapper mapper = Mockito.mock(CompositeMapper.class);
         service = new SimpleAutoPostService(
-                postRepository, storageDirectory, userRepository, mapper, mapperCreate, mapperModify);
+                postRepository, storageDirectory, userRepository, mapper);
         post = AutoPost.builder()
                 .description("description")
                 .created(LocalDateTime.now())
@@ -63,8 +63,11 @@ public class AutoPostServiceTest {
                 .build();
 
         Tuple tuple = Mockito.mock(Tuple.class);
-        when(mapper.convert(tuple)).thenReturn(ban);
-
+        var tbmapper = Mockito.mock(TupleBannerMapper.class);
+        when(mapper.mapper(Tuple.class, Banner.class))
+                .thenReturn(tbmapper);
+        when(tbmapper.convert(tuple))
+                .thenReturn(ban);
         collection = new HashSet<>();
         collection.add(tuple);
     }
